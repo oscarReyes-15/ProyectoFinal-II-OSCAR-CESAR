@@ -31,20 +31,10 @@ public class PruebaDeArchivos {
     return mfile.delete();
     }
     
-
-    public static void main(String[] args)  {
-        Scanner lea = new Scanner(System.in);
+    public static void login(){
+    Scanner lea = new Scanner(System.in);
         PruebaDeArchivos mf  = new PruebaDeArchivos();
-        
-                while(true){
-                    System.out.println(
-                        "1. Iniciar sesion\n" +
-                        "2. Crear cuenta\n" +
-                        "3. Salir"
-                    );
-                    int menu=lea.nextInt();
-                    if(menu==1){
-                        System.out.println("Ingrese su nombre de usuario");
+         System.out.println("Ingrese su nombre de usuario");
                         String nombre2=lea.next();
                         System.out.println("Ingrese su contrasena");
                         String contrasena2=lea.next();
@@ -57,20 +47,26 @@ public class PruebaDeArchivos {
                             
                             if(nombre2.equals(nombreArchivo) && contrasena2.equals(contrasenaArchivo)) {
                                 System.out.println("Inicio de sesion exitoso");
+                                Menu();
                                 return;
 
                             } else {
                                 System.out.println("Usuario o contraseña incorrectos");
+                                menup();
                                 return;
                             }
                         } catch(IOException e) {
-                            System.out.println("Error al leer el archivo: " + e.getMessage());
+                            System.out.println("Error usuario no encontrado ");
+                            menup();
                             return;
                         }
-                        
-                    }
-                    if(menu==2){
-                        System.out.println("Ingrese su nombre de usuario");
+    }
+    
+    public static void crear(){
+     Scanner lea = new Scanner(System.in);
+        PruebaDeArchivos mf  = new PruebaDeArchivos();
+    
+    System.out.println("Ingrese su nombre de usuario");
                         String nombre=lea.next();  
                         System.out.println("Ingrese una contrasena");               
                         String contrasena=lea.next(); 
@@ -83,28 +79,80 @@ public class PruebaDeArchivos {
                                     salida.writeUTF(nombre);
                                     salida.writeUTF(contrasena);
                                     salida.close();
-                                    
+                                    Menu();
+
                                 return;
                                 } catch (IOException e) {
                                     System.out.println("Error al guardar los datos: " + e.getMessage());
+                                    menup();
                                     return;
                                 }
                                 
                             }
                         } catch(Exception e) {
                             System.out.println("Error: " + e.getMessage());
+                             menup();
                             return;
                         }
                     }
-                    if(menu==3){
+    public static void main(String[] args)  {
+        menup();
+            }
+    public static void Menu(){
+        PruebaDeArchivos mf  = new PruebaDeArchivos();
+        Scanner lea = new Scanner(System.in);
+        System.out.println("1. Borrar Cuenta\n"
+                + "2. Salir");
+        int op=lea.nextInt();
+        switch(op){
+            case 1:
+            mf.borrar();
+            System.out.println("BORRANDO CUENTA");
+            menup();
+        break;
+            case 2:
+                System.out.println("SALIENDO");
+        break;
+            default:
+                System.out.println("NO SE PUEDE");
+                Menu();
+                return;
+        }
+        
+        }
+      public static void menup(){
+        Scanner lea = new Scanner(System.in);
+        PruebaDeArchivos mf  = new PruebaDeArchivos();
+        
+                while(true){
+                    System.out.println(
+                        "1. Iniciar sesion\n" +
+                        "2. Crear cuenta\n" +
+                        "3. Salir"
+                    );
+                    int menu=lea.nextInt();
+                    switch(menu){
+                        case 1:
+                        login();
+                        break; 
+                        case 2:
+                        crear();
+                        break;
+   
+                        case 3:
                         System.exit(0);
                         break;
+                        
+                        default:
+                            System.out.println("NO SE PUEDE");
+                            return;
                     }
                 }
-            }
-     
+            
+      } 
     }
-
+     
+    
 
       
        
