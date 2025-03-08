@@ -49,27 +49,27 @@ public class Login extends JFrame implements ActionListener {
         this.setVisible(true);
     }
     
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == iniciarSesionBtn) {
-            String usuarioInput = usuario.getText().trim();
-            String passwordInput = new String(password.getPassword()).trim();
-            
-            if (usuarioInput.isEmpty() || passwordInput.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Por favor, ingrese usuario y contraseña");
-                return;
-            }
-            
-            if (UserFile.verificarCredenciales(usuarioInput, passwordInput)) {
-                JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
-                new Menu(usuarioInput);
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
-            }
-        } else if (e.getSource() == regresarMenuBtn) {
-            new MainMenu();
+   @Override
+public void actionPerformed(ActionEvent e) {
+    if (e.getSource() == iniciarSesionBtn) {
+        String usuarioInput = usuario.getText().trim().toLowerCase(); 
+        String passwordInput = new String(password.getPassword()).trim();
+        
+        if (usuarioInput.isEmpty() || passwordInput.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese usuario y contraseña");
+            return;
+        }
+        
+        if (UserFile.verificarCredenciales(usuarioInput, passwordInput)) {
+            JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
+            new Menu(usuarioInput);
             this.dispose();
-        } 
-    }
+        } else {
+            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+        }
+    } else if (e.getSource() == regresarMenuBtn) {
+        new MainMenu();
+        this.dispose();
+    } 
+   }
 }

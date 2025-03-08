@@ -19,7 +19,7 @@ public class Menu extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(new Color(177, 37, 7));
 
-        borrarCuentaBtn = new JButton("1. Borrar Cuenta");
+        borrarCuentaBtn = new JButton("1. Jugar");
         borrarCuentaBtn.setBounds(125, 100, 150, 30);
         borrarCuentaBtn.addActionListener(this);
         this.add(borrarCuentaBtn);

@@ -159,6 +159,8 @@ public class MiPerfil extends JFrame implements ActionListener {
         new NewAvatar(usuarioActual);
         this.dispose();          
         } else if (e.getSource() == cambiarContraBtn) {
+          UserLogic userLogic = new UserLogic(usuarioActual);
+          userLogic.cambiarContrasena();
           
         } else if (e.getSource() == eliminarCuentaBtn) {
            UserLogic userLogic = new UserLogic(usuarioActual);
