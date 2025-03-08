@@ -1,3 +1,5 @@
+package MenuGUI;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,8 +49,5 @@ public class MainMenu extends JFrame implements ActionListener {
             System.exit(0);
         }
     }
-    public static void main(String[] args) {
-        new MainMenu();
-        
-    }
+  
 }

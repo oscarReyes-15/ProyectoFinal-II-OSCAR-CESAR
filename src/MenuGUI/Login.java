@@ -1,14 +1,15 @@
+package MenuGUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
+import User.*;
 
 public class Login extends JFrame implements ActionListener {
     private JTextField usuario;
     private JPasswordField password;
     private JButton iniciarSesionBtn, regresarMenuBtn;
-    private File archivoUsuario;
-
+    
     public Login() {
         this.setTitle("Inicio de Sesión");
         this.setSize(400, 300);
@@ -16,52 +17,51 @@ public class Login extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setLayout(null);
         this.getContentPane().setBackground(new Color(177, 37, 7));
-
+        
         JLabel usuarioLabel = new JLabel("Usuario:");
         usuarioLabel.setBounds(50, 50, 100, 25);
         usuarioLabel.setForeground(Color.white);
         this.add(usuarioLabel);
-
+        
         usuario = new JTextField();
         usuario.setBounds(150, 50, 150, 25);
         this.add(usuario);
-
+        
         JLabel passwordLabel = new JLabel("Contraseña:");
         passwordLabel.setBounds(50, 100, 100, 25);
         passwordLabel.setForeground(Color.white);
         this.add(passwordLabel);
-
+        
         password = new JPasswordField();
         password.setBounds(150, 100, 150, 25);
         this.add(password);
-
+        
         iniciarSesionBtn = new JButton("Iniciar Sesión");
         iniciarSesionBtn.setBounds(50, 160, 130, 30);
         iniciarSesionBtn.addActionListener(this);
         this.add(iniciarSesionBtn);
-
+        
         regresarMenuBtn = new JButton("Regresar");
         regresarMenuBtn.setBounds(200, 160, 100, 30);
         regresarMenuBtn.addActionListener(this);
         this.add(regresarMenuBtn);
-
+        
         this.setVisible(true);
     }
-
-     @Override
+    
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == iniciarSesionBtn) {
             String usuarioInput = usuario.getText().trim();
             String passwordInput = new String(password.getPassword()).trim();
-
+            
             if (usuarioInput.isEmpty() || passwordInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Por favor, ingrese usuario y contraseña");
                 return;
             }
-
-            if (verificarCredenciales(usuarioInput, passwordInput)) {
+            
+            if (UserFile.verificarCredenciales(usuarioInput, passwordInput)) {
                 JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
-                archivoUsuario = new File(usuarioInput); 
                 new Menu(usuarioInput);
                 this.dispose();
             } else {
@@ -72,20 +72,4 @@ public class Login extends JFrame implements ActionListener {
             this.dispose();
         } 
     }
-
-    private boolean verificarCredenciales(String usuario, String contrasena) {
-        File archivo = new File(usuario + "/datos.bin");
-        if (!archivo.exists()) {
-            return false;
-        }
-
-        try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
-            String nombreArchivo = entrada.readUTF();
-            String contrasenaArchivo = entrada.readUTF();
-            return usuario.equals(nombreArchivo) && contrasena.equals(contrasenaArchivo);
-        } catch (IOException e) {
-            return false;
-        }
-    }
-   
 }

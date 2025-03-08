@@ -1,12 +1,12 @@
+package MenuGUI;
+
 import java.awt.Color;
 import java.awt.event.*;
-import java.io.File;
 import javax.swing.*;
 
 public class Menu extends JFrame implements ActionListener {
     
-    private JButton borrarCuentaBtn;
-    private JButton salirBtn;
+    private JButton borrarCuentaBtn, salirBtn, miPerfilBtn;
     private String usuarioActual;
 
     public Menu(String usuario) {
@@ -24,8 +24,13 @@ public class Menu extends JFrame implements ActionListener {
         borrarCuentaBtn.addActionListener(this);
         this.add(borrarCuentaBtn);
 
-        salirBtn = new JButton("2. Cerrar Sesión");
-        salirBtn.setBounds(125, 160, 150, 30);
+        miPerfilBtn = new JButton("2. Mi Perfil");
+        miPerfilBtn.setBounds(125, 160, 150, 30);
+        miPerfilBtn.addActionListener(this);
+        this.add(miPerfilBtn);
+        
+        salirBtn=new JButton("3. Cerrar Sesion");
+        salirBtn.setBounds(125,200,150,30);
         salirBtn.addActionListener(this);
         this.add(salirBtn);
 
@@ -35,15 +40,11 @@ public class Menu extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == borrarCuentaBtn) {
-            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Seguro que deseas borrar tu cuenta?", 
-                                                             "Confirmación", JOptionPane.YES_NO_OPTION);
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                eliminarCuenta();
-                JOptionPane.showMessageDialog(this, "Cuenta eliminada con éxito.");
-                new MainMenu();
-                this.dispose();
-            }
-        } else if (e.getSource() == salirBtn) {
+        } if(e.getSource()==miPerfilBtn){
+                  new MiPerfil(usuarioActual);
+                  this.dispose();
+        }
+        else if (e.getSource() == salirBtn) {
             int confirmacion = JOptionPane.showConfirmDialog(this, "¿Desea cerrar sesión?", 
                                                              "Confirmación", JOptionPane.YES_NO_OPTION);
             if (confirmacion == JOptionPane.YES_OPTION) {
@@ -53,21 +54,4 @@ public class Menu extends JFrame implements ActionListener {
         }
     }
 
-    private void eliminarCuenta() {
-        if (usuarioActual != null) {
-            File carpetaUsuario = new File(usuarioActual);
-            if (carpetaUsuario.exists()) {
-                eliminarDirectorio(carpetaUsuario);
-            }
-        }
-    }
-
-    private void eliminarDirectorio(File directorio) {
-        if (directorio.isDirectory()) {
-            for (File archivo : directorio.listFiles()) {
-                eliminarDirectorio(archivo);
-            }
-        }
-        directorio.delete();
-    }
 }
