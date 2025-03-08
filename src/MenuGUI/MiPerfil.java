@@ -4,15 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import User.*;
+import java.io.*;
+
 
 /**
  *
  * @author LENOVO
  */
+
 public class MiPerfil extends JFrame implements ActionListener {
    private JButton regresarBtn, cambiarContraBtn, eliminarCuentaBtn, cambiarAvatarBtn;
    private String usuarioActual;
-   private JLabel usuarioLabel, puntosLabel, fechaLabel, avatarLabel;
+   private JLabel usuarioLabel, puntosLabel, fechaLabel, avatarLabel, tiempoJugadoLabel, partidasJugadasLabel;
    private User userData;
    private JPanel avatarPanel;
 
@@ -33,7 +36,7 @@ public class MiPerfil extends JFrame implements ActionListener {
         avatarPanel.setBackground(new Color(177, 37, 7));
         this.add(avatarPanel);
         
-        ImageIcon Avatar = new ImageIcon("src/Images/avatar1.png");
+        ImageIcon Avatar = new ImageIcon("src/Images/avatardef.png");
         Image img = Avatar.getImage();
         Image imgEscalada = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         ImageIcon avatarEscalado = new ImageIcon(imgEscalada);
@@ -78,33 +81,83 @@ public class MiPerfil extends JFrame implements ActionListener {
         fechaLabel.setForeground(Color.white);
         this.add(fechaLabel);
         
+        tiempoJugadoLabel = new JLabel();
+        tiempoJugadoLabel.setBounds(50, 140, 200, 30);
+        tiempoJugadoLabel.setForeground(Color.white);
+        this.add( tiempoJugadoLabel);
+        
+        partidasJugadasLabel = new JLabel();
+        partidasJugadasLabel.setBounds(50, 180, 200, 30);
+        partidasJugadasLabel.setForeground(Color.white);
+        this.add(partidasJugadasLabel);
+        
         actualizarDatos();
         this.setVisible(true);
     }
+
     
-    private void actualizarDatos() {
-        if (usuarioActual != null) {
-            userData = UserFile.cargarUsuario(usuarioActual);
+ private void actualizarDatos() {
+    if (usuarioActual != null) {
+        userData = UserFile.cargarUsuario(usuarioActual);
+        
+        if (userData != null) {
+            usuarioLabel.setText("Usuario: " + userData.getUsuario());
+            puntosLabel.setText("Puntos: " + userData.getPuntos());
+            fechaLabel.setText("Fecha de creación: " + userData.getFechaCreacion().toString());
+            tiempoJugadoLabel.setText("Tiempo Jugado: ");
+            partidasJugadasLabel.setText("Partidas Jugadas: ");
             
-            if (userData != null) {
-                usuarioLabel.setText("Usuario: " + userData.getUsuario());
-                puntosLabel.setText("Puntos: " + userData.getPuntos());
-                fechaLabel.setText("Fecha de creación: " + userData.getFechaCreacion().toString());
-            } else {
-                usuarioLabel.setText("Usuario: " + usuarioActual);
-                puntosLabel.setText("Puntos: No disponible");
-                fechaLabel.setText("Fecha de creación: No disponible");
+            String avatarSeleccionado = cargarAvatarSeleccionado(usuarioActual);
+            String avatarPath = "src/Images/" + avatarSeleccionado + ".png";
+            
+            try {
+                ImageIcon Avatar = new ImageIcon(avatarPath);
+                Image img = Avatar.getImage();
+                Image imgEscalada = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+                ImageIcon avatarEscalado = new ImageIcon(imgEscalada);
+                avatarLabel.setIcon(avatarEscalado);
+            } catch (Exception ex) {
+                System.err.println("Error cargando imagen: " + avatarPath);
+                try {
+                    ImageIcon Avatar = new ImageIcon("src/Images/avatardef.png");
+                    Image img = Avatar.getImage();
+                    Image imgEscalada = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+                    ImageIcon avatarEscalado = new ImageIcon(imgEscalada);
+                    avatarLabel.setIcon(avatarEscalado);
+                } catch (Exception e) {
+                    System.err.println("Error cargando imagen predeterminada");
+                }
             }
+        } else {
+            usuarioLabel.setText("Usuario: " + usuarioActual);
+            puntosLabel.setText("Puntos: No disponible");
+            fechaLabel.setText("Fecha de creación: No disponible");
+            tiempoJugadoLabel.setText("Tiempo Jugado: No disponible");
+            partidasJugadasLabel.setText("Partidas Jugadas: No disponible ");
         }
     }
+}
+ private String cargarAvatarSeleccionado(String usuario) {
+    File archivo = new File(usuario + "/avatar.txt");
+    if (!archivo.exists()) {
+        return "avatardef"; // Default avatar
+    }
     
-   
+    try (FileInputStream fis = new FileInputStream(archivo)) {
+        byte[] data = new byte[(int) archivo.length()];
+        fis.read(data);
+        return new String(data).trim();
+    } catch (IOException ex) {
+        System.err.println("Error al cargar avatar: " + ex.getMessage());
+        return "avatardef";
+    }
+}
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == cambiarAvatarBtn) {
-            new NewPfP();
-            this.dispose();      
+           if (e.getSource() == cambiarAvatarBtn) {
+        new NewAvatar(usuarioActual);
+        this.dispose();          
         } else if (e.getSource() == cambiarContraBtn) {
           
         } else if (e.getSource() == eliminarCuentaBtn) {
