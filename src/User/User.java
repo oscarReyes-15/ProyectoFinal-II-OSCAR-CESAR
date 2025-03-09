@@ -3,7 +3,7 @@ import java.time.LocalDate;
 
 public class User {
     
-    private String usuario;
+    private final String usuario;
     private String contra;
     private int puntos;
     private LocalDate fechaCreacion;
