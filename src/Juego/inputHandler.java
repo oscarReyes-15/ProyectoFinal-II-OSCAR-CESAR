@@ -4,42 +4,57 @@
  */
 package Juego;
 
-import Objects.jugador;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
 
 /**
  *
  * @author LENOVO
  */
-public class inputHandler implements KeyListener {
-
-    // dependencias
-    private final jugador Player;
-
-    //datos
-    float speed = 100;
-
-    public inputHandler(jugador Player) {
-        this.Player = Player;
-    }
+public class inputHandler implements KeyListener{
+    public boolean upPressed, downPressed, leftPressed, rightPressed;
 
     @Override
     public void keyTyped(KeyEvent e) {
-        int code = e.getKeyCode();
-            if (code == KeyEvent.VK_W){Player.moveY(speed);}
-            if (code == KeyEvent.VK_S){Player.moveY(-speed);}
-            if (code == KeyEvent.VK_D){Player.moveX(speed);}
-            if (code == KeyEvent.VK_A){Player.moveX(-speed);}
-
+        // Not needed for movement
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+
+        if (keyCode == KeyEvent.VK_W) {
+            System.out.println("woooo");
+            upPressed = true;
+        }
+        if (keyCode == KeyEvent.VK_S) {
+            downPressed = true;
+        }
+        if (keyCode == KeyEvent.VK_A) {
+            leftPressed = true;
+        }
+        if (keyCode == KeyEvent.VK_D) {
+            rightPressed = true;
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-    }
+        int keyCode = e.getKeyCode();
 
+        if (keyCode == KeyEvent.VK_W) {
+            upPressed = false;
+        }
+        if (keyCode == KeyEvent.VK_S) {
+            downPressed = false;
+        }
+        if (keyCode == KeyEvent.VK_A) {
+            leftPressed = false;
+        }
+        if (keyCode == KeyEvent.VK_D) {
+            rightPressed = false;
+        }
+    }
 }

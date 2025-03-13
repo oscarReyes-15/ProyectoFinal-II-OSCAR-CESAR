@@ -5,13 +5,8 @@ package Juego;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 import User.User;
-import java.awt.Color;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -19,71 +14,69 @@ import javax.swing.JPanel;
  *
  * @author LENOVO
  */
-public final class gameManager extends JFrame implements Runnable {
-    // game functioning
-    Thread gameThread;
-    int fps = 10;
-    
+public final class gameManager extends JPanel {    
     // user
-    User userActual;
+    User userActual; // todas las clases usan la misma referencia
     
-    // manager de mundos 
-    Mundo mundo1, mundo2; JPanel mundoActual;
-    Nivel nivelTest;
+    // manager  
+    JPanel actual; // el panel a ser mostrado
+    MapaMundi MM;  // clase que maneja diversos mundos
+    JFrame f;
     
     public gameManager (User userActual) {
         // inicializacion
-        JFrame f = new JFrame();
+        f = new JFrame();
         this.userActual = userActual;
-        mundo1 = new Mundo(userActual, this);
-        mundo2 = new Mundo(userActual, this);
-        mundoActual = mundo1;
-        nivelTest = new Nivel();
+
+        MM = new MapaMundi(userActual, this);
+        actual = MM.getMapa();
         
         // frame conf
+        setLayout(new BorderLayout());
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setPreferredSize(new Dimension(300, 300));
+        f.setSize(new Dimension(300, 300));
         f.add(this);
         f.setVisible(true);
         
     }
-    
-    public void startGame () {
-        gameThread = new Thread(this);
-        nivelTest.abrirNivel();
-        if(nivelTest.cargarNivel())
-            gameThread.start(); addKeyListener(nivelTest.input);
+
+    public void select (JPanel cartridge) {
+        actual = null; // reusamos
+        actual = cartridge;
+        
+        // segun la instancia 
+        if (cartridge instanceof Mundo){
+            ((Mundo)actual).cargar();
             
+        } else if (cartridge instanceof Nivel){
+            ((Nivel)actual).cargar(); 
+        }
+        display(cartridge);
     }
     
-    @Override
-    public void run() {
-        while (gameThread != null){
-            
-            // 1. actualizar valores
-            update();
-           
-            // 2. pintar en el canvas      
-            revalidate();
-            repaint();
-            
-            // 3. WAIT
-            try {
-                Thread.sleep(1000 / fps);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(gameManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }        
+    public void display () {
+        removeAll();
+        add(actual);
+        revalidate();
+        repaint();
+    
     }
     
-    void update () {
-        System.out.println("updated");
+    public void display (JPanel cartridge) {
+        display();
+        cartridge.requestFocus();
     }
-    
-    
     
     public static void main(String[] args) {
         gameManager G= new gameManager (new User("robRigattoni", "123"));
-        G.startGame();
-    }
+        G.display();
+    }   
+        
 }
+ /*
+    - dependencias
+
+    - funciones
+        - display (Mundo o nivel)
+        - select (Mundo o nivel, dsps de seleccionar despliega (display))
+*/

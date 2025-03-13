@@ -1,0 +1,100 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Juego;
+
+import User.User;
+import java.awt.Color;
+import javax.swing.*;
+
+/**
+ *
+ * @author LENOVO
+ */
+public final class MapaMundi {
+    // atributos
+    Mundo[] mundos;
+    JPanel mapaMundi;
+    int cantMundos = 5;
+    JButton[] btnMnds;
+    ImageIcon bg;
+    
+    // dependencias 
+    User user;
+    gameManager game;
+    
+    // Constructor
+
+    public MapaMundi(User user, gameManager game) {
+        //dependcias
+        this.user = user;
+        this.game = game;
+        
+        // atributos
+        mundos = new Mundo[cantMundos];
+        btnMnds = new JButton[mundos.length];
+        mapaMundi = new JPanel ();
+        
+        //
+        initMundos();
+        crearBtns();
+        addMnds();
+    }
+    
+    private void initMundos () {
+        for (int i = 0; i < mundos.length; i++){
+            mundos[i] = new Mundo((i+1), user, game, Color.black);
+        }
+    }
+    
+    private void crearBtns () {
+        for (int i = 0; i < btnMnds.length; i++){
+            btnMnds[i] = new JButton("Mundo " + (i+1));
+            
+            btnMnds[i].setBackground(mundos[i].completado == true? Color.GREEN : Color.GRAY);
+            
+            int n = i;
+            btnMnds[i].addActionListener(e -> {
+                game.select(mundos[n]);
+                mapaMundi.removeAll();
+            });
+        }
+    }
+    
+    private void addMnds () {
+        mapaMundi.removeAll();
+        for (JButton btn : btnMnds) {
+            mapaMundi.add(btn);
+        }
+        JButton salir = new JButton ("salir");
+        salir.addActionListener(e -> {System.exit(0);});
+        mapaMundi.add(salir);
+    }
+    
+    public void refresh () {     
+        for (int i = 0; i < mundos.length; i++) {
+            if (mundos[i].isComplete()){
+                btnMnds[i].setBackground(Color.green);
+            }
+        }    
+        mapaMundi.revalidate();
+        mapaMundi.repaint();
+    }
+    
+    public JPanel getMapa () {        
+        addMnds();
+        return mapaMundi;
+    }
+}
+
+/*
+    Inicializar cada mundo
+    - inicializarMundos (con la cantMundos)
+
+    Mostrar botones para cada mundo
+    - crearBtns (para cada mundo)
+
+    
+
+*/
