@@ -44,6 +44,7 @@ public class Menu extends JFrame implements ActionListener {
         if (e.getSource() == jugar) {
             gameManager G= new gameManager (new User("robRigattoni", "123"));
             G.display();
+            this.dispose();
         } if(e.getSource()==miPerfilBtn){
                   new MiPerfil(usuarioActual);
                   this.dispose();

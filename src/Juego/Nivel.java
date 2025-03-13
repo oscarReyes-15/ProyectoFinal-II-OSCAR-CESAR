@@ -6,7 +6,6 @@ import User.User;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.KeyListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,7 +36,7 @@ public class Nivel extends JPanel implements Runnable {
     public Mundo mundo;
     
     // atributos del nivel
-    int fps = 24;
+    int fps = 15;
     boolean isDesBloqueado = true;
     boolean completado = false;
     int moves;
@@ -131,24 +130,20 @@ public class Nivel extends JPanel implements Runnable {
             refresh();
         });
 
-        final long OPTIMAL_TIME = 1_000_000_000 / fps; // Time per frame in nanoseconds
-
-        long lastTime = System.nanoTime();
-        double delta = 0;
-
         while (running) {
-            long now = System.nanoTime();
-            delta += (now - lastTime) / (double) OPTIMAL_TIME;
-            lastTime = now;
 
-            while (delta >= 1) {
-                // 1. actualizar informacion de objetos
-                updateGame();
-                delta--;
-            }
-            
+            // 1. actualizar informacion de objetos
+            updateGame();
+
             // 2. actualizar visual
             repaint();
+            
+            try {
+                //3 ESPERA - WAIT
+                Thread.sleep(1000 / fps);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Nivel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
     }

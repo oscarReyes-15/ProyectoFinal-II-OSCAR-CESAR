@@ -51,10 +51,6 @@ public class Object {
         bounds[3][0] = x + tileSize;
         bounds[3][1] = y;
         
-        System.out.println("Bounds: " );
-        for(int[] bound : bounds){
-            System.out.println("X: " + bound[0] + " Y: " + bound[1]);
-        }
     }
     
     public boolean isInBound (int speed, String coord) {
@@ -66,14 +62,12 @@ public class Object {
                 case "x" -> {
                     int x2 = bound[0] + speed;
                     if (x2 > nivel.game.getWidth() || x2 < 0){
-                        System.out.println(bound[0] + " + " + speed +  "!! no se puede x !!" + nivel.getWidth());
                         return false;
                     } 
                 }
                 case "y" -> {
                     int y2 = bound[1] + speed;
                     if (y2 > nivel.game.getHeight() || y2 < 0){
-                        System.out.println(bound[01] + " + " + speed + "!! no se puede y !!" + nivel.getHeight());
                         return false;
                     } 
                 }

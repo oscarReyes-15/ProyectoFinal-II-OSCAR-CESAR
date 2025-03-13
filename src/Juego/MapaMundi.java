@@ -4,19 +4,28 @@
  */
 package Juego;
 
+import MenuGUI.MainMenu;
 import User.User;
 import java.awt.Color;
+import java.awt.Graphics;
 import javax.swing.*;
 
-/**
- *
- * @author LENOVO
- */
+/*
+    Inicializar cada mundo
+    - inicializarMundos (con la cantMundos)
+
+    Mostrar botones para cada mundo
+    - crearBtns (para cada mundo)
+
+    
+
+*/
+
 public final class MapaMundi {
     // atributos
     Mundo[] mundos;
     JPanel mapaMundi;
-    int cantMundos = 5;
+    int cantMundos = 2;
     JButton[] btnMnds;
     ImageIcon bg;
     
@@ -35,6 +44,9 @@ public final class MapaMundi {
         mundos = new Mundo[cantMundos];
         btnMnds = new JButton[mundos.length];
         mapaMundi = new JPanel ();
+        
+        //
+        bg = new ImageIcon ("C:\\Users\\LENOVO\\OneDrive - Universidad Tecnologica Centroamericana\\Trimestre #3\\Programacion II\\GarbageTests\\SodokanV1\\src\\Images\\avatar4.png");
         
         //
         initMundos();
@@ -68,7 +80,7 @@ public final class MapaMundi {
             mapaMundi.add(btn);
         }
         JButton salir = new JButton ("salir");
-        salir.addActionListener(e -> {System.exit(0);});
+        salir.addActionListener(e -> {new MainMenu(); game.f.dispose();});
         mapaMundi.add(salir);
     }
     
@@ -86,15 +98,6 @@ public final class MapaMundi {
         addMnds();
         return mapaMundi;
     }
+    
 }
 
-/*
-    Inicializar cada mundo
-    - inicializarMundos (con la cantMundos)
-
-    Mostrar botones para cada mundo
-    - crearBtns (para cada mundo)
-
-    
-
-*/
