@@ -6,25 +6,45 @@ import User.User;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.KeyListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+/*
+    funciones de juego
+        Rendering
+        - refresh
+        - cargar nivel (carga el nivel en gameManager y corre la funcion run)
+        - run (hace el render)
+        - spawnObjects (debe de renderizar objetos segun un mapa de enteros (int) )
+        - salirNivel (sale del nivel)
+        - displayPause
+        - reiniciar Juego (nullify el thread y crea uno nuevo, efectivamente reiniciando la partida ( !!! debe reiniciar atributos de juego y jugador !!! ))
+
+        informacion de juego
+        - desbloquear nivel
+        - ganarNivel (cuando todas las cajas esten en su lugar (ejecuta salir nivel y completar nivel) )
+        - completar nivel (set completado com true solo al ganar, no al salir)
+
+*/
+
 public class Nivel extends JPanel implements Runnable {
     // dependencias
-    User user;
-    gameManager game;
-    Mundo mundo;
+    public User user;
+    public gameManager game;
+    public Mundo mundo;
     
     // atributos del nivel
-    int fps = 15;
+    int fps = 24;
     boolean isDesBloqueado = true;
     boolean completado = false;
     int moves;
     int stars = 0;
     int code;
-    int[] spawnPoint = {1, 20};
+    int[] spawnPoint = {0, 16};
+    boolean running = false;
     
     // objetos de nivel
     jugador player;
@@ -70,11 +90,8 @@ public class Nivel extends JPanel implements Runnable {
             this.setFocusable(true);
             this.requestFocus();
 
-           
-
-            
+            running = true;
             nivelThread = new Thread(this);
-            
             nivelThread.start();
         } 
     }
@@ -87,10 +104,8 @@ public class Nivel extends JPanel implements Runnable {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
-        Graphics2D g2 = (Graphics2D) g;
-        
-        player.draw(g2, this);       
+        render(g);
+             
     }
     
 
@@ -115,27 +130,34 @@ public class Nivel extends JPanel implements Runnable {
             add(salir);
             refresh();
         });
-        
-        
-         update(getGraphics());
-        while (nivelThread != null){
-            try {
+
+        final long OPTIMAL_TIME = 1_000_000_000 / fps; // Time per frame in nanoseconds
+
+        long lastTime = System.nanoTime();
+        double delta = 0;
+
+        while (running) {
+            long now = System.nanoTime();
+            delta += (now - lastTime) / (double) OPTIMAL_TIME;
+            lastTime = now;
+
+            while (delta >= 1) {
                 // 1. actualizar informacion de objetos
                 updateGame();
-                System.out.println("rendering");
-                // 2. actualizar visual
-                update(getGraphics());
-
-            
-                // 3. ESPERA - WAIT
-                Thread.sleep(1000 / fps);
-                
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Nivel.class.getName()).log(Level.SEVERE, null, ex);
+                delta--;
             }
+            
+            // 2. actualizar visual
+            repaint();
         }
         
-        
+    }
+    
+    public void render (Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setBackground(Color.yellow);
+        g2.drawImage(player.getImage().getImage(), 0, 0, getWidth(), getHeight(), this);
+        player.draw(g2, this);  
     }
     
     public void refresh () {
@@ -144,16 +166,3 @@ public class Nivel extends JPanel implements Runnable {
     }
 }
 
-/*
-    funciones de juego
-    - refresh
-    - desbloquear nivel
-    - run (hace el render)
-    - cargar nivel (carga el nivel en gameManager y corre la funcion run)
-    - spawnObjects (debe de renderizar objetos segun un mapa de enteros (int) )
-    - displayPause
-    - reiniciar Juego (nullify el thread y crea uno nuevo, efectivamente reiniciando la partida ( !!! debe reiniciar atributos de juego y jugador !!! ))
-    - salirNivel (sale del nivel)
-    - ganarNivel (cuando todas las cajas esten en su lugar (ejecuta salir nivel) )
-
-*/

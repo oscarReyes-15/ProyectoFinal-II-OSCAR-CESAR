@@ -11,8 +11,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- *
- * @author LENOVO
+
+    - dependencias
+
+    - funciones
+        - display (Mundo o nivel)
+        - select (Mundo o nivel, dsps de seleccionar despliega (display))
+
  */
 public final class gameManager extends JPanel {    
     // user
@@ -41,7 +46,7 @@ public final class gameManager extends JPanel {
     }
 
     public void select (JPanel cartridge) {
-        actual = null; // reusamos
+        actual = null; // reusamos espacio
         actual = cartridge;
         
         // segun la instancia 
@@ -66,17 +71,5 @@ public final class gameManager extends JPanel {
         display();
         cartridge.requestFocus();
     }
-    
-    public static void main(String[] args) {
-        gameManager G= new gameManager (new User("robRigattoni", "123"));
-        G.display();
-    }   
-        
+            
 }
- /*
-    - dependencias
-
-    - funciones
-        - display (Mundo o nivel)
-        - select (Mundo o nivel, dsps de seleccionar despliega (display))
-*/

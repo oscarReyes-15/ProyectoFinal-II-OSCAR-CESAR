@@ -9,45 +9,35 @@ import javax.swing.*;
 
 
 
-public class jugador {
+public class jugador extends Object {
     private final User user;
     private inputHandler input;
     private Nivel nivel;
     
-    private int x, y;
-    private int moves = 0;
-    private final ImageIcon playerTexture;
-    
-    private int speed = 25;
+    private int moves = 0;    
+    private int speed = 16;
     
     public jugador (User user, inputHandler input, Nivel nivel) {
+        super(nivel.getSpawnX(), nivel.getSpawnY(), this.nivel = nivel);
         this.user = user;
         this.input = input;
-        this.nivel = nivel;
         
-        x = nivel.getSpawnX(); y = nivel.getSpawnY();
-        playerTexture = new ImageIcon("C:\\Users\\LENOVO\\OneDrive - Universidad Tecnologica Centroamericana\\Trimestre #3\\Programacion II\\GarbageTests\\SodokanV1\\src\\Images\\avatar2.png");
+        image = new ImageIcon("C:\\Users\\LENOVO\\OneDrive - Universidad Tecnologica Centroamericana\\Trimestre #3\\Programacion II\\GarbageTests\\SodokanV1\\src\\Images\\avatar2.png");
     }
     
     public int getMoves () {
         return moves;
     }
-
-    public ImageIcon getImage () {
-        return playerTexture;
-    }
     
     public void move () {
-        int y2 = y;
-        int x2 = x;
-        if (input.downPressed && (y2 += speed) < nivel.getHeight()){
+        if (input.downPressed && isInBound(speed, "y")){
             y += speed;
-        } else if (input.upPressed && (y2 += speed) > 0){
+        } else if (input.upPressed && isInBound(-speed, "y")){
             y += -speed;
         }
-        if (input.rightPressed && (x2 += speed) < nivel.getWidth()){
+        if (input.rightPressed && isInBound(speed, "x")){
             x += speed;
-        } else if (input.leftPressed && (x2 += speed) > 0){
+        } else if (input.leftPressed && isInBound(-speed, "x")){
             x += -speed;
         }
         moves += 1;
@@ -55,7 +45,7 @@ public class jugador {
     
     
     public void draw (Graphics2D g, JComponent comp) {
-        g.drawImage(getImage().getImage(), x, y, 64, 64,  comp);
+        g.drawImage(getImage().getImage(), x, y, tileSize, tileSize,  comp);
     }
     
     public void printPos () {
