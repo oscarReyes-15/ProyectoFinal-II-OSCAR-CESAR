@@ -36,12 +36,7 @@ public class MiPerfil extends JFrame implements ActionListener {
         avatarPanel.setBackground(new Color(177, 37, 7));
         this.add(avatarPanel);
         
-        ImageIcon Avatar = new ImageIcon("src/Images/avatardef.png");
-        Image img = Avatar.getImage();
-        Image imgEscalada = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        ImageIcon avatarEscalado = new ImageIcon(imgEscalada);
-
-        avatarLabel = new JLabel(avatarEscalado);
+        avatarLabel = new JLabel();
         avatarLabel.setPreferredSize(new Dimension(120, 120));
         avatarLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         avatarPanel.add(avatarLabel);
@@ -84,7 +79,7 @@ public class MiPerfil extends JFrame implements ActionListener {
         tiempoJugadoLabel = new JLabel();
         tiempoJugadoLabel.setBounds(50, 140, 200, 30);
         tiempoJugadoLabel.setForeground(Color.white);
-        this.add( tiempoJugadoLabel);
+        this.add(tiempoJugadoLabel);
         
         partidasJugadasLabel = new JLabel();
         partidasJugadasLabel.setBounds(50, 180, 200, 30);
@@ -107,27 +102,7 @@ public class MiPerfil extends JFrame implements ActionListener {
             tiempoJugadoLabel.setText("Tiempo Jugado: ");
             partidasJugadasLabel.setText("Partidas Jugadas: ");
             
-            String avatarSeleccionado = cargarAvatarSeleccionado(usuarioActual);
-            String avatarPath = "src/Images/" + avatarSeleccionado + ".png";
-            
-            try {
-                ImageIcon Avatar = new ImageIcon(avatarPath);
-                Image img = Avatar.getImage();
-                Image imgEscalada = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-                ImageIcon avatarEscalado = new ImageIcon(imgEscalada);
-                avatarLabel.setIcon(avatarEscalado);
-            } catch (Exception ex) {
-                System.err.println("Error cargando imagen: " + avatarPath);
-                try {
-                    ImageIcon Avatar = new ImageIcon("src/Images/avatardef.png");
-                    Image img = Avatar.getImage();
-                    Image imgEscalada = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-                    ImageIcon avatarEscalado = new ImageIcon(imgEscalada);
-                    avatarLabel.setIcon(avatarEscalado);
-                } catch (Exception e) {
-                    System.err.println("Error cargando imagen predeterminada");
-                }
-            }
+            actualizarAvatar();
         } else {
             usuarioLabel.setText("Usuario: " + usuarioActual);
             puntosLabel.setText("Puntos: No disponible");
@@ -137,43 +112,57 @@ public class MiPerfil extends JFrame implements ActionListener {
         }
     }
 }
- private String cargarAvatarSeleccionado(String usuario) {
-    File archivo = new File(usuario + "/avatar.txt");
-    if (!archivo.exists()) {
-        return "avatardef"; // Default avatar
-    }
+
+ private void actualizarAvatar() {
+    File avatarFile = new File(usuarioActual + "/avatar.png");
     
-    try (FileInputStream fis = new FileInputStream(archivo)) {
-        byte[] data = new byte[(int) archivo.length()];
-        fis.read(data);
-        return new String(data).trim();
-    } catch (IOException ex) {
-        System.err.println("Error al cargar avatar: " + ex.getMessage());
-        return "avatardef";
+    if (avatarFile.exists()) {
+        try {
+            ImageIcon Avatar = new ImageIcon(avatarFile.getAbsolutePath());
+            Image img = Avatar.getImage();
+            Image imgEscalada = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+            ImageIcon avatarEscalado = new ImageIcon(imgEscalada);
+            avatarLabel.setIcon(avatarEscalado);
+        } catch (Exception ex) {
+            System.err.println("Error cargando avatar personalizado: " + ex.getMessage());
+            cargarAvatarPredeterminado();
+        }
+    } else {
+        cargarAvatarPredeterminado();
+    }
+}
+
+ private void cargarAvatarPredeterminado() {
+    try {
+        ImageIcon Avatar = new ImageIcon("src/Images/avatardef.png");
+        Image img = Avatar.getImage();
+        Image imgEscalada = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        ImageIcon avatarEscalado = new ImageIcon(imgEscalada);
+        avatarLabel.setIcon(avatarEscalado);
+    } catch (Exception ex) {
+        System.err.println("Error cargando imagen predeterminada: " + ex.getMessage());
     }
 }
     
     @Override
     public void actionPerformed(ActionEvent e) {
-           if (e.getSource() == cambiarAvatarBtn) {
-        new NewAvatar(usuarioActual);
-        this.dispose();          
+        if (e.getSource() == cambiarAvatarBtn) {
+            new NewAvatar(usuarioActual);
+            this.dispose();          
         } else if (e.getSource() == cambiarContraBtn) {
-          UserLogic userLogic = new UserLogic(usuarioActual);
-          userLogic.cambiarContrasena();
+            UserLogic userLogic = new UserLogic(usuarioActual);
+            userLogic.cambiarContrasena();
           
         } else if (e.getSource() == eliminarCuentaBtn) {
-           UserLogic userLogic = new UserLogic(usuarioActual);
-
-          boolean deleted = userLogic.eliminarCuenta();
-         if (deleted) {
-             new MainMenu();
-             this.dispose();
-       }
+            UserLogic userLogic = new UserLogic(usuarioActual);
+            boolean deleted = userLogic.eliminarCuenta();
+            if (deleted) {
+                new MainMenu();
+                this.dispose();
+            }
         } else if (e.getSource() == regresarBtn) {
             new Menu(usuarioActual); 
             this.dispose();
         }
     }
-    
 }

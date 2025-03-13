@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.nio.file.*;
 import User.*;
 
 public class NewAvatar extends JFrame implements ActionListener {
@@ -15,7 +16,6 @@ public class NewAvatar extends JFrame implements ActionListener {
         "src/Images/avatar3.png",
         "src/Images/avatar4.png"
     };
-    private String selectedAvatar;
     private String usuarioActual;
     
     public NewAvatar(String usuario) {
@@ -37,19 +37,18 @@ public class NewAvatar extends JFrame implements ActionListener {
         for (int i = 0; i < avatarPaths.length; i++) {
             try {
                 ImageIcon avatarIcon = new ImageIcon(avatarPaths[i]);
-                Image img = avatarIcon.getImage();
-                Image imgEscalada = img.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-                ImageIcon avatarEscalado = new ImageIcon(imgEscalada);
+                Image img = avatarIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+                ImageIcon avatarEscalado = new ImageIcon(img);
                 
                 avatarButtons[i] = new JButton(avatarEscalado);
                 avatarButtons[i].setPreferredSize(new Dimension(150, 150));
-                avatarButtons[i].setActionCommand("avatar" + (i + 1)); 
+                avatarButtons[i].setActionCommand(avatarPaths[i]); // Store full path
                 avatarButtons[i].addActionListener(this);
                 avatarPanel.add(avatarButtons[i]);
             } catch (Exception ex) {
                 System.err.println("Error cargando imagen: " + avatarPaths[i]);
                 avatarButtons[i] = new JButton("Avatar " + (i + 1));
-                avatarButtons[i].setActionCommand("avatar" + (i + 1));
+                avatarButtons[i].setActionCommand(avatarPaths[i]);
                 avatarButtons[i].addActionListener(this);
                 avatarPanel.add(avatarButtons[i]);
             }
@@ -69,30 +68,26 @@ public class NewAvatar extends JFrame implements ActionListener {
         this.setVisible(true);
     }
     
-    private String getCurrentUser() {
-        File[] files = new File(".").listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isDirectory() && !file.getName().startsWith(".")) {
-                    return file.getName();
-                }
+    private boolean copiarAvatarSeleccionado(String usuario, String avatarSeleccionado) {
+        try {
+            File directorio = new File(usuario);
+            if (!directorio.exists() && !directorio.mkdirs()) {
+                System.err.println("No se pudo crear la carpeta del usuario.");
+                return false;
             }
-        }
-        return null;
-    }
-    
-    private boolean guardarAvatarSeleccionado(String usuario, String avatarSeleccionado) {
-        File directorio = new File(usuario);
-        if (!directorio.exists()) {
-            directorio.mkdir();
-        }
-        
-        File archivo = new File(usuario + "/avatar.txt");
-        try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
-            writer.println(avatarSeleccionado);
+
+            File avatarOrigen = new File(avatarSeleccionado);
+            if (!avatarOrigen.exists()) {
+                System.err.println("El archivo de avatar no existe: " + avatarOrigen.getAbsolutePath());
+                return false;
+            }
+
+            File avatarDestino = new File(directorio, "avatar.png");
+            Files.copy(avatarOrigen.toPath(), avatarDestino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            
             return true;
         } catch (IOException ex) {
-            System.err.println("Error al guardar avatar: " + ex.getMessage());
+            ex.printStackTrace();
             return false;
         }
     }
@@ -104,34 +99,26 @@ public class NewAvatar extends JFrame implements ActionListener {
                 new MiPerfil(usuarioActual);
                 this.dispose();
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, 
-                    "Error al regresar al perfil", 
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error al regresar al perfil", "Error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
         } else {
             for (JButton button : avatarButtons) {
                 if (e.getSource() == button) {
-                    selectedAvatar = button.getActionCommand();
+                    String selectedAvatar = button.getActionCommand();
                     
-                    if (guardarAvatarSeleccionado(usuarioActual, selectedAvatar)) {
-                        JOptionPane.showMessageDialog(this, 
-                            "Avatar seleccionado correctamente", 
-                            "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                            
+                    if (copiarAvatarSeleccionado(usuarioActual, selectedAvatar)) {
+                        JOptionPane.showMessageDialog(this, "Avatar seleccionado correctamente", "Ã‰xito", JOptionPane.INFORMATION_MESSAGE);
+                        
                         try {
                             new MiPerfil(usuarioActual);
                             this.dispose();
                         } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(this, 
-                                "Error al regresar al perfil", 
-                                "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(this, "Error al regresar al perfil", "Error", JOptionPane.ERROR_MESSAGE);
                             ex.printStackTrace();
                         }
                     } else {
-                        JOptionPane.showMessageDialog(this, 
-                            "Error al guardar el avatar seleccionado", 
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Error al copiar el avatar seleccionado", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                     break;
                 }
