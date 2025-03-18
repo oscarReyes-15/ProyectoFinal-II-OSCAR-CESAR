@@ -17,7 +17,6 @@ public class MainMenu extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setLayout(null);
         
-        // Cargar imagen de fondo
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
         fondo.setBounds(0, 0, 800, 450);
@@ -37,8 +36,7 @@ public class MainMenu extends JFrame implements ActionListener {
         salirbtn.addActionListener(this);
         this.add(salirbtn);
         
-        this.add(fondo); // Se agrega el fondo al final para que esté en la capa más baja
-        
+        this.add(fondo); 
         this.setVisible(true);
     }
     

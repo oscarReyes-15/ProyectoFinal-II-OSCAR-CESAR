@@ -1,55 +1,83 @@
 package MenuGUI;
+
 import java.awt.Image;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 public class Menu extends JFrame implements ActionListener {
     
     private JButton jugar, salirBtn, miPerfilBtn, multiplayerBtn, ajustesBtn;
     private String usuarioActual;
     private JLabel fondo;
+    private ResourceBundle messages;
     
     public Menu(String usuario) {
         this.usuarioActual = usuario;
+        
+        // Get messages from LanguageManager
+        this.messages = LanguageManager.getMessages();
+        
+        initComponents();
+    }
+    
+    // Constructor that accepts a Locale
+    public Menu(String usuario, Locale locale) {
+        this.usuarioActual = usuario;
+        
+        // Update LanguageManager with the provided locale
+        if (locale.getLanguage().equals("en")) {
+            LanguageManager.setLanguage("English");
+        } else {
+            LanguageManager.setLanguage("Español");
+        }
+        
+        // Get updated messages
+        this.messages = LanguageManager.getMessages();
+        
+        initComponents();
+    }
+    
+    private void initComponents() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setTitle("Menu Principal");
+        this.setTitle(messages.getString("title.main"));
         this.setLayout(null);
         this.setSize(800, 450);
         this.setLocationRelativeTo(null);
         
-        // Cargar imagen de fondo
+        // Load background image
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
         fondo.setBounds(0, 0, 800, 450);
         
-        // Subí todos los botones un poco para mejor distribución
-        jugar = new JButton("1. Jugar");
+        // Create buttons with localized text
+        jugar = new JButton(messages.getString("button.play"));
         jugar.setBounds(325, 120, 150, 30);
         jugar.addActionListener(this);
         this.add(jugar);
         
-        miPerfilBtn = new JButton("2. Mi Perfil");
+        miPerfilBtn = new JButton(messages.getString("button.profile"));
         miPerfilBtn.setBounds(325, 170, 150, 30);
         miPerfilBtn.addActionListener(this);
         this.add(miPerfilBtn);
         
-        // Botón Multiplayer
-        multiplayerBtn = new JButton("3. Multijugadpr");
+        multiplayerBtn = new JButton(messages.getString("button.ranking"));
         multiplayerBtn.setBounds(325, 220, 150, 30);
         multiplayerBtn.addActionListener(this);
         this.add(multiplayerBtn);
         
-        // Botón Ajustes
-        ajustesBtn = new JButton("4. Ajustes");
+        ajustesBtn = new JButton(messages.getString("button.settings"));
         ajustesBtn.setBounds(325, 270, 150, 30);
         ajustesBtn.addActionListener(this);
         this.add(ajustesBtn);
         
-        salirBtn = new JButton("5. Cerrar Sesion");
+        salirBtn = new JButton(messages.getString("button.logout"));
         salirBtn.setBounds(325, 320, 150, 30);
         salirBtn.addActionListener(this);
         this.add(salirBtn);
         
-        this.add(fondo); // Se agrega el fondo al final para que esté en la capa más baja
+        this.add(fondo); // Add the background last so it's in the lowest layer
         
         this.setVisible(true);
     }
@@ -63,13 +91,17 @@ public class Menu extends JFrame implements ActionListener {
             new MiPerfil(usuarioActual);
             this.dispose();
         } else if (e.getSource() == multiplayerBtn) {
-            JOptionPane.showMessageDialog(this, "Función Multiplayer en desarrollo");
+            JOptionPane.showMessageDialog(this, messages.getString("dialog.multiplayer"));
         } else if (e.getSource() == ajustesBtn) {
             new Ajustes(usuarioActual);
             this.dispose();
         } else if (e.getSource() == salirBtn) {
-            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Desea cerrar sesión?", 
-                                                             "Confirmación", JOptionPane.YES_NO_OPTION);
+            int confirmacion = JOptionPane.showConfirmDialog(
+                this, 
+                messages.getString("dialog.confirmLogout"), 
+                messages.getString("dialog.confirmation"), 
+                JOptionPane.YES_NO_OPTION
+            );
             if (confirmacion == JOptionPane.YES_OPTION) {
                 new MainMenu();
                 this.dispose();

@@ -18,20 +18,18 @@ public class MiPerfil extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("Mi Perfil");
         this.setLayout(null);
-        this.setSize(800, 450); // Se ajusta la resolución
+        this.setSize(800, 450); 
         this.setLocationRelativeTo(null);
 
-        // Cargar imagen de fondo
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
         fondo.setBounds(0, 0, 800, 450);
 
         userData = UserFile.cargarUsuario(usuarioActual);
 
-        // Panel para el avatar
         avatarPanel = new JPanel();
         avatarPanel.setBounds(550, 50, 150, 150);
-        avatarPanel.setBackground(new Color(0, 0, 0, 0)); // Transparente
+        avatarPanel.setBackground(new Color(0, 0, 0, 0));
         this.add(avatarPanel);
 
         avatarLabel = new JLabel();
@@ -75,7 +73,6 @@ public class MiPerfil extends JFrame implements ActionListener {
         fechaLabel.setForeground(Color.white);
         this.add(fechaLabel);
 
-        // Add new labels for game statistics
         nivelMaximoLabel = new JLabel();
         nivelMaximoLabel.setBounds(50, 170, 250, 30);
         nivelMaximoLabel.setForeground(Color.white);
@@ -93,7 +90,7 @@ public class MiPerfil extends JFrame implements ActionListener {
 
         actualizarDatos();
 
-        this.add(fondo); // Se agrega el fondo al final para que esté en la capa más baja
+        this.add(fondo);
 
         this.setVisible(true);
     }

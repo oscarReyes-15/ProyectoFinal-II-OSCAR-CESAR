@@ -3,11 +3,10 @@ package Niveles;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import MenuGUI.Menu;
-import User.UserFile;
+import java.io.*;
+import javax.imageio.*;
+import User.*;
+import java.util.Locale;
 
 public class Nivel1 extends JPanel implements ActionListener {
     
@@ -97,6 +96,7 @@ public class Nivel1 extends JPanel implements ActionListener {
                 int key = e.getKeyCode();
                 
                 switch (key) {
+                    
                     case KeyEvent.VK_UP:
                         movePlayer(0, -1);
                         break;
@@ -107,6 +107,18 @@ public class Nivel1 extends JPanel implements ActionListener {
                         movePlayer(-1, 0);
                         break;
                     case KeyEvent.VK_RIGHT:
+                        movePlayer(1, 0);
+                        break;
+                     case KeyEvent.VK_W:
+                        movePlayer(0, -1);
+                        break;
+                    case KeyEvent.VK_S:
+                        movePlayer(0, 1);
+                        break;
+                    case KeyEvent.VK_A:
+                        movePlayer(-1, 0);
+                        break;
+                    case KeyEvent.VK_D:
                         movePlayer(1, 0);
                         break;
                     case KeyEvent.VK_R:
@@ -364,21 +376,7 @@ public class Nivel1 extends JPanel implements ActionListener {
             int messageWidth = fm.stringWidth(message);
             int messageX = (COLS * CELL_SIZE - messageWidth) / 2;
             g.drawString(message, messageX, ROWS * CELL_SIZE / 2);
-             int option = JOptionPane.showConfirmDialog(
-                frame,
-                "¿Desea ir al siguiente nivel o volver al menú?",
-                " ",
-                JOptionPane.YES_NO_OPTION);
-                
-            if (option == JOptionPane.YES_OPTION) {
-                frame.dispose();
-                if (usuarioActual != null) {
-                    new MenuGUI.Menu(usuarioActual);
-                } 
-                
-            } else {
-              new MenuGUI.Menu(usuarioActual);
-            }
+        
         }
     }
     
@@ -405,10 +403,5 @@ public class Nivel1 extends JPanel implements ActionListener {
             }
         }
     }
-    
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new Nivel1();
-        });
-    }
-}
+
+  }

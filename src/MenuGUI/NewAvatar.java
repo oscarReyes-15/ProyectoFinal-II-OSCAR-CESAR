@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.nio.file.*;
-import User.*;
 
 public class NewAvatar extends JFrame implements ActionListener {
     private JButton regresarBtn;

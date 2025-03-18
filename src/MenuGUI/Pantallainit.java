@@ -13,11 +13,9 @@ public class Pantallainit extends JFrame implements ActionListener {
         this.setTitle("Menu Principal");
         this.setLayout(null);
         
-        // Nueva resolución más pequeña
         int anchoVentana = 800;
         int altoVentana = 450;
 
-        // Cargar imagen de fondo sin redimensionar
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/inicioim.png");
         Image imgFondo = imagenFondo.getImage().getScaledInstance(anchoVentana, altoVentana, Image.SCALE_SMOOTH);
         fondo = new JLabel(new ImageIcon(imgFondo));
@@ -27,11 +25,9 @@ public class Pantallainit extends JFrame implements ActionListener {
         jugar.setBounds(320,250,150,30);
         jugar.addActionListener(this);
         this.add(jugar);
-        // Ajustar tamaño del frame
         this.setSize(anchoVentana, altoVentana);
         this.setLocationRelativeTo(null);
 
-        // Agregar componentes
         this.add(jugar);
         this.add(fondo);
         

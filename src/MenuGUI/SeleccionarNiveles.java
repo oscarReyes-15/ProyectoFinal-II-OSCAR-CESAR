@@ -1,9 +1,6 @@
 package MenuGUI;
 
-import MenuGUI.MainMenu;
-import MenuGUI.Menu;
-import Niveles.Nivel1;
-import User.UserFile;
+import Niveles.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -26,20 +23,17 @@ public class SeleccionarNiveles extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setLayout(null);
         
-        // Using the same background image as NewAvatar
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
         fondo.setBounds(0, 0, 800, 450);
         
   
-        // Calculate button positions for horizontal layout
         int buttonWidth = 80;
         int buttonHeight = 80;
         int spacing = 20;
         int startX = 150;
         int y = 150;
         
-        // Create level buttons
         lvl1btn = createLevelButton("Nivel 1", startX, y, buttonWidth, buttonHeight);
         lvl2btn = createLevelButton("Nivel 2", startX + buttonWidth + spacing, y, buttonWidth, buttonHeight);
         lvl3btn = createLevelButton("Nivel 3", startX + (buttonWidth + spacing) * 2, y, buttonWidth, buttonHeight);
@@ -52,7 +46,6 @@ public class SeleccionarNiveles extends JFrame implements ActionListener {
         backBtn.addActionListener(this);
         add(backBtn);
         
-        // Add the background last so it's behind all components
         this.add(fondo);
         
         this.setVisible(true);
@@ -61,7 +54,7 @@ public class SeleccionarNiveles extends JFrame implements ActionListener {
     private JButton createLevelButton(String text, int x, int y, int width, int height) {
         JButton button = new JButton(text);
         button.setBounds(x, y, width, height);
-        button.setBackground(new Color(245, 222, 179)); // Light brown color
+        button.setBackground(new Color(245, 222, 179)); // Light  
         button.setForeground(new Color(139, 69, 19)); // Dark brown color
         button.setFont(new Font("Arial", Font.BOLD, 14));
         button.addActionListener(this);
@@ -75,10 +68,9 @@ public void actionPerformed(ActionEvent e) {
         this.dispose();
         new Menu(usuarioActual);
     } else if (e.getSource() == lvl1btn) {
-        new Nivel1(usuarioActual); // Pass the username here
+        new Nivel1(usuarioActual); 
         this.dispose();
     } else if (e.getSource() == lvl2btn) {
-        // Implement level 2 logic similarly with the username
-    } // etc.
+    } 
 }
 }
