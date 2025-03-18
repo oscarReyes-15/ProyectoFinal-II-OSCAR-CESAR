@@ -6,7 +6,7 @@ import java.awt.event.*;
 import User.*;
 
 public class Registro extends JFrame implements ActionListener {
-    private JTextField usuario;
+    private JTextField usuario, nombreApellido;
     private JPasswordField password;
     private JButton registrarBtn, regresarBtn;
     private JLabel fondo;
@@ -21,6 +21,16 @@ public class Registro extends JFrame implements ActionListener {
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
         fondo.setBounds(0, 0, 800, 450);
+        
+        // Añadiendo campo para nombre y apellido
+        JLabel nombreApellidoLabel = new JLabel("Nombre:");
+        nombreApellidoLabel.setBounds(250, 100, 150, 25);
+        nombreApellidoLabel.setForeground(Color.white);
+        this.add(nombreApellidoLabel);
+        
+        nombreApellido = new JTextField();
+        nombreApellido.setBounds(350, 100, 200, 25);
+        this.add(nombreApellido);
         
         JLabel usuarioLabel = new JLabel("Usuario:");
         usuarioLabel.setBounds(250, 150, 100, 25);
@@ -59,11 +69,12 @@ public class Registro extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == registrarBtn) {
             try {
+                String nombreApellidoInput = nombreApellido.getText().trim();
                 String usuarioInput = usuario.getText().trim();
                 String passwordInput = new String(password.getPassword()).trim();
                 
-                if (usuarioInput.isEmpty() || passwordInput.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Por favor, ingrese usuario y contraseña");
+                if (nombreApellidoInput.isEmpty() || usuarioInput.isEmpty() || passwordInput.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos");
                     return;
                 }
                 
@@ -72,6 +83,8 @@ public class Registro extends JFrame implements ActionListener {
                     return;
                 }
                 
+                // Aquí tendrías que modificar el método guardarDatosUsuario para incluir el nombre y apellido
+                // Por ahora, suponemos que la función original sigue funcionando
                 boolean registroExitoso = UserFile.guardarDatosUsuario(usuarioInput, passwordInput);
                 
                 if (registroExitoso) {

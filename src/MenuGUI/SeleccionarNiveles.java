@@ -31,13 +31,7 @@ public class SeleccionarNiveles extends JFrame implements ActionListener {
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
         fondo.setBounds(0, 0, 800, 450);
         
-        // Create title label
-        JLabel titleLabel = new JLabel("Seleccionar Nivel");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setBounds(290, 100, 200, 30);
-        add(titleLabel);
-        
+  
         // Calculate button positions for horizontal layout
         int buttonWidth = 80;
         int buttonHeight = 80;

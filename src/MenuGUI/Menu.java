@@ -1,15 +1,10 @@
 package MenuGUI;
-
-import Juego.gameManager;
-import User.User;
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.*;
 import javax.swing.*;
-
 public class Menu extends JFrame implements ActionListener {
     
-    private JButton jugar, salirBtn, miPerfilBtn;
+    private JButton jugar, salirBtn, miPerfilBtn, multiplayerBtn, ajustesBtn;
     private String usuarioActual;
     private JLabel fondo;
     
@@ -26,18 +21,31 @@ public class Menu extends JFrame implements ActionListener {
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
         fondo.setBounds(0, 0, 800, 450);
         
+        // Subí todos los botones un poco para mejor distribución
         jugar = new JButton("1. Jugar");
-        jugar.setBounds(325, 150, 150, 30);
+        jugar.setBounds(325, 120, 150, 30);
         jugar.addActionListener(this);
         this.add(jugar);
         
         miPerfilBtn = new JButton("2. Mi Perfil");
-        miPerfilBtn.setBounds(325, 210, 150, 30);
+        miPerfilBtn.setBounds(325, 170, 150, 30);
         miPerfilBtn.addActionListener(this);
         this.add(miPerfilBtn);
         
-        salirBtn = new JButton("3. Cerrar Sesion");
-        salirBtn.setBounds(325, 270, 150, 30);
+        // Botón Multiplayer
+        multiplayerBtn = new JButton("3. MultiKigadpr");
+        multiplayerBtn.setBounds(325, 220, 150, 30);
+        multiplayerBtn.addActionListener(this);
+        this.add(multiplayerBtn);
+        
+        // Botón Ajustes
+        ajustesBtn = new JButton("4. Ajustes");
+        ajustesBtn.setBounds(325, 270, 150, 30);
+        ajustesBtn.addActionListener(this);
+        this.add(ajustesBtn);
+        
+        salirBtn = new JButton("5. Cerrar Sesion");
+        salirBtn.setBounds(325, 320, 150, 30);
         salirBtn.addActionListener(this);
         this.add(salirBtn);
         
@@ -53,6 +61,11 @@ public class Menu extends JFrame implements ActionListener {
             this.dispose();
         } else if (e.getSource() == miPerfilBtn) {
             new MiPerfil(usuarioActual);
+            this.dispose();
+        } else if (e.getSource() == multiplayerBtn) {
+            JOptionPane.showMessageDialog(this, "Función Multiplayer en desarrollo");
+        } else if (e.getSource() == ajustesBtn) {
+            new Ajustes(usuarioActual);
             this.dispose();
         } else if (e.getSource() == salirBtn) {
             int confirmacion = JOptionPane.showConfirmDialog(this, "¿Desea cerrar sesión?", 

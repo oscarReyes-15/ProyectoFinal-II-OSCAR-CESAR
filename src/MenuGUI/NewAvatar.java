@@ -28,7 +28,7 @@ public class NewAvatar extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setLayout(null);
         
-        ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
+        ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui1.png");
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
         fondo.setBounds(0, 0, 800, 450);
         
