@@ -26,7 +26,6 @@ public class inputHandler implements KeyListener{
         int keyCode = e.getKeyCode();
 
         if (keyCode == KeyEvent.VK_W) {
-            System.out.println("woooo");
             upPressed = true;
         }
         if (keyCode == KeyEvent.VK_S) {

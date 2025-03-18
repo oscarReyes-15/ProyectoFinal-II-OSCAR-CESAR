@@ -17,20 +17,24 @@ public class NewAvatar extends JFrame implements ActionListener {
         "src/Images/avatar4.png"
     };
     private String usuarioActual;
+    private JLabel fondo;
     
     public NewAvatar(String usuario) {
         this.usuarioActual = usuario;
         
         this.setTitle("Seleccionar Avatar");
-        this.setSize(600, 500);
+        this.setSize(800, 450);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
-        this.setLayout(new BorderLayout());
-        this.getContentPane().setBackground(new Color(177, 37, 7));
+        this.setLayout(null);
+        
+        ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
+        fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
+        fondo.setBounds(0, 0, 800, 450);
         
         JPanel avatarPanel = new JPanel(new GridLayout(2, 2, 20, 20));
-        avatarPanel.setBackground(new Color(177, 37, 7));
-        avatarPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        avatarPanel.setBounds(200, 50, 400, 300);
+        avatarPanel.setOpaque(false);
         
         avatarButtons = new JButton[avatarPaths.length];
         
@@ -42,7 +46,7 @@ public class NewAvatar extends JFrame implements ActionListener {
                 
                 avatarButtons[i] = new JButton(avatarEscalado);
                 avatarButtons[i].setPreferredSize(new Dimension(150, 150));
-                avatarButtons[i].setActionCommand(avatarPaths[i]); // Store full path
+                avatarButtons[i].setActionCommand(avatarPaths[i]);
                 avatarButtons[i].addActionListener(this);
                 avatarPanel.add(avatarButtons[i]);
             } catch (Exception ex) {
@@ -54,16 +58,14 @@ public class NewAvatar extends JFrame implements ActionListener {
             }
         }
         
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        bottomPanel.setBackground(new Color(177, 37, 7));
+        this.add(avatarPanel);
         
         regresarBtn = new JButton("Regresar sin cambiar");
-        regresarBtn.setPreferredSize(new Dimension(200, 40));
+        regresarBtn.setBounds(300, 370, 200, 30);
         regresarBtn.addActionListener(this);
-        bottomPanel.add(regresarBtn);
+        this.add(regresarBtn);
         
-        this.add(avatarPanel, BorderLayout.CENTER);
-        this.add(bottomPanel, BorderLayout.SOUTH);
+        this.add(fondo);
         
         this.setVisible(true);
     }
@@ -108,7 +110,7 @@ public class NewAvatar extends JFrame implements ActionListener {
                     String selectedAvatar = button.getActionCommand();
                     
                     if (copiarAvatarSeleccionado(usuarioActual, selectedAvatar)) {
-                        JOptionPane.showMessageDialog(this, "Avatar seleccionado correctamente", "Ã‰xito", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Avatar seleccionado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                         
                         try {
                             new MiPerfil(usuarioActual);

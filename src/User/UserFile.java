@@ -4,10 +4,11 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class UserFile{
+public class UserFile {
     
     private static final String USER_DATA_FILE = "/datos.bin";
     private static final String USER_STATS_FILE = "/stats.bin";
+    private static final String USER_GAME_STATS_FILE = "/gamestats.bin";
     
     
     public static boolean guardarDatosUsuario(String usuario, String password) {
@@ -20,7 +21,8 @@ public class UserFile{
         try (DataOutputStream salida = new DataOutputStream(new FileOutputStream(archivo))) {
             salida.writeUTF(usuario);
             salida.writeUTF(password);
-             guardarEstadisticasUsuario(usuario, 0, LocalDate.now());
+            guardarEstadisticasUsuario(usuario, 0, LocalDate.now());
+            guardarEstadisticasJuego(usuario, 0, 0); // Initialize game stats
             return true;
         } catch (IOException ex) {
             System.err.println("Error al guardar datos de usuario: " + ex.getMessage());
@@ -46,7 +48,70 @@ public class UserFile{
         }
     }
     
-  
+    // New method to save game statistics
+    public static boolean guardarEstadisticasJuego(String usuario, int nivelMaximo, int partidasJugadas) {
+        File directorio = new File(usuario);
+        if (!directorio.exists()) {
+            directorio.mkdir();
+        }
+        
+        File archivo = new File(usuario + USER_GAME_STATS_FILE);
+        try (DataOutputStream salida = new DataOutputStream(new FileOutputStream(archivo))) {
+            salida.writeInt(nivelMaximo);
+            salida.writeInt(partidasJugadas);
+            return true;
+        } catch (IOException ex) {
+            System.err.println("Error al guardar estadísticas de juego: " + ex.getMessage());
+            return false;
+        }
+    }
+    
+    // Method to load game statistics
+    public static int[] cargarEstadisticasJuego(String usuario) {
+        File archivo = new File(usuario + USER_GAME_STATS_FILE);
+        int[] stats = new int[2]; // [nivelMaximo, partidasJugadas]
+        
+        if (!archivo.exists()) {
+            return new int[]{0, 0};
+        }
+        
+        try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
+            stats[0] = entrada.readInt(); // nivelMaximo
+            stats[1] = entrada.readInt(); // partidasJugadas
+            return stats;
+        } catch (IOException ex) {
+            System.err.println("Error al cargar estadísticas de juego: " + ex.getMessage());
+            return new int[]{0, 0};
+        }
+    }
+    
+    // Method to set completed level
+    public static boolean setNivelCompletado(String usuario, int nivel) {
+        int[] stats = cargarEstadisticasJuego(usuario);
+        if (nivel > stats[0]) {
+            stats[0] = nivel;
+            return guardarEstadisticasJuego(usuario, stats[0], stats[1]);
+        }
+        return true;
+    }
+    
+    // Method to increment played games count
+    public static boolean incrementarPartidasJugadas(String usuario) {
+        int[] stats = cargarEstadisticasJuego(usuario);
+        stats[1]++;
+        return guardarEstadisticasJuego(usuario, stats[0], stats[1]);
+    }
+    
+    // Method to get max unlocked level
+    public static int getNivelMaximo(String usuario) {
+        return cargarEstadisticasJuego(usuario)[0];
+    }
+    
+    // Method to get played games count
+    public static int getPartidasJugadas(String usuario) {
+        return cargarEstadisticasJuego(usuario)[1];
+    }
+
     public static boolean actualizarPuntos(String usuario, int puntosNuevos) {
         User user = cargarUsuario(usuario);
         if (user != null) {
@@ -126,5 +191,4 @@ public class UserFile{
         File archivoDatos = new File(usuario + USER_DATA_FILE);
         return directorio.exists() && archivoDatos.exists();
     }
-    
 }

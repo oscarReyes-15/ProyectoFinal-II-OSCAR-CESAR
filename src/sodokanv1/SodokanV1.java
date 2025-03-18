@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package sodokanv1;
-import MenuGUI.MainMenu;
+import MenuGUI.Pantallainit;
 /**
  *
  * @author LENOVO
@@ -15,7 +15,7 @@ public class SodokanV1 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        new MainMenu();
+        new Pantallainit();
         
     }
     

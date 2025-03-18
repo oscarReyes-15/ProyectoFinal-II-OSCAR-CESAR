@@ -10,33 +10,13 @@ import java.awt.event.KeyListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-/*
-    funciones de juego
-        Rendering
-        - refresh
-        - cargar nivel (carga el nivel en gameManager y corre la funcion run)
-        - run (hace el render)
-        - spawnObjects (debe de renderizar objetos segun un mapa de enteros (int) )
-        - salirNivel (sale del nivel)
-        - displayPause
-        - reiniciar Juego (nullify el thread y crea uno nuevo, efectivamente reiniciando la partida ( !!! debe reiniciar atributos de juego y jugador !!! ))
-
-        informacion de juego
-        - desbloquear nivel
-        - ganarNivel (cuando todas las cajas esten en su lugar (ejecuta salir nivel y completar nivel) )
-        - completar nivel (set completado com true solo al ganar, no al salir)
-
-*/
-
 public class Nivel extends JPanel implements Runnable {
-    // dependencias
     public User user;
     public gameManager game;
     public Mundo mundo;
     
     // atributos del nivel
-    int fps = 15;
+    int fps = 30;
     boolean isDesBloqueado = true;
     boolean completado = false;
     int moves;
@@ -45,14 +25,14 @@ public class Nivel extends JPanel implements Runnable {
     int[] spawnPoint = {0, 16};
     boolean running = false;
     
+    private NivelMap nivelMap;
+    private int tileSize = 32; 
+    
     // objetos de nivel
     jugador player;
     inputHandler input;
     Thread nivelThread;
     JLabel pop;
-
-    
-   
     
     public Nivel(int code, User user, gameManager game, Mundo mundo, Color color) {
         this.code = code;
@@ -61,25 +41,25 @@ public class Nivel extends JPanel implements Runnable {
         this.mundo = mundo;
         setBackground(color);
         
+        nivelMap = new NivelMap(code);
     }
     
-    public int getSpawnX () {
-        return spawnPoint[0];
+    public int getSpawnX() {
+        return nivelMap.getPlayerX();
     }
     
-    public int getSpawnY () {
-        return spawnPoint[1];
+    public int getSpawnY() {
+        return nivelMap.getPlayerY();
     }
     
     public boolean isComplete() {
         return completado;
     }
-
     
-    public void cargar () {
-        if (isDesBloqueado){
+    public void cargar() {
+        if (isDesBloqueado) {
             input = new inputHandler();
-            player = new jugador (user, input, this);
+            player = new jugador(user, input, this);
             
             moves = player.getMoves();
             
@@ -95,32 +75,70 @@ public class Nivel extends JPanel implements Runnable {
         } 
     }
     
-    public void desbloquearNivel () {
+    public void desbloquearNivel() {
         isDesBloqueado = true;
     }
-    
     
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         render(g);
-             
     }
     
-
-    
-    public void updateGame () {
-        player.move();
+    public void updateGame() {
+        // Check for player movement
+        if (input.upPressed) {
+            if (nivelMap.movePlayer(0, -1)) {
+                player.incrementMoves();
+            }
+            input.upPressed = false;
+        }
+        if (input.downPressed) {
+            if (nivelMap.movePlayer(0, 1)) {
+                player.incrementMoves();
+            }
+            input.downPressed = false;
+        }
+        if (input.leftPressed) {
+            if (nivelMap.movePlayer(-1, 0)) {
+                player.incrementMoves();
+            }
+            input.leftPressed = false;
+        }
+        if (input.rightPressed) {
+            if (nivelMap.movePlayer(1, 0)) {
+                player.incrementMoves();
+            }
+            input.rightPressed = false;
+        }
+        
+        // Check if level is complete
+        if (nivelMap.isLevelComplete()) {
+            ganarNivel();
+        }
+        
         moves = player.getMoves();
+    }
+    
+    public void ganarNivel() {
+        completado = true;
+        running = false;
+        JOptionPane.showMessageDialog(this, "¡Nivel completado!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        salirNivel();
+    }
+    
+    public void salirNivel() {
+        nivelThread = null;
+        game.select(mundo);
+        removeAll();
     }
     
     @Override
     public void run() {
-        
         setDoubleBuffered(true);
 
         SwingUtilities.invokeLater(() -> {
-            JButton salir = new JButton ("salir");
+            JButton salir = new JButton("Salir");
             salir.addActionListener(e -> {
                 nivelThread = null;
                 game.select(mundo);
@@ -131,7 +149,6 @@ public class Nivel extends JPanel implements Runnable {
         });
 
         while (running) {
-
             // 1. actualizar informacion de objetos
             updateGame();
 
@@ -139,25 +156,27 @@ public class Nivel extends JPanel implements Runnable {
             repaint();
             
             try {
-                //3 ESPERA - WAIT
+                // 3. ESPERA - WAIT
                 Thread.sleep(1000 / fps);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Nivel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
     }
     
-    public void render (Graphics g) {
+    public void render(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        g2.setBackground(Color.yellow);
-        g2.drawImage(player.getImage().getImage(), 0, 0, getWidth(), getHeight(), this);
-        player.draw(g2, this);  
+        
+        // Draw level map
+        nivelMap.draw(g2, tileSize);
+        
+        // Note: you might not need to draw the player separately since it's included in the map
+        // But if you want custom player rendering, you can do it here
+        // player.draw(g2, this);
     }
     
-    public void refresh () {
+    public void refresh() {
         revalidate();
         repaint();
     }
 }
-

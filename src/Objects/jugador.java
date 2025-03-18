@@ -1,64 +1,47 @@
 package Objects;
 
-
 import Juego.Nivel;
 import Juego.inputHandler;
 import User.User;
 import java.awt.Graphics2D;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
-
-
-public class jugador extends Object {
-    private final User user;
+public class jugador {
+    // Attributes
+    private User user;
     private inputHandler input;
     private Nivel nivel;
+    private int moves;
+    private ImageIcon image;
     
-    private int moves = 0;    
-    private int speed = 16;
-    
-    public jugador (User user, inputHandler input, Nivel nivel) {
-        super(nivel.getSpawnX(), nivel.getSpawnY(), this.nivel = nivel);
+    // Constructor
+    public jugador(User user, inputHandler input, Nivel nivel) {
         this.user = user;
         this.input = input;
-        
-        image = new ImageIcon("C:\\Users\\LENOVO\\OneDrive - Universidad Tecnologica Centroamericana\\Trimestre #3\\Programacion II\\GarbageTests\\SodokanV1\\src\\Images\\avatar2.png");
+        this.nivel = nivel;
+        this.moves = 0;
+        this.image = new ImageIcon("src/Images/sprite1.png");
     }
     
-    public int getMoves () {
+    // Methods
+    public void move() {
+        // Movement is now handled in the Nivel class directly
+    }
+    
+    public void incrementMoves() {
+        moves++;
+    }
+    
+    public int getMoves() {
         return moves;
     }
     
-    public void move () {
-        if (input.downPressed && isInBound(speed, "y")){
-            y += speed;
-        } else if (input.upPressed && isInBound(-speed, "y")){
-            y += -speed;
-        }
-        if (input.rightPressed && isInBound(speed, "x")){
-            x += speed;
-        } else if (input.leftPressed && isInBound(-speed, "x")){
-            x += -speed;
-        }
-        moves += 1;
+    public ImageIcon getImage() {
+        return image;
     }
     
-    
-    public void draw (Graphics2D g, JComponent comp) {
-        g.drawImage(getImage().getImage(), x, y, tileSize, tileSize,  comp);
+    public void draw(Graphics2D g2, JPanel panel) {
+        // No need to draw here since the map handles drawing the player
     }
-    
-    public void printPos () {
-        System.out.println( x + " " + y);
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    
 }

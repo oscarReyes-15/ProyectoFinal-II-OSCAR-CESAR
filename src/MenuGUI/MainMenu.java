@@ -1,6 +1,5 @@
 package MenuGUI;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,33 +8,40 @@ public class MainMenu extends JFrame implements ActionListener {
     private JButton loginbtn;
     private JButton crearcuentabtn;
     private JButton salirbtn;
-
+    private JLabel fondo;
     
     public MainMenu() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("Prueba");
-        this.setSize(400, 300);
+        this.setSize(800, 450);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
-        this.getContentPane().setBackground(new Color(177, 37, 7));
-
+        
+        // Cargar imagen de fondo
+        ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
+        fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
+        fondo.setBounds(0, 0, 800, 450);
+        
         loginbtn = new JButton("1. Login");
-        loginbtn.setBounds(125, 50, 150, 40);
+        loginbtn.setBounds(325, 150, 150, 40);
         loginbtn.addActionListener(this);
         this.add(loginbtn);
-
+        
         crearcuentabtn = new JButton("2. Crear Cuenta");
-        crearcuentabtn.setBounds(125, 110, 150, 40);
+        crearcuentabtn.setBounds(325, 210, 150, 40);
         crearcuentabtn.addActionListener(this);
         this.add(crearcuentabtn);
-
+        
         salirbtn = new JButton("3. Salir");
-        salirbtn.setBounds(125, 170, 150, 40);
+        salirbtn.setBounds(325, 270, 150, 40);
         salirbtn.addActionListener(this);
         this.add(salirbtn);
-
+        
+        this.add(fondo); // Se agrega el fondo al final para que esté en la capa más baja
+        
         this.setVisible(true);
     }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loginbtn) {
@@ -49,5 +55,4 @@ public class MainMenu extends JFrame implements ActionListener {
             System.exit(0);
         }
     }
-  
 }

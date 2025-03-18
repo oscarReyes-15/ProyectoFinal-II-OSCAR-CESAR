@@ -25,7 +25,7 @@ public final class MapaMundi {
     // atributos
     Mundo[] mundos;
     JPanel mapaMundi;
-    int cantMundos = 2;
+    int cantMundos = 1;
     JButton[] btnMnds;
     ImageIcon bg;
     
@@ -46,7 +46,8 @@ public final class MapaMundi {
         mapaMundi = new JPanel ();
         
         //
-        bg = new ImageIcon ("C:\\Users\\LENOVO\\OneDrive - Universidad Tecnologica Centroamericana\\Trimestre #3\\Programacion II\\GarbageTests\\SodokanV1\\src\\Images\\avatar4.png");
+        bg = new ImageIcon ("src/Images/fondogame.png"
+);
         
         //
         initMundos();
