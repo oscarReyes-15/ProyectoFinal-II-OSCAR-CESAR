@@ -33,7 +33,7 @@ public class Menu extends JFrame implements ActionListener {
         this.add(miPerfilBtn);
         
         // Botón Multiplayer
-        multiplayerBtn = new JButton("3. MultiKigadpr");
+        multiplayerBtn = new JButton("3. Multijugadpr");
         multiplayerBtn.setBounds(325, 220, 150, 30);
         multiplayerBtn.addActionListener(this);
         this.add(multiplayerBtn);
