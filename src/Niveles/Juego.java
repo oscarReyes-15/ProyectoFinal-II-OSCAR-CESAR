@@ -135,7 +135,6 @@ public abstract class Juego extends JPanel implements ActionListener {
         int newX = playerX + dx;
         int newY = playerY + dy;
         
-        // Check boundary
         if (newX < 0 || newX >= COLS || newY < 0 || newY >= ROWS) {
             return;
         }

@@ -5,27 +5,38 @@ import java.awt.*;
 import java.awt.event.*;
 import User.*;
 import java.io.*;
+import java.util.ResourceBundle;
 
 public class MiPerfil extends JFrame implements ActionListener {
     private JButton regresarBtn, cambiarContraBtn, eliminarCuentaBtn, cambiarAvatarBtn;
     private String usuarioActual;
     private JLabel usuarioLabel, puntosLabel, fechaLabel, avatarLabel, tiempoJugadoLabel, partidasJugadasLabel, nivelMaximoLabel, fondo;
     private User userData;
-    private JPanel avatarPanel;
+    private JPanel avatarPanel, infoPanel;
+    private ResourceBundle messages;
 
     public MiPerfil(String usuario) {
         this.usuarioActual = usuario;
+        this.messages = LanguageManager.getMessages();
+        
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setTitle("Mi Perfil");
+        this.setTitle(messages.getString("title.profile"));
         this.setLayout(null);
         this.setSize(800, 450); 
         this.setLocationRelativeTo(null);
 
-        ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
+        ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui1.png");
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
         fondo.setBounds(0, 0, 800, 450);
 
         userData = UserFile.cargarUsuario(usuarioActual);
+
+        infoPanel = new JPanel();
+        infoPanel.setLayout(null);
+        infoPanel.setBounds(30, 30, 470, 250); 
+        infoPanel.setBackground(new Color(0, 20, 60, 200)); 
+        infoPanel.setBorder(BorderFactory.createLineBorder(new Color(100, 180, 255), 2)); 
+        this.add(infoPanel);
 
         avatarPanel = new JPanel();
         avatarPanel.setBounds(550, 50, 150, 150);
@@ -37,56 +48,70 @@ public class MiPerfil extends JFrame implements ActionListener {
         avatarLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         avatarPanel.add(avatarLabel);
 
-        cambiarAvatarBtn = new JButton("Cambiar Avatar");
+        cambiarAvatarBtn = new JButton(messages.getString("button.changeAvatar"));
         cambiarAvatarBtn.setBounds(550, 210, 150, 30);
         cambiarAvatarBtn.addActionListener(this);
         this.add(cambiarAvatarBtn);
 
-        cambiarContraBtn = new JButton("Cambiar Contraseña");
+        // Botones ahora ubicados bajo el panel de información
+        cambiarContraBtn = new JButton(messages.getString("button.changePassword"));
         cambiarContraBtn.setBounds(50, 290, 200, 30);
         cambiarContraBtn.addActionListener(this);
         this.add(cambiarContraBtn);
 
-        eliminarCuentaBtn = new JButton("Eliminar Cuenta");
+        eliminarCuentaBtn = new JButton(messages.getString("button.deleteAccount"));
         eliminarCuentaBtn.setBounds(50, 330, 200, 30);
         eliminarCuentaBtn.addActionListener(this);
         this.add(eliminarCuentaBtn);
 
-        regresarBtn = new JButton("Regresar");
+        regresarBtn = new JButton(messages.getString("button.back"));
         regresarBtn.setBounds(50, 370, 200, 30);
         regresarBtn.addActionListener(this);
         this.add(regresarBtn);
 
+        // Etiquetas dentro del panel de información
         usuarioLabel = new JLabel();
-        usuarioLabel.setBounds(50, 50, 250, 30);
+        usuarioLabel.setBounds(20, 20, 250, 30);
         usuarioLabel.setForeground(Color.white);
-        usuarioLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        this.add(usuarioLabel);
+        usuarioLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        infoPanel.add(usuarioLabel);
 
         puntosLabel = new JLabel();
-        puntosLabel.setBounds(50, 90, 250, 30);
+        puntosLabel.setBounds(20, 60, 250, 30);
         puntosLabel.setForeground(Color.white);
-        this.add(puntosLabel);
+        puntosLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        infoPanel.add(puntosLabel);
 
         fechaLabel = new JLabel();
-        fechaLabel.setBounds(50, 130, 250, 30);
+        fechaLabel.setBounds(20, 100, 250, 30);
         fechaLabel.setForeground(Color.white);
-        this.add(fechaLabel);
+        fechaLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        infoPanel.add(fechaLabel);
 
         nivelMaximoLabel = new JLabel();
-        nivelMaximoLabel.setBounds(50, 170, 250, 30);
+        nivelMaximoLabel.setBounds(20, 140, 250, 30);
         nivelMaximoLabel.setForeground(Color.white);
-        this.add(nivelMaximoLabel);
+        nivelMaximoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        infoPanel.add(nivelMaximoLabel);
 
         partidasJugadasLabel = new JLabel();
-        partidasJugadasLabel.setBounds(50, 210, 250, 30);
+        partidasJugadasLabel.setBounds(20, 180, 250, 30);
         partidasJugadasLabel.setForeground(Color.white);
-        this.add(partidasJugadasLabel);
+        partidasJugadasLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        infoPanel.add(partidasJugadasLabel);
 
         tiempoJugadoLabel = new JLabel();
-        tiempoJugadoLabel.setBounds(50, 250, 250, 30);
+        tiempoJugadoLabel.setBounds(20, 220, 250, 30);
         tiempoJugadoLabel.setForeground(Color.white);
-        this.add(tiempoJugadoLabel);
+        tiempoJugadoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        infoPanel.add(tiempoJugadoLabel);
+
+        JLabel titleLabel = new JLabel(messages.getString("title.profile"));
+        titleLabel.setBounds(135, 5, 200, 30);
+        titleLabel.setForeground(new Color(255, 255, 200));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        infoPanel.add(titleLabel);
 
         actualizarDatos();
 
@@ -100,30 +125,28 @@ public class MiPerfil extends JFrame implements ActionListener {
             userData = UserFile.cargarUsuario(usuarioActual);
 
             if (userData != null) {
-                usuarioLabel.setText("Usuario: " + userData.getUsuario());
-                puntosLabel.setText("Puntos: " + userData.getPuntos());
-                fechaLabel.setText("Fecha de creación: " + userData.getFechaCreacion().toString());
+                usuarioLabel.setText(messages.getString("profile.user") + ": " + userData.getUsuario());
+                puntosLabel.setText(messages.getString("profile.points") + ": " + userData.getPuntos());
+                fechaLabel.setText(messages.getString("profile.creationDate") + ": " + userData.getFechaCreacion().toString());
                 
-                // Get game statistics
                 int nivelMaximo = UserFile.getNivelMaximo(usuarioActual);
                 int partidasJugadas = UserFile.getPartidasJugadas(usuarioActual);
                 
-                nivelMaximoLabel.setText("Nivel máximo: " + nivelMaximo);
-                partidasJugadasLabel.setText("Partidas jugadas: " + partidasJugadas);
-                tiempoJugadoLabel.setText("Tiempo Jugado: No disponible");
+                nivelMaximoLabel.setText(messages.getString("profile.maxLevel") + ": " + nivelMaximo);
+                partidasJugadasLabel.setText(messages.getString("profile.gamesPlayed") + ": " + partidasJugadas);
+                tiempoJugadoLabel.setText(messages.getString("profile.timePlayed") + ": " + messages.getString("profile.notAvailable"));
 
                 actualizarAvatar();
             } else {
-                usuarioLabel.setText("Usuario: " + usuarioActual);
-                puntosLabel.setText("Puntos: No disponible");
-                fechaLabel.setText("Fecha de creación: No disponible");
-                nivelMaximoLabel.setText("Nivel máximo: No disponible");
-                partidasJugadasLabel.setText("Partidas Jugadas: No disponible");
-                tiempoJugadoLabel.setText("Tiempo Jugado: No disponible");
+                usuarioLabel.setText(messages.getString("profile.user") + ": " + usuarioActual);
+                puntosLabel.setText(messages.getString("profile.points") + ": " + messages.getString("profile.notAvailable"));
+                fechaLabel.setText(messages.getString("profile.creationDate") + ": " + messages.getString("profile.notAvailable"));
+                nivelMaximoLabel.setText(messages.getString("profile.maxLevel") + ": " + messages.getString("profile.notAvailable"));
+                partidasJugadasLabel.setText(messages.getString("profile.gamesPlayed") + ": " + messages.getString("profile.notAvailable"));
+                tiempoJugadoLabel.setText(messages.getString("profile.timePlayed") + ": " + messages.getString("profile.notAvailable"));
             }
         }
     }
-
 
     private void actualizarAvatar() {
         File avatarFile = new File(usuarioActual + "/avatar.png");

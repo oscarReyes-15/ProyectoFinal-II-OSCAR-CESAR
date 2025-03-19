@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.nio.file.*;
+import java.util.ResourceBundle;
 
 public class NewAvatar extends JFrame implements ActionListener {
     private JButton regresarBtn;
@@ -17,11 +18,13 @@ public class NewAvatar extends JFrame implements ActionListener {
     };
     private String usuarioActual;
     private JLabel fondo;
+    private ResourceBundle messages;
     
     public NewAvatar(String usuario) {
         this.usuarioActual = usuario;
+        this.messages = LanguageManager.getMessages();
         
-        this.setTitle("Seleccionar Avatar");
+        this.setTitle(messages.getString("title.selectAvatar"));
         this.setSize(800, 450);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
@@ -59,7 +62,7 @@ public class NewAvatar extends JFrame implements ActionListener {
         
         this.add(avatarPanel);
         
-        regresarBtn = new JButton("Regresar sin cambiar");
+        regresarBtn = new JButton(messages.getString("button.returnWithoutChanging"));
         regresarBtn.setBounds(300, 370, 200, 30);
         regresarBtn.addActionListener(this);
         this.add(regresarBtn);
@@ -100,7 +103,10 @@ public class NewAvatar extends JFrame implements ActionListener {
                 new MiPerfil(usuarioActual);
                 this.dispose();
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error al regresar al perfil", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, 
+                    messages.getString("dialog.profileError"), 
+                    messages.getString("dialog.error"), 
+                    JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
         } else {
@@ -109,17 +115,26 @@ public class NewAvatar extends JFrame implements ActionListener {
                     String selectedAvatar = button.getActionCommand();
                     
                     if (copiarAvatarSeleccionado(usuarioActual, selectedAvatar)) {
-                        JOptionPane.showMessageDialog(this, "Avatar seleccionado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, 
+                            messages.getString("dialog.avatarSelected"), 
+                            messages.getString("dialog.success"), 
+                            JOptionPane.INFORMATION_MESSAGE);
                         
                         try {
                             new MiPerfil(usuarioActual);
                             this.dispose();
                         } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(this, "Error al regresar al perfil", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(this, 
+                                messages.getString("dialog.profileError"), 
+                                messages.getString("dialog.error"), 
+                                JOptionPane.ERROR_MESSAGE);
                             ex.printStackTrace();
                         }
                     } else {
-                        JOptionPane.showMessageDialog(this, "Error al copiar el avatar seleccionado", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, 
+                            messages.getString("dialog.avatarError"), 
+                            messages.getString("dialog.error"), 
+                            JOptionPane.ERROR_MESSAGE);
                     }
                     break;
                 }
