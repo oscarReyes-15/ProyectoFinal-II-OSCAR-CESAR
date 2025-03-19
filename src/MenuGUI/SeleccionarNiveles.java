@@ -71,6 +71,8 @@ public void actionPerformed(ActionEvent e) {
         new Nivel1(usuarioActual); 
         this.dispose();
     } else if (e.getSource() == lvl2btn) {
+         new Nivel2(usuarioActual); 
+        this.dispose();
     } 
 }
 }

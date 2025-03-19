@@ -3,20 +3,14 @@ import java.util.*;
 
 public class LanguageManager {
     private static Locale currentLocale = new Locale("es", "ES");
-    // Maps to store the messages for each language
     private static final Map<String, String> spanishMessages = new HashMap<>();
     private static final Map<String, String> englishMessages = new HashMap<>();
-    // Custom ResourceBundle that uses our maps
     private static ResourceBundle messages;
     
-    // Static initializer block - runs when the class is loaded
     static {
-        // Populate Spanish messages
         initializeSpanishMessages();
-        // Populate English messages
         initializeEnglishMessages();
         
-        // Create initial ResourceBundle based on default locale (Spanish)
         messages = createCustomBundle(spanishMessages);
     }
     
@@ -44,7 +38,6 @@ public class LanguageManager {
         spanishMessages.put("controls.moveLeft", "Mover Izquierda: Flecha Izquierda / A" );
         spanishMessages.put("controls.moveRight", "Mover Derecha: Flecha Derecha / D" );
         spanishMessages.put("controls.reset", "Reiniciar : R" );
-
 
     }
     
@@ -75,7 +68,6 @@ public class LanguageManager {
 
     }
     
-    // Creates a custom ResourceBundle that uses our maps
     private static ResourceBundle createCustomBundle(final Map<String, String> messagesMap) {
         return new ResourceBundle() {
             @Override

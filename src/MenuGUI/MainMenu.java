@@ -21,7 +21,7 @@ public class MainMenu extends JFrame implements ActionListener {
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
         fondo.setBounds(0, 0, 800, 450);
         
-        loginbtn = new JButton("1. Login");
+        loginbtn = new JButton("1. Iniciar Sesion");
         loginbtn.setBounds(325, 150, 150, 40);
         loginbtn.addActionListener(this);
         this.add(loginbtn);
