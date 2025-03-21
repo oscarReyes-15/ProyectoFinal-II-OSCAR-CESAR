@@ -1,5 +1,6 @@
 package MenuGUI;
 
+import Sounds.Sonidos;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -14,10 +15,12 @@ public class MiPerfil extends JFrame implements ActionListener {
     private User userData;
     private JPanel avatarPanel, infoPanel;
     private ResourceBundle messages;
-
-    public MiPerfil(String usuario) {
+    private Sonidos s;
+    
+    public MiPerfil(String usuario, Sonidos s) {
         this.usuarioActual = usuario;
         this.messages = LanguageManager.getMessages();
+        this. s = s;
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle(messages.getString("title.profile"));
@@ -178,20 +181,24 @@ public class MiPerfil extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == cambiarAvatarBtn) {
-            new NewAvatar(usuarioActual);
+            s.Play(3);
+            new NewAvatar(usuarioActual, s);
             this.dispose();
         } else if (e.getSource() == cambiarContraBtn) {
+            s.Play(3);
             UserLogic userLogic = new UserLogic(usuarioActual);
             userLogic.cambiarContrasena();
         } else if (e.getSource() == eliminarCuentaBtn) {
+            s.Play(3);
             UserLogic userLogic = new UserLogic(usuarioActual);
             boolean deleted = userLogic.eliminarCuenta();
             if (deleted) {
-                new MainMenu();
+                new MainMenu(s);
                 this.dispose();
             }
         } else if (e.getSource() == regresarBtn) {
-            new Menu(usuarioActual);
+            s.Play(3);
+            new Menu(usuarioActual, s);
             this.dispose();
         }
     }

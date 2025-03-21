@@ -1,5 +1,6 @@
 package MenuGUI;
 
+import Sounds.Sonidos;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -7,11 +8,13 @@ import javax.swing.*;
 public class Pantallainit extends JFrame implements ActionListener {
     private JButton jugar;
     private JLabel fondo;
-
-    public Pantallainit() {
+    protected Sonidos sonido;
+    
+    public Pantallainit(Sonidos sonido) {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("Menu Principal");
         this.setLayout(null);
+        this. sonido = sonido;
         
         int anchoVentana = 800;
         int altoVentana = 450;
@@ -27,7 +30,9 @@ public class Pantallainit extends JFrame implements ActionListener {
         this.add(jugar);
         this.setSize(anchoVentana, altoVentana);
         this.setLocationRelativeTo(null);
+        
 
+        
         this.add(jugar);
         this.add(fondo);
         
@@ -37,14 +42,10 @@ public class Pantallainit extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == jugar) {
-            new MainMenu(); 
+            sonido.Play(3);
+            new MainMenu(sonido); 
             this.dispose();
         }
     }
 
-
-
-    public static void main(String[] args) {
-        new Pantallainit();
-    }
 }

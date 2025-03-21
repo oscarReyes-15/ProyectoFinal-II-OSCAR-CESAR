@@ -1,5 +1,6 @@
 package Niveles;
 
+import Sounds.Sonidos;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -7,6 +8,7 @@ import java.io.*;
 import javax.imageio.*;
 
 public abstract class Juego extends JPanel implements ActionListener {
+    private Sonidos s;
     
     // Constants for game elements
     protected static final int CELL_SIZE = 60;
@@ -41,10 +43,11 @@ public abstract class Juego extends JPanel implements ActionListener {
     
     protected String usuarioActual;
     
-    public Juego(String usuario, int nivel) {
+    public Juego(String usuario, int nivel, Sonidos s) {
         this.usuarioActual = usuario;
         this.currentLevel = nivel;
         this.setPreferredSize(new Dimension(COLS * CELL_SIZE, ROWS * CELL_SIZE));
+        this. s = s;
         
         this.setFocusable(true);
         this.addKeyListener(new KeyAdapter() {
@@ -305,7 +308,7 @@ public abstract class Juego extends JPanel implements ActionListener {
             if (option == JOptionPane.YES_OPTION) {
                 frame.dispose();
                 if (usuarioActual != null) {
-                    new MenuGUI.Menu(usuarioActual);
+                    new MenuGUI.Menu(usuarioActual, s);
                 }
             } else {
                 this.requestFocus(); 

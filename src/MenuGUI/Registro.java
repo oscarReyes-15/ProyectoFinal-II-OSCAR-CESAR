@@ -1,4 +1,5 @@
 package MenuGUI;
+import Sounds.Sonidos;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -10,13 +11,15 @@ public class Registro extends JFrame implements ActionListener {
     private JPasswordField password;
     private JButton registrarBtn, regresarBtn;
     private JLabel fondo;
+    private Sonidos s;
     
-    public Registro() {
+    public Registro(Sonidos s) {
         this.setTitle("Registro de Usuario");
         this.setSize(800, 450);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
+        this.s = s;
         
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
@@ -68,6 +71,7 @@ public class Registro extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == registrarBtn) {
+            s.Play(3);
             try {
                 String nombreApellidoInput = nombreApellido.getText().trim();
                 String usuarioInput = usuario.getText().trim();
@@ -90,7 +94,7 @@ public class Registro extends JFrame implements ActionListener {
                 if (registroExitoso) {
                     JOptionPane.showMessageDialog(this, "Cuenta creada exitosamente");
                     try {
-                        Menu menuPrincipal = new Menu(usuarioInput);
+                        Menu menuPrincipal = new Menu(usuarioInput, s);
                         menuPrincipal.setVisible(true);
                         this.dispose();
                     } catch (Exception ex) {
@@ -111,7 +115,8 @@ public class Registro extends JFrame implements ActionListener {
                 ex.printStackTrace();
             }
         } else if (e.getSource() == regresarBtn) {
-            new MainMenu();
+            s.Play(3);
+            new MainMenu(s);
             this.dispose();
         }
     }

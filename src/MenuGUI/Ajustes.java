@@ -1,5 +1,6 @@
 package MenuGUI;
 
+import Sounds.Sonidos;
 import java.awt.Image;
 import java.awt.event.*;
 import javax.swing.*;
@@ -15,9 +16,11 @@ public class Ajustes extends JFrame implements ActionListener, ChangeListener {
     private String usuarioActual;
     private ResourceBundle messages;
     private Locale currentLocale;
+    private Sonidos s;
     
-    public Ajustes(String usuario) {
+    public Ajustes(String usuario, Sonidos s) {
         this.usuarioActual = usuario;
+        this.s = s;
         
         // Get the current locale and messages from LanguageManager
         this.currentLocale = LanguageManager.getCurrentLocale();
@@ -47,14 +50,21 @@ public class Ajustes extends JFrame implements ActionListener, ChangeListener {
         volumenLabel.setForeground(java.awt.Color.WHITE);
         this.add(volumenLabel);
         
-        volumenSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+        volumenSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, (int)s.vol * 100);
         volumenSlider.setBounds(325, 200, 150, 50);
         volumenSlider.setMajorTickSpacing(25);
         volumenSlider.setMinorTickSpacing(5);
         volumenSlider.setPaintTicks(true);
         volumenSlider.setPaintLabels(true);
         volumenSlider.setOpaque(false);
-        volumenSlider.addChangeListener(this);
+        volumenSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int value = volumenSlider.getValue(); 
+                
+                s.setVolume(s.vol = value/100);
+            }
+        });
         this.add(volumenSlider);
         
         controlesBtn = new JButton(messages.getString("button.controls"));
@@ -124,7 +134,7 @@ public void actionPerformed(ActionEvent e) {
                 messages.getString("controls.reset"),
                 "", JOptionPane.INFORMATION_MESSAGE);
     } else if (e.getSource() == volverBtn) {
-        new Menu(usuarioActual, currentLocale);
+        new Menu(usuarioActual, currentLocale, s);
         this.dispose();
     }
 }    

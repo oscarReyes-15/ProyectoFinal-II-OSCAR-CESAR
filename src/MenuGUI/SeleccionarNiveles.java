@@ -1,6 +1,7 @@
 package MenuGUI;
 
 import Niveles.*;
+import Sounds.Sonidos;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -15,10 +16,12 @@ public class SeleccionarNiveles extends JFrame implements ActionListener {
     private String usuarioActual;
     private JLabel fondo, titleLabel;
     private ResourceBundle messages;
+    private Sonidos s;
     
-    public SeleccionarNiveles(String usuario) {
+    public SeleccionarNiveles(String usuario, Sonidos s) {
         this.usuarioActual = usuario;
         this.messages = LanguageManager.getMessages();
+        this.s = s;
         
         this.setTitle(messages.getString("title.selectLevel"));
         this.setSize(800, 450);
@@ -66,23 +69,41 @@ public class SeleccionarNiveles extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backBtn) {
+            s.Play(3);
+            s.setSound(2);
+            s.Stop();
             this.dispose();
-            new Menu(usuarioActual);
+            new Menu(usuarioActual,s);
         } else if (e.getSource() == lvl1btn) {
-            new Nivel1(usuarioActual); 
+            s.Play(3);
+            s.setSound(2);
+            s.Stop();
+            new Nivel1(usuarioActual, s); 
             this.dispose();
         } else if (e.getSource() == lvl2btn) {
-             new Nivel2(usuarioActual); 
-             this.dispose();
+            s.Play(3);
+            s.setSound(2);
+            s.Stop();
+            new Nivel2(usuarioActual, s); 
+            this.dispose();
         } else if (e.getSource() == lvl3btn) {
-             new Nivel3(usuarioActual); 
-             this.dispose();    
+            s.Play(3);
+            s.setSound(2);
+            s.Stop();
+            new Nivel3(usuarioActual, s); 
+            this.dispose();    
         } else if (e.getSource() == lvl4btn) {
-             new Nivel4(usuarioActual); 
-             this.dispose();
+            s.Play(3); 
+            s.setSound(2);
+            s.Stop();
+            new Nivel4(usuarioActual, s); 
+            this.dispose();
         } else if (e.getSource() == lvl5btn) {
-            new Nivel5(usuarioActual); 
-             this.dispose();
+            s.Play(3);
+            s.setSound(2);
+            s.Stop();
+            new Nivel5(usuarioActual, s); 
+            this.dispose();
         }
     }
 }

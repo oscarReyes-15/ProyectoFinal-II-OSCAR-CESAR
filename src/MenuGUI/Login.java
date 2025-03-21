@@ -1,5 +1,6 @@
 package MenuGUI;
 
+import Sounds.Sonidos;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -10,13 +11,15 @@ public class Login extends JFrame implements ActionListener {
     private JPasswordField password;
     private JButton iniciarSesionBtn, regresarMenuBtn;
     private JLabel fondo;
+    private Sonidos s;
     
-    public Login() {
+    public Login(Sonidos s) {
         this.setTitle("Inicio de Sesión");
         this.setSize(800, 450);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
+        this.s = s;
         
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
@@ -58,6 +61,7 @@ public class Login extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == iniciarSesionBtn) {
+            s.Play(3);
             String usuarioInput = usuario.getText().trim().toLowerCase(); 
             String passwordInput = new String(password.getPassword()).trim();
             
@@ -68,13 +72,14 @@ public class Login extends JFrame implements ActionListener {
             
             if (UserFile.verificarCredenciales(usuarioInput, passwordInput)) {
                 JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
-                new Menu(usuarioInput);
+                new Menu(usuarioInput, s);
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
             }
         } else if (e.getSource() == regresarMenuBtn) {
-            new MainMenu();
+            s.Play(3);
+            new MainMenu(s);
             this.dispose();
         } 
     }

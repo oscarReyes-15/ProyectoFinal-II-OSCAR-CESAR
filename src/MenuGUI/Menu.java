@@ -1,5 +1,6 @@
 package MenuGUI;
 
+import Sounds.Sonidos;
 import java.awt.Image;
 import java.awt.event.*;
 import javax.swing.*;
@@ -12,18 +13,20 @@ public class Menu extends JFrame implements ActionListener {
     private String usuarioActual;
     private JLabel fondo;
     private ResourceBundle messages;
+    Sonidos s;
     
-    public Menu(String usuario) {
+    public Menu(String usuario, Sonidos s) {
         this.usuarioActual = usuario;
+        
         
         // Get messages from LanguageManager
         this.messages = LanguageManager.getMessages();
-        
+        this.s = s;
         initComponents();
     }
     
     // Constructor that accepts a Locale
-    public Menu(String usuario, Locale locale) {
+    public Menu(String usuario, Locale locale, Sonidos s) {
         this.usuarioActual = usuario;
         
         // Update LanguageManager with the provided locale
@@ -36,6 +39,7 @@ public class Menu extends JFrame implements ActionListener {
         // Get updated messages
         this.messages = LanguageManager.getMessages();
         
+        this.s = s;
         initComponents();
     }
     
@@ -45,6 +49,7 @@ public class Menu extends JFrame implements ActionListener {
         this.setLayout(null);
         this.setSize(800, 450);
         this.setLocationRelativeTo(null);
+        
         
         // Load background image
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
@@ -85,17 +90,22 @@ public class Menu extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == jugar) {
-            new SeleccionarNiveles(usuarioActual);
+            s.Play(3);
+            new SeleccionarNiveles(usuarioActual, s);
             this.dispose();
         } else if (e.getSource() == miPerfilBtn) {
-            new MiPerfil(usuarioActual);
+            s.Play(3);
+            new MiPerfil(usuarioActual, s);
             this.dispose();
         } else if (e.getSource() == multiplayerBtn) {
+            s.Play(3);
             JOptionPane.showMessageDialog(this, messages.getString("dialog.multiplayer"));
         } else if (e.getSource() == ajustesBtn) {
-            new Ajustes(usuarioActual);
+            s.Play(3);
+            new Ajustes(usuarioActual, s);
             this.dispose();
         } else if (e.getSource() == salirBtn) {
+            s.Play(3);
             int confirmacion = JOptionPane.showConfirmDialog(
                 this, 
                 messages.getString("dialog.confirmLogout"), 
@@ -103,7 +113,7 @@ public class Menu extends JFrame implements ActionListener {
                 JOptionPane.YES_NO_OPTION
             );
             if (confirmacion == JOptionPane.YES_OPTION) {
-                new MainMenu();
+                new MainMenu(s);
                 this.dispose();
             }
         }

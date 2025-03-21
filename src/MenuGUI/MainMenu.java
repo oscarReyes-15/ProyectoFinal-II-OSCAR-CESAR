@@ -1,5 +1,6 @@
 package MenuGUI;
 
+import Sounds.Sonidos;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,13 +10,16 @@ public class MainMenu extends JFrame implements ActionListener {
     private JButton crearcuentabtn;
     private JButton salirbtn;
     private JLabel fondo;
+    private Sonidos s;
     
-    public MainMenu() {
+    public MainMenu(Sonidos s) {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("Prueba");
         this.setSize(800, 450);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
+        
+        this.s = s;
         
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
@@ -43,12 +47,15 @@ public class MainMenu extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loginbtn) {
-            new Login();
+            s.Play(3);
+            new Login(s);
             this.dispose();
         } else if (e.getSource() == crearcuentabtn) {
-            new Registro();
+            s.Play(3);
+            new Registro(s);
             this.dispose();
         } else if (e.getSource() == salirbtn) {
+            s.Play(3);
             JOptionPane.showMessageDialog(null, "Saliendo");
             System.exit(0);
         }

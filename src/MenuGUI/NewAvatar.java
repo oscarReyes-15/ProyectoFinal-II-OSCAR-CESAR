@@ -1,5 +1,6 @@
 package MenuGUI;
 
+import Sounds.Sonidos;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -19,10 +20,12 @@ public class NewAvatar extends JFrame implements ActionListener {
     private String usuarioActual;
     private JLabel fondo;
     private ResourceBundle messages;
+    private Sonidos s;
     
-    public NewAvatar(String usuario) {
+    public NewAvatar(String usuario, Sonidos s) {
         this.usuarioActual = usuario;
         this.messages = LanguageManager.getMessages();
+        this.s = s;
         
         this.setTitle(messages.getString("title.selectAvatar"));
         this.setSize(800, 450);
@@ -100,7 +103,8 @@ public class NewAvatar extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == regresarBtn) {
             try {
-                new MiPerfil(usuarioActual);
+                s.Play(3);
+                new MiPerfil(usuarioActual, s);
                 this.dispose();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, 
@@ -110,6 +114,7 @@ public class NewAvatar extends JFrame implements ActionListener {
                 ex.printStackTrace();
             }
         } else {
+            s.Play(3);
             for (JButton button : avatarButtons) {
                 if (e.getSource() == button) {
                     String selectedAvatar = button.getActionCommand();
@@ -121,7 +126,7 @@ public class NewAvatar extends JFrame implements ActionListener {
                             JOptionPane.INFORMATION_MESSAGE);
                         
                         try {
-                            new MiPerfil(usuarioActual);
+                            new MiPerfil(usuarioActual, s);
                             this.dispose();
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(this, 

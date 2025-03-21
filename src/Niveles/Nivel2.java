@@ -1,16 +1,17 @@
 package Niveles;
 
+import Sounds.Sonidos;
 import javax.swing.*;
 import User.*;
 
 public class Nivel2 extends Juego {
     
     public Nivel2() {
-        this(null);
+        this(null, null);
     }
     
-    public Nivel2(String usuario) {
-        super(usuario, 2);
+    public Nivel2(String usuario, Sonidos s) {
+        super(usuario, 2, s);
         
         loadImages();
         setupFrame("Sokoban - Nivel 2");
