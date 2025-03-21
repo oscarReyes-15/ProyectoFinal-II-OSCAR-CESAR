@@ -1,6 +1,7 @@
 package Niveles;
-
+import Juego.Juego;
 import javax.swing.*;
+import java.awt.*;
 import User.*;
 
 public class Nivel1 extends Juego {
@@ -20,6 +21,7 @@ public class Nivel1 extends Juego {
         }
         
         initializeLevel();
+        
         this.requestFocus();
     }
     
@@ -76,25 +78,43 @@ public class Nivel1 extends Juego {
     
     @Override
     protected void checkWinCondition() {
+        boolean allBoxesOnTargets = true;
+        int boxOnTargetCount = 0;
+        
         for (int x = 0; x < COLS; x++) {
             for (int y = 0; y < ROWS; y++) {
                 if (board[x][y] == BOX) {
-                    return; 
+                    allBoxesOnTargets = false;
+                } else if (board[x][y] == BOX_ON_TARGET) {
+                    boxOnTargetCount++;
                 }
             }
         }
         
+        if (!allBoxesOnTargets && boxOnTargetCount < 3) {
+            return;
+        }
+        
         gameCompleted = true;
+        
+        stopTimer();
         
         if (usuarioActual != null) {
             UserFile.setNivelCompletado(usuarioActual, 1);
             
-            int puntos = 1000 - (moveCount * 5);
-            if (puntos < 100) puntos = 100; // Minimum points
-            UserFile.actualizarPuntos(usuarioActual, puntos);
+            int puntosPorMovimientos = 1000 - (moveCount * 5);
+            if (puntosPorMovimientos < 100) puntosPorMovimientos = 100; // Minimum points
+            
+            UserFile.actualizarPuntos(usuarioActual, puntosPorMovimientos);
+            
         }
         
-        JOptionPane.showMessageDialog(frame, "¡Nivel completado!\nMovimientos: " + moveCount, 
-                                     "Felicitaciones", JOptionPane.INFORMATION_MESSAGE);
+        String tiempoFormateado = formatTime(elapsedTime);
+        
+        JOptionPane.showMessageDialog(frame, 
+            "¡Nivel completado!\n" +
+            "Movimientos: " + moveCount + "\n" +
+            "Tiempo: " + tiempoFormateado,
+            "Felicitaciones", JOptionPane.INFORMATION_MESSAGE);
     }
 }

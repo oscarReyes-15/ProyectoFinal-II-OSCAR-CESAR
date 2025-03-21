@@ -1,5 +1,6 @@
 package Niveles;
 
+import Juego.Juego;
 import javax.swing.*;
 import User.*;
 

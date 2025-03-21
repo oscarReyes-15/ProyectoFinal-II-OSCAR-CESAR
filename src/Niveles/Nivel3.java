@@ -1,5 +1,6 @@
 package Niveles;
 
+import Juego.Juego;
 import javax.swing.*;
 import User.*;
 
@@ -104,4 +105,3 @@ public class Nivel3 extends Juego{
                                      "Felicitaciones", JOptionPane.INFORMATION_MESSAGE);
     }
 }
-
