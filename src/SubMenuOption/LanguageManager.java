@@ -18,7 +18,6 @@ public class LanguageManager {
         messages = createCustomBundle(spanishMessages);
     }
     
-    // Keep all your existing initialization methods for messages
     private static void initializeSpanishMessages() {
         spanishMessages.put("title.main", "Menu Principal");
         spanishMessages.put("button.play", "1. Jugar");
@@ -281,7 +280,6 @@ public class LanguageManager {
             messages = createCustomBundle(italianMessages);
         }
         
-        // Save language preference to the user's file
         UserFile.setLanguageForUser(usuario, langCode);
     }
     

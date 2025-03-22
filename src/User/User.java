@@ -9,7 +9,7 @@ public class User {
     private String nombre;
     private int puntos;
     private LocalDate fechaCreacion;
-    private long tiempoJugado; // Added field for play time in seconds
+    private long tiempoJugado; 
     
     public User(String usuario, String password) {
         this.usuario = usuario;
@@ -56,7 +56,6 @@ public class User {
         this.nombre = nombre;
     }
     
-    // New methods for time tracking
     public long getTiempoJugado() {
         return tiempoJugado;
     }
@@ -69,7 +68,6 @@ public class User {
         this.tiempoJugado += segundos;
     }
     
-    // Method to get formatted time string
     public String getTiempoFormateado() {
         long hours = tiempoJugado / 3600;
         long minutes = (tiempoJugado % 3600) / 60;

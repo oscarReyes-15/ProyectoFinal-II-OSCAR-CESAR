@@ -24,41 +24,34 @@ public class UserFile {
             directorio.mkdir();
         }
         
-        // Get current controls if not provided
         if (controls == null) {
-            controls = new char[] {'W', 'S', 'A', 'D', 'R'}; // Default controls
+            controls = new char[] {'W', 'S', 'A', 'D', 'R'}; 
         }
         
-        // Get current language if not provided
         if (language == null) {
             language = LanguageManager.getCurrentLocale().getLanguage();
         }
         
         File archivo = new File(usuario + USER_DATA_FILE);
         try (DataOutputStream salida = new DataOutputStream(new FileOutputStream(archivo))) {
-            // User credentials
             salida.writeUTF(usuario);
             salida.writeUTF(password);
             salida.writeUTF(nombre);
             
-            // User statistics
-            salida.writeInt(0); // puntos
+            salida.writeInt(0); 
             salida.writeUTF(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)); // fechaCreacion
-            salida.writeInt(0); // nivelMaximo
-            salida.writeInt(0); // partidasJugadas
-            salida.writeLong(0); // tiempoTotal
+            salida.writeInt(0); 
+            salida.writeInt(0); 
+            salida.writeLong(0); 
             
-            // Language preference
             salida.writeUTF(language);
             
-            // Control settings
             for (char key : controls) {
                 salida.writeChar(key);
             }
             
             return true;
         } catch (IOException ex) {
-            System.err.println("Error al guardar datos de usuario: " + ex.getMessage());
             return false;
         }
     }
@@ -66,7 +59,6 @@ public class UserFile {
     public static boolean actualizarDatosUsuario(String usuario, int puntos, LocalDate fechaCreacion, 
                                                int nivelMaximo, int partidasJugadas, long tiempoTotal,
                                                String language, char[] controls) {
-        // Load existing data first
         User user = cargarUsuario(usuario);
         if (user == null) {
             return false;
@@ -74,22 +66,17 @@ public class UserFile {
         
         File archivo = new File(usuario + USER_DATA_FILE);
         try (DataOutputStream salida = new DataOutputStream(new FileOutputStream(archivo))) {
-            // User credentials
             salida.writeUTF(usuario);
             salida.writeUTF(user.getPassword());
             salida.writeUTF(user.getNombre());
             
-            // User statistics
             salida.writeInt(puntos);
             salida.writeUTF(fechaCreacion.format(DateTimeFormatter.ISO_LOCAL_DATE));
             salida.writeInt(nivelMaximo);
             salida.writeInt(partidasJugadas);
             salida.writeLong(tiempoTotal);
-            
-            // Language preference
             salida.writeUTF(language);
             
-            // Control settings
             for (char key : controls) {
                 salida.writeChar(key);
             }
@@ -202,7 +189,7 @@ public class UserFile {
         }
         
         try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
-            entrada.readUTF(); // usuario
+            entrada.readUTF();
             String password = entrada.readUTF();
             String nombre = entrada.readUTF();
             
@@ -216,32 +203,30 @@ public class UserFile {
             
             return user;
         } catch (IOException e) {
-            System.err.println("Error al cargar usuario: " + e.getMessage());
             return null;
         }
     }
     
     public static int[] getEstadisticasUsuario(String usuario) {
         File archivo = new File(usuario + USER_DATA_FILE);
-        int[] stats = new int[3]; // puntos, nivelMaximo, partidasJugadas
+        int[] stats = new int[3]; 
         
         if (!archivo.exists()) {
             return new int[]{0, 0, 0};
         }
         
         try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
-            entrada.readUTF(); // usuario
-            entrada.readUTF(); // password
-            entrada.readUTF(); // nombre
+            entrada.readUTF(); 
+            entrada.readUTF(); 
+            entrada.readUTF(); 
             
-            stats[0] = entrada.readInt(); // puntos
-            entrada.readUTF(); // fechaCreacion
-            stats[1] = entrada.readInt(); // nivelMaximo
-            stats[2] = entrada.readInt(); // partidasJugadas
+            stats[0] = entrada.readInt(); 
+            entrada.readUTF();
+            stats[1] = entrada.readInt();
+            stats[2] = entrada.readInt(); 
             
             return stats;
         } catch (IOException e) {
-            System.err.println("Error al cargar estadísticas de usuario: " + e.getMessage());
             return new int[]{0, 0, 0};
         }
     }
@@ -254,17 +239,16 @@ public class UserFile {
         }
         
         try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
-            entrada.readUTF(); // usuario
-            entrada.readUTF(); // password
-            entrada.readUTF(); // nombre
-            entrada.readInt(); // puntos
-            entrada.readUTF(); // fechaCreacion
-            entrada.readInt(); // nivelMaximo
-            entrada.readInt(); // partidasJugadas
+            entrada.readUTF(); 
+            entrada.readUTF(); 
+            entrada.readUTF(); 
+            entrada.readInt(); 
+            entrada.readUTF(); 
+            entrada.readInt(); 
+            entrada.readInt(); 
             
-            return entrada.readLong(); // tiempoTotal
+            return entrada.readLong(); 
         } catch (IOException e) {
-            System.err.println("Error al cargar tiempo de usuario: " + e.getMessage());
             return 0;
         }
     }
@@ -273,29 +257,28 @@ public class UserFile {
         File archivo = new File(usuario + USER_DATA_FILE);
         
         if (!archivo.exists()) {
-            return "es"; // Default to Spanish
+            return "es"; 
         }
         
         try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
-            entrada.readUTF(); // usuario
-            entrada.readUTF(); // password
-            entrada.readUTF(); // nombre
-            entrada.readInt(); // puntos
-            entrada.readUTF(); // fechaCreacion
-            entrada.readInt(); // nivelMaximo
-            entrada.readInt(); // partidasJugadas
-            entrada.readLong(); // tiempoTotal
+            entrada.readUTF(); 
+            entrada.readUTF(); 
+            entrada.readUTF(); 
+            entrada.readInt(); 
+            entrada.readUTF();
+            entrada.readInt(); 
+            entrada.readInt();
+            entrada.readLong(); 
             
-            return entrada.readUTF(); // language
+            return entrada.readUTF(); 
         } catch (IOException e) {
-            System.err.println("Error al cargar idioma de usuario: " + e.getMessage());
-            return "es"; // Default to Spanish
+            return "es";
         }
     }
     
     public static char[] getControlsForUser(String usuario) {
         File archivo = new File(usuario + USER_DATA_FILE);
-        char[] controls = new char[] {'W', 'S', 'A', 'D', 'R'}; // Default controls
+        char[] controls = new char[] {'W', 'S', 'A', 'D', 'R'}; 
         
         if (!archivo.exists()) {
             return controls;

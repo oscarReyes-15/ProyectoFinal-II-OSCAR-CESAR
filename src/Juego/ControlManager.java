@@ -19,15 +19,12 @@ public class ControlManager {
             resetKey
         };
         
-        // Save controls to the user's file
         UserFile.setControlsForUser(usuario, controls);
     }
     
     public static char[] loadControls(String usuario) {
-        // Load controls from the user's file
         char[] controls = UserFile.getControlsForUser(usuario);
         
-        // Verify all controls are valid
         if (controls == null || controls.length < 5) {
             return getDefaultControls();
         }
