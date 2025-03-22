@@ -1,6 +1,5 @@
 package InitGUI;
 
-import Menu.MainMenu;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package Menu;
+package InitGUI;
 
 import InitGUI.Login;
 import InitGUI.Registro;

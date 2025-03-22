@@ -1,6 +1,6 @@
 package SubMenuOption;
 
-import InitGUI.Menu;
+import Menu.Menu;
 import Niveles.*;
 import javax.swing.*;
 import java.awt.*;

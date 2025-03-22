@@ -1,8 +1,6 @@
 package Menu;
 
-import SubMenuOption.ControlSettings;
-import SubMenuOption.LanguageManager;
-import InitGUI.Menu;
+import SubMenuOption.*;
 import java.awt.Image;
 import java.awt.event.*;
 import javax.swing.*;

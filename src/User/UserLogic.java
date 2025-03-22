@@ -1,6 +1,6 @@
 package User;
 
-import Menu.MainMenu;
+import InitGUI.MainMenu;
 import java.io.File;
 import javax.swing.*;
 

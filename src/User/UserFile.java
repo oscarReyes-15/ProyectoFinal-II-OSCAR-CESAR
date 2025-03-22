@@ -25,7 +25,7 @@ public class UserFile {
             salida.writeUTF(usuario);
             salida.writeUTF(password);
             salida.writeUTF(nombre); 
-            guardarEstadisticasUsuario(usuario, 0, LocalDate.now(), 0, 0, 0); // Added 0 for tiempoTotal
+            guardarEstadisticasUsuario(usuario, 0, LocalDate.now(), 0, 0, 0); 
             return true;
         } catch (IOException ex) {
             System.err.println("Error al guardar datos de usuario: " + ex.getMessage());
@@ -46,7 +46,7 @@ public class UserFile {
             salida.writeUTF(fechaCreacion.format(DateTimeFormatter.ISO_LOCAL_DATE));
             salida.writeInt(nivelMaximo);
             salida.writeInt(partidasJugadas);
-            salida.writeLong(tiempoTotal); // Added time tracking in seconds
+            salida.writeLong(tiempoTotal);
             return true;
         } catch (IOException ex) {
             System.err.println("Error al guardar estadísticas de usuario: " + ex.getMessage());
@@ -64,17 +64,14 @@ public class UserFile {
         }
         
         try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
-            stats[0] = entrada.readInt(); // puntos
+            stats[0] = entrada.readInt();
             fechaCreacion = LocalDate.parse(entrada.readUTF(), DateTimeFormatter.ISO_LOCAL_DATE);
-            stats[1] = entrada.readInt(); // nivel máximo
-            stats[2] = entrada.readInt(); // partidas jugadas
+            stats[1] = entrada.readInt(); 
+            stats[2] = entrada.readInt(); 
             
-            // Try to read time if it exists
             try {
                 long tiempoTotal = entrada.readLong();
-                // We could expand the array to include this but for compatibility we'll keep it as is
             } catch (EOFException e) {
-                // Older file format without time data, ignore
             }
             
             return stats;
@@ -92,15 +89,14 @@ public class UserFile {
         }
         
         try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
-            entrada.readInt(); // Skip puntos
-            entrada.readUTF(); // Skip fechaCreacion
-            entrada.readInt(); // Skip nivelMaximo
-            entrada.readInt(); // Skip partidasJugadas
+            entrada.readInt(); 
+            entrada.readUTF();
+            entrada.readInt(); 
+            entrada.readInt();
             
             try {
                 return entrada.readLong(); // Read tiempoTotal
             } catch (EOFException e) {
-                // Older file format without time data
                 return 0;
             }
         } catch (IOException ex) {
@@ -244,21 +240,16 @@ public class UserFile {
         File archivoDatos = new File(usuario + USER_DATA_FILE);
         return directorio.exists() && archivoDatos.exists();
     }
-    // Add these methods to your UserFile class
 
-/**
- * Gets the maximum level reached by the user
- * @param usuario Username to check
- * @return Maximum level reached or 0 if not found
- */
+
 public static int getNivelMaximo(String usuario) {
     int[] stats = cargarEstadisticasUsuario(usuario);
-    return stats[1]; // The nivel máximo is at index 1 in the stats array
+    return stats[1];
 }
 
 public static int getPartidasJugadas(String usuario) {
     int[] stats = cargarEstadisticasUsuario(usuario);
-    return stats[2]; // The partidas jugadas is at index 2 in the stats array
+    return stats[2];
 }
 
 

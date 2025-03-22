@@ -206,7 +206,7 @@ public abstract class Juego extends GameMovement implements ActionListener {
                 stopTimer();
                 frame.dispose();
                 if (usuarioActual != null) {
-                    new InitGUI.Menu(usuarioActual);
+                    new Menu(usuarioActual);
                 }
             } else {
                 this.requestFocus(); 

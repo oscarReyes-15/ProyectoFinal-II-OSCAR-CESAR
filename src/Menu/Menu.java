@@ -1,11 +1,7 @@
-package InitGUI;
+package Menu;
 
-import Menu.MiPerfil;
-import Menu.MainMenu;
-import Menu.Ajustes;
-import Niveles.*;
-import SubMenuOption.LanguageManager;
-import SubMenuOption.SeleccionarNiveles;
+import InitGUI.*;
+import SubMenuOption.*;
 import java.awt.Image;
 import java.awt.event.*;
 import javax.swing.*;
@@ -92,6 +88,8 @@ public class Menu extends JFrame implements ActionListener {
             new MiPerfil(usuarioActual);
             this.dispose();
         } else if (e.getSource() == multiplayerBtn) {
+            new Ranking(usuarioActual);
+            this.dispose();
         } else if (e.getSource() == ajustesBtn) {
             new Ajustes(usuarioActual);
             this.dispose();

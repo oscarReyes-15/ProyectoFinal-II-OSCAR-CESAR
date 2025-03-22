@@ -1,8 +1,7 @@
 package Menu;
 
-import SubMenuOption.LanguageManager;
-import InitGUI.Menu;
-import SubMenuOption.NewAvatar;
+import InitGUI.*;
+import SubMenuOption.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
