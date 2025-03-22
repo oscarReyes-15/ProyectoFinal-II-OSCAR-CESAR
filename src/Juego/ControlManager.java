@@ -1,11 +1,9 @@
 package Juego;
-
 import java.io.*;
 import javax.swing.JOptionPane;
+import User.UserFile;
 
 public class ControlManager {
-    private static final String CONTROLS_FILE_SUFFIX = "_controls.dat";
-    
     private static final char DEFAULT_UP_KEY = 'W';
     private static final char DEFAULT_DOWN_KEY = 'S';
     private static final char DEFAULT_LEFT_KEY = 'A'; 
@@ -13,40 +11,31 @@ public class ControlManager {
     private static final char DEFAULT_RESET_KEY = 'R';
     
     public static void saveControls(String usuario, char upKey, char downKey, char leftKey, char rightKey, char resetKey) {
-        try (DataOutputStream out = new DataOutputStream(new FileOutputStream(usuario + CONTROLS_FILE_SUFFIX))) {
-            out.writeChar(upKey);
-            out.writeChar(downKey);
-            out.writeChar(leftKey);
-            out.writeChar(rightKey);
-            out.writeChar(resetKey);
-        } catch (IOException e) {
-            System.err.println("Error saving controls for user " + usuario + ": " + e.getMessage());
-        }
+        char[] controls = new char[] {
+            upKey,
+            downKey,
+            leftKey,
+            rightKey,
+            resetKey
+        };
+        
+        // Save controls to the user's file
+        UserFile.setControlsForUser(usuario, controls);
     }
     
     public static char[] loadControls(String usuario) {
-        File file = new File(usuario + CONTROLS_FILE_SUFFIX);
-        char[] controls = new char[5];
+        // Load controls from the user's file
+        char[] controls = UserFile.getControlsForUser(usuario);
         
-        if (file.exists()) {
-            try (DataInputStream in = new DataInputStream(new FileInputStream(file))) {
-                controls[0] = in.readChar(); 
-                controls[1] = in.readChar(); 
-                controls[2] = in.readChar();
-                controls[3] = in.readChar(); 
-                controls[4] = in.readChar(); 
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null,"Error loading controls for user " + usuario + ": " +e.getMessage());
-                controls = getDefaultControls();
-            }
-        } else {
-            controls = getDefaultControls();
+        // Verify all controls are valid
+        if (controls == null || controls.length < 5) {
+            return getDefaultControls();
         }
         
         return controls;
     }
     
-    private static char[] getDefaultControls() {
+    public static char[] getDefaultControls() {
         return new char[] {
             DEFAULT_UP_KEY,
             DEFAULT_DOWN_KEY,
@@ -63,5 +52,10 @@ public class ControlManager {
         ControlSettings.LEFT_KEY = controls[2];
         ControlSettings.RIGHT_KEY = controls[3];
         ControlSettings.RESET_KEY = controls[4];
+    }
+    
+    public static void resetToDefaultControls(String usuario) {
+        char[] defaults = getDefaultControls();
+        saveControls(usuario, defaults[0], defaults[1], defaults[2], defaults[3], defaults[4]);
     }
 }

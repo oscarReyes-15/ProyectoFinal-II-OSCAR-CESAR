@@ -1,6 +1,6 @@
 package SubMenuOption;
-import java.io.*;
 import java.util.*;
+import User.UserFile;
 
 public class LanguageManager {
     private static Locale currentLocale = new Locale("es", "ES");
@@ -8,18 +8,18 @@ public class LanguageManager {
     private static final Map<String, String> englishMessages = new HashMap<>();
     private static final Map<String, String> italianMessages= new HashMap<>();
     private static ResourceBundle messages;
-    private static final String LANGUAGE_FILE = "language.dat";
     
     static {
         initializeSpanishMessages();
         initializeEnglishMessages();
         initializeItalianMessages();
         
-        loadLanguagePreference();
+        // Default to Spanish
+        messages = createCustomBundle(spanishMessages);
     }
     
+    // Keep all your existing initialization methods for messages
     private static void initializeSpanishMessages() {
-        // Menu
         spanishMessages.put("title.main", "Menu Principal");
         spanishMessages.put("button.play", "1. Jugar");
         spanishMessages.put("button.profile", "2. Mi Perfil");
@@ -92,8 +92,79 @@ public class LanguageManager {
         spanishMessages.put("dialog.error", "Error");
     }
     
-   private static void initializeItalianMessages() {
-        // Menu
+    private static void initializeEnglishMessages() {
+ englishMessages.put("title.main", "Main Menu");
+        englishMessages.put("button.play", "1. Play");
+        englishMessages.put("button.profile", "2. My Profile");
+        englishMessages.put("button.ranking", "3. Ranking");
+        englishMessages.put("button.settings", "4. Settings");
+        englishMessages.put("button.logout", "5. Logout");
+        englishMessages.put("dialog.confirmLogout", "Do you want to log out?");
+        englishMessages.put("dialog.confirmation", "Confirmation");
+        
+        // Settings
+        englishMessages.put("title.settings", "Settings");
+        englishMessages.put("button.language", "Language");
+        englishMessages.put("label.volume", "Volume");
+        englishMessages.put("button.controls", "Controls");
+        englishMessages.put("button.ncontrols", "Change Controls");
+        englishMessages.put("button.back", "Back");
+        englishMessages.put("dialog.selectLanguage", "Select a language");
+        englishMessages.put("dialog.changeLanguage", "Change Language");
+        englishMessages.put("dialog.languageChanged", "Language changed to");
+        
+        // Control Settings - Added missing entries
+        englishMessages.put("title.controls", "Control Settings");
+        englishMessages.put("button.save", "Save");
+        englishMessages.put("button.default", "Default Controls");
+        englishMessages.put("dialog.defaultControls", "Controls have been reset to default (WASD + R). Click Save to apply.");
+        englishMessages.put("dialog.controlsSaved", "Controls saved successfully");
+        englishMessages.put("dialog.info", "Information");
+        
+        // Controls
+        englishMessages.put("controls.title", "Controls");
+        englishMessages.put("controls.moveUp", "Move Up");
+        englishMessages.put("controls.moveDown", "Move Down");
+        englishMessages.put("controls.moveLeft", "Move Left");
+        englishMessages.put("controls.moveRight", "Move Right");
+        englishMessages.put("controls.reset", "Restart");
+        
+        // Levels
+        englishMessages.put("title.selectLevel", "Select Level");
+        englishMessages.put("level.1", "Level 1");
+        englishMessages.put("level.2", "Level 2");
+        englishMessages.put("level.3", "Level 3");
+        englishMessages.put("level.4", "Level 4");
+        englishMessages.put("level.5", "Level 5");
+        englishMessages.put("dialog.levelInDevelopment", "This level is under development");
+        
+        // Profile 
+        englishMessages.put("title.profile", "My Profile");
+        englishMessages.put("profile.user", "User");
+        englishMessages.put("profile.name", "Name");
+        englishMessages.put("profile.points", "Points");
+        englishMessages.put("profile.creationDate", "Creation date");
+        englishMessages.put("profile.maxLevel", "Maximum level");
+        englishMessages.put("profile.gamesPlayed", "Games played");
+        englishMessages.put("profile.timePlayed", "Time played");
+        englishMessages.put("profile.notAvailable", "Not available");
+        englishMessages.put("button.changeAvatar", "Change Avatar");
+        englishMessages.put("button.changePassword", "Change Password");
+        englishMessages.put("button.deleteAccount", "Delete Account");
+        englishMessages.put("dialog.confirmDeleteAccount", "Are you sure you want to delete your account?");
+        englishMessages.put("dialog.accountDeleted", "Account successfully deleted");
+        
+        // Avatar selection 
+        englishMessages.put("title.selectAvatar", "Select Avatar");
+        englishMessages.put("button.returnWithoutChanging", "Return without changing");
+        englishMessages.put("dialog.avatarSelected", "Avatar successfully selected");
+        englishMessages.put("dialog.avatarError", "Error copying the selected avatar");
+        englishMessages.put("dialog.profileError", "Error returning to profile");
+        englishMessages.put("dialog.success", "Success");
+        englishMessages.put("dialog.error", "Error");
+    }
+    
+    private static void initializeItalianMessages() {
         italianMessages.put("title.main", "Menu Principale");
         italianMessages.put("button.play", "1. Giocare");
         italianMessages.put("button.profile", "2. Il Mio Profilo");
@@ -163,79 +234,8 @@ public class LanguageManager {
         italianMessages.put("dialog.profileError", "Errore durante il ritorno al profilo");
         italianMessages.put("dialog.success", "Successo");
         italianMessages.put("dialog.error", "Errore");
-}
-        private static void initializeEnglishMessages() {
-                    // Menu
-        englishMessages.put("title.main", "Main Menu");
-        englishMessages.put("button.play", "1. Play");
-        englishMessages.put("button.profile", "2. My Profile");
-        englishMessages.put("button.ranking", "3. Ranking");
-        englishMessages.put("button.settings", "4. Settings");
-        englishMessages.put("button.logout", "5. Logout");
-        englishMessages.put("dialog.confirmLogout", "Do you want to log out?");
-        englishMessages.put("dialog.confirmation", "Confirmation");
-        
-        // Settings
-        englishMessages.put("title.settings", "Settings");
-        englishMessages.put("button.language", "Language");
-        englishMessages.put("label.volume", "Volume");
-        englishMessages.put("button.controls", "Controls");
-        englishMessages.put("button.ncontrols", "Change Controls");
-        englishMessages.put("button.back", "Back");
-        englishMessages.put("dialog.selectLanguage", "Select a language");
-        englishMessages.put("dialog.changeLanguage", "Change Language");
-        englishMessages.put("dialog.languageChanged", "Language changed to");
-        
-        // Control Settings - Added missing entries
-        englishMessages.put("title.controls", "Control Settings");
-        englishMessages.put("button.save", "Save");
-        englishMessages.put("button.default", "Default Controls");
-        englishMessages.put("dialog.defaultControls", "Controls have been reset to default (WASD + R). Click Save to apply.");
-        englishMessages.put("dialog.controlsSaved", "Controls saved successfully");
-        englishMessages.put("dialog.info", "Information");
-        
-        // Controls
-        englishMessages.put("controls.title", "Controls");
-        englishMessages.put("controls.moveUp", "Move Up");
-        englishMessages.put("controls.moveDown", "Move Down");
-        englishMessages.put("controls.moveLeft", "Move Left");
-        englishMessages.put("controls.moveRight", "Move Right");
-        englishMessages.put("controls.reset", "Restart");
-        
-        // Levels
-        englishMessages.put("title.selectLevel", "Select Level");
-        englishMessages.put("level.1", "Level 1");
-        englishMessages.put("level.2", "Level 2");
-        englishMessages.put("level.3", "Level 3");
-        englishMessages.put("level.4", "Level 4");
-        englishMessages.put("level.5", "Level 5");
-        englishMessages.put("dialog.levelInDevelopment", "This level is under development");
-        
-        // Profile 
-        englishMessages.put("title.profile", "My Profile");
-        englishMessages.put("profile.user", "User");
-        englishMessages.put("profile.name", "Name");
-        englishMessages.put("profile.points", "Points");
-        englishMessages.put("profile.creationDate", "Creation date");
-        englishMessages.put("profile.maxLevel", "Maximum level");
-        englishMessages.put("profile.gamesPlayed", "Games played");
-        englishMessages.put("profile.timePlayed", "Time played");
-        englishMessages.put("profile.notAvailable", "Not available");
-        englishMessages.put("button.changeAvatar", "Change Avatar");
-        englishMessages.put("button.changePassword", "Change Password");
-        englishMessages.put("button.deleteAccount", "Delete Account");
-        englishMessages.put("dialog.confirmDeleteAccount", "Are you sure you want to delete your account?");
-        englishMessages.put("dialog.accountDeleted", "Account successfully deleted");
-        
-        // Avatar selection 
-        englishMessages.put("title.selectAvatar", "Select Avatar");
-        englishMessages.put("button.returnWithoutChanging", "Return without changing");
-        englishMessages.put("dialog.avatarSelected", "Avatar successfully selected");
-        englishMessages.put("dialog.avatarError", "Error copying the selected avatar");
-        englishMessages.put("dialog.profileError", "Error returning to profile");
-        englishMessages.put("dialog.success", "Success");
-        englishMessages.put("dialog.error", "Error");
-        }
+
+    }
     
     private static ResourceBundle createCustomBundle(final Map<String, String> messagesMap) {
         return new ResourceBundle() {
@@ -251,7 +251,6 @@ public class LanguageManager {
         };
     }
     
-
     public static void setLanguage(String language) {
         if (language.equals("English")) {
             currentLocale = new Locale("en", "US");
@@ -263,77 +262,41 @@ public class LanguageManager {
             currentLocale = new Locale("it", "IT");
             messages = createCustomBundle(italianMessages);
         }
-        
-        saveLanguagePreference();
     }
-    
-    private static void saveLanguagePreference() {
-        try (DataOutputStream out = new DataOutputStream(new FileOutputStream(LANGUAGE_FILE))) {
-            out.writeUTF(currentLocale.getLanguage());
-            out.writeUTF(currentLocale.getCountry());
-        } catch (IOException e) {
-            System.err.println("Error saving language preference: " + e.getMessage());
-        }
-    }
-    
-   
-    private static void loadLanguagePreference() {
-        File file = new File(LANGUAGE_FILE);
-        if (file.exists()) {
-            try (DataInputStream in = new DataInputStream(new FileInputStream(file))) {
-                String language = in.readUTF();
-                String country = in.readUTF();
-                currentLocale = new Locale(language, country);
-                
-                if (language.equals("en")) {
-                    messages = createCustomBundle(englishMessages);
-                } else if(language.equals("es")){
-                    messages = createCustomBundle(spanishMessages);
-                }else{
-                messages = createCustomBundle(italianMessages);}
-            } catch (IOException e) {
-                System.err.println("Error loading language preference: " + e.getMessage());
-                messages = createCustomBundle(spanishMessages);
-            }
-        } else {
-            messages = createCustomBundle(spanishMessages);
-        }
-    }
-    
     
     public static void setLanguageForUser(String language, String usuario) {
-        setLanguage(language);
+        String langCode;
         
-        try (DataOutputStream out = new DataOutputStream(new FileOutputStream(usuario + "_language.dat"))) {
-            out.writeUTF(currentLocale.getLanguage());
-            out.writeUTF(currentLocale.getCountry());
-        } catch (IOException e) {
-            System.err.println("Error saving language preference for user: " + e.getMessage());
+        if (language.equals("English")) {
+            langCode = "en";
+            currentLocale = new Locale("en", "US");
+            messages = createCustomBundle(englishMessages);
+        } else if(language.equals("Español")){
+            langCode = "es";
+            currentLocale = new Locale("es", "ES");
+            messages = createCustomBundle(spanishMessages);
+        } else {
+            langCode = "it";
+            currentLocale = new Locale("it", "IT");
+            messages = createCustomBundle(italianMessages);
         }
+        
+        // Save language preference to the user's file
+        UserFile.setLanguageForUser(usuario, langCode);
     }
     
-
     public static void loadLanguageForUser(String usuario) {
-        File file = new File(usuario + "_language.dat");
-        if (file.exists()) {
-            try (DataInputStream in = new DataInputStream(new FileInputStream(file))) {
-                String language = in.readUTF();
-                String country = in.readUTF();
-                currentLocale = new Locale(language, country);
-                
-                if (language.equals("en")) {
-                    messages = createCustomBundle(englishMessages);
-                } else if(language.equals("es")) {
-                    messages = createCustomBundle(spanishMessages);
-                }else {
-                messages = createCustomBundle(italianMessages);
-}
-            } catch (IOException e) {
-                System.err.println("Error loading language preference for user: " + e.getMessage());
-                messages = createCustomBundle(spanishMessages);
-            }
+        String language = UserFile.getLanguageForUser(usuario);
+        
+        if (language.equals("en")) {
+            currentLocale = new Locale("en", "US");
+            messages = createCustomBundle(englishMessages);
+        } else if(language.equals("es")) {
+            currentLocale = new Locale("es", "ES");
+            messages = createCustomBundle(spanishMessages);
         } else {
-            loadLanguagePreference();
+            currentLocale = new Locale("it", "IT");
+            messages = createCustomBundle(italianMessages);
         }
     }
     
