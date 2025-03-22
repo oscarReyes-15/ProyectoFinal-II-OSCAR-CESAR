@@ -67,7 +67,6 @@ public class Nivel2 extends Juego {
         board[4][5] = BOX;
         board[5][5] = BOX;
         
-        // Set player position
         playerX = 4;
         playerY = 3;
         board[playerX][playerY] = PLAYER;

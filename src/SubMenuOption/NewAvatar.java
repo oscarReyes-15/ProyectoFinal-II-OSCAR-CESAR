@@ -12,10 +12,10 @@ public class NewAvatar extends JFrame implements ActionListener {
     private JButton regresarBtn;
     private JButton[] avatarButtons;
     private String[] avatarPaths = {
-        "src/Images/avatar1.png",
-        "src/Images/avatar2.png",
-        "src/Images/avatar3.png",
-        "src/Images/avatar4.png"
+        "src/AvatarImages/avatar1.png",
+        "src/AvatarImages/avatar2.png",
+        "src/AvatarImages/avatar3.png",
+        "src/AvatarImages/avatar4.png"
     };
     private String usuarioActual;
     private JLabel fondo;
@@ -53,7 +53,6 @@ public class NewAvatar extends JFrame implements ActionListener {
                 avatarButtons[i].addActionListener(this);
                 avatarPanel.add(avatarButtons[i]);
             } catch (Exception ex) {
-                System.err.println("Error cargando imagen: " + avatarPaths[i]);
                 avatarButtons[i] = new JButton("Avatar " + (i + 1));
                 avatarButtons[i].setActionCommand(avatarPaths[i]);
                 avatarButtons[i].addActionListener(this);
@@ -77,13 +76,11 @@ public class NewAvatar extends JFrame implements ActionListener {
         try {
             File directorio = new File(usuario);
             if (!directorio.exists() && !directorio.mkdirs()) {
-                System.err.println("No se pudo crear la carpeta del usuario.");
                 return false;
             }
 
             File avatarOrigen = new File(avatarSeleccionado);
             if (!avatarOrigen.exists()) {
-                System.err.println("El archivo de avatar no existe: " + avatarOrigen.getAbsolutePath());
                 return false;
             }
 

@@ -1,8 +1,10 @@
 package Juego;
 
+import SubMenuOption.SeleccionarNiveles;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.*;
 
@@ -41,7 +43,7 @@ public abstract class Juego extends GameMovement implements ActionListener {
         resetBtn.addActionListener(this);
         frame.add(resetBtn);
         
-        menuBtn = new JButton("Menú");
+        menuBtn = new JButton("Salir");
         menuBtn.setBounds(520, 10, 100, 30);
         menuBtn.addActionListener(this);
         frame.add(menuBtn);
@@ -59,19 +61,59 @@ public abstract class Juego extends GameMovement implements ActionListener {
         this.requestFocus();
     }
     
-    protected void loadImages() {
-        try {
-            backgroundImage = ImageIO.read(new File("src/images/fondogame.png"));
-            wallImage = ImageIO.read(new File("src/images/muro1.png"));
-            boxImage = ImageIO.read(new File("src/images/caja.png"));
-            playerImage = ImageIO.read(new File("src/images/avatar1.png"));
-        } catch (IOException e) {
-            System.out.println("Error loading game images: " + e.getMessage());
-            this.setBackground(new Color(233, 149, 65));
+protected void loadImages() {
+    try {
+        backgroundImage = ImageIO.read(new File("src/GameImages/fondogame.png"));
+        wallImage = ImageIO.read(new File("src/GameImages/muro1.png"));
+        boxImage = ImageIO.read(new File("src/GameImages/caja.png"));
+        
+        BufferedImage spriteSheet = ImageIO.read(new File("src/GameImages/sprites1.png"));
+        
+        int cols = 3;
+        int rows = 4;
+        
+        int spriteWidth = spriteSheet.getWidth() / cols; 
+        int spriteHeight = spriteSheet.getHeight() / rows;
+        
+        playerSprites = new BufferedImage[12];
+        
+        int index = 0;
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                playerSprites[index] = spriteSheet.getSubimage(
+                    col * spriteWidth, row * spriteHeight, spriteWidth, spriteHeight
+                );
+                index++;
+            }
         }
+        
+        // Set initial player image
+        playerImage = playerSprites[0];
+    } catch (IOException e) {
+        e.printStackTrace();
+        this.setBackground(new Color(233, 149, 65));
     }
-    
-    @Override
+}    
+protected void updatePlayerSprite(int direction) {
+    switch (direction) {
+        case 0: 
+            currentSpriteIndex = (currentSpriteIndex + 1) % 3;
+            playerImage = playerSprites[0 + currentSpriteIndex]; 
+            break;
+        case 1: 
+            currentSpriteIndex = (currentSpriteIndex + 1) % 3;
+            playerImage = playerSprites[3 + currentSpriteIndex];
+            break;
+        case 2: 
+            currentSpriteIndex = (currentSpriteIndex + 1) % 3;
+            playerImage = playerSprites[6 + currentSpriteIndex];
+            break;
+        case 3:
+            currentSpriteIndex = (currentSpriteIndex + 1) % 3;
+            playerImage = playerSprites[9 + currentSpriteIndex];
+            break;
+    }
+} 
     protected void resetLevel() {
         stopTimer();
         elapsedTime = 0;
@@ -81,6 +123,8 @@ public abstract class Juego extends GameMovement implements ActionListener {
         moveCount = 0;
         movesLabel.setText("Movimientos: " + moveCount);
         gameCompleted = false;
+        currentSpriteIndex = 0;
+        playerImage = playerSprites[0];
         repaint();
     }
     
@@ -185,7 +229,6 @@ public abstract class Juego extends GameMovement implements ActionListener {
             int messageX = (COLS * CELL_SIZE - messageWidth) / 2;
             g.drawString(message, messageX, ROWS * CELL_SIZE / 2);
             
-            // Stop the timer when game is completed
             stopTimer();
         }
     }
@@ -198,15 +241,19 @@ public abstract class Juego extends GameMovement implements ActionListener {
         } else if (e.getSource() == menuBtn) {
             int option = JOptionPane.showConfirmDialog(
                 frame,
-                "¿Desea salir del nivel y volver al menú?",
-                "Volver al menú",
+                "Desea salir del nivel?",
+                "Salir del Juego",
                 JOptionPane.YES_NO_OPTION);
                 
             if (option == JOptionPane.YES_OPTION) {
                 stopTimer();
-                frame.dispose();
                 if (usuarioActual != null) {
-                    new Menu(usuarioActual);
+                    try {
+                        new SeleccionarNiveles(usuarioActual);
+                        frame.dispose();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             } else {
                 this.requestFocus(); 

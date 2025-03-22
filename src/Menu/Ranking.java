@@ -9,10 +9,11 @@ import java.util.*;
 
 public class Ranking extends JFrame implements ActionListener {
     private JButton salirbtn;
-    private JLabel fondo;
+    private JLabel fondo, titleLabel;
     private JTextArea rankingArea;
     private JScrollPane scrollPane;
     private String usuarioActual;
+    private JPanel rankingPanel;
     
     public Ranking(String usuario) {
         this.usuarioActual = usuario;
@@ -23,18 +24,39 @@ public class Ranking extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setLayout(null);
         
+        rankingPanel = new JPanel();
+        rankingPanel.setLayout(null);
+        rankingPanel.setBounds(150, 30, 500, 280);
+        rankingPanel.setBackground(new Color(0, 20, 60, 200));
+        rankingPanel.setBorder(BorderFactory.createLineBorder(new Color(100, 180, 255), 2));
+        this.add(rankingPanel);
+        
+        titleLabel = new JLabel("RANKING DE JUGADORES");
+        titleLabel.setBounds(100, 10, 300, 30);
+        titleLabel.setForeground(new Color(255, 255, 200));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        rankingPanel.add(titleLabel);
+        
+        // Make sure the text area is completely non-editable
         rankingArea = new JTextArea();
         rankingArea.setEditable(false);
-        rankingArea.setFont(new Font("Arial", Font.BOLD, 14));
+        rankingArea.setFont(new Font("Monospace", Font.PLAIN, 14)); // Using monospace font for better alignment
+        rankingArea.setForeground(Color.WHITE);
+        rankingArea.setBackground(new Color(0, 40, 80, 200)); // Increased opacity for better readability
+        rankingArea.setMargin(new Insets(10, 10, 10, 10));
+        rankingArea.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Use default cursor instead of text cursor
+        rankingArea.setFocusable(false); // Prevents focus and selection
         
         scrollPane = new JScrollPane(rankingArea);
-        scrollPane.setBounds(200, 50, 400, 200);
-        this.add(scrollPane);
+        scrollPane.setBounds(50, 50, 400, 180);
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(100, 180, 255), 1));
+        rankingPanel.add(scrollPane);
         
         displayRanking();
         
         salirbtn = new JButton("Volver");
-        salirbtn.setBounds(325, 270, 150, 40);
+        salirbtn.setBounds(325, 340, 150, 40);      
         salirbtn.addActionListener(this);
         this.add(salirbtn);
         
@@ -49,38 +71,45 @@ public class Ranking extends JFrame implements ActionListener {
     private void displayRanking() {
         ArrayList<UserScore> userScores = getAllUserScores();
         
+        // Ensure consistent sorting by points (primary) and level (secondary)
         Collections.sort(userScores, Collections.reverseOrder());
         
         StringBuilder sb = new StringBuilder();
-        sb.append("===== RANKING DE JUGADORES =====\n\n");
         
         if (userScores.isEmpty()) {
             sb.append("No hay jugadores registrados.");
         } else {
-            sb.append(String.format("%-5s %-20s %-10s %-10s %-15s\n", 
+            // Improved spacing for better alignment
+            sb.append(String.format("%-4s %-20s %-10s %-10s %-15s\n", 
                       "Pos", "Usuario", "Puntos", "Nivel", "Tiempo Total"));
-            sb.append("--------------------------------------------------\n");
+            sb.append("----------------------------------------------------------\n");
             
             int position = 1;
             for (UserScore score : userScores) {
                 String userName = score.username;
+                String highlight = "";
+                
+                // Destacar usuario actual
                 if (userName.equals(usuarioActual)) {
-                    userName = userName + " *";
+                    highlight = " ➤"; // Usar un indicador más visible
                 }
                 
-                sb.append(String.format("%-5d %-20s %-10d %-10d %-15s\n", 
-                          position, userName, score.points, score.maxLevel,
-                          UserFile.getTiempoFormateado(score.username)));
+                String formattedLine = String.format("%-4d %-20s %-10d %-10d %-15s%s\n", 
+                      position, userName, score.points, score.maxLevel,
+                      UserFile.getTiempoFormateado(score.username), highlight);
+                
+                if (position <= 3) {
+                    sb.append(formattedLine);
+                } else {
+                    sb.append(formattedLine);
+                }
                 position++;
             }
-            
-            sb.append("\n* Usuario actual");
         }
         
         rankingArea.setText(sb.toString());
     }
     
-   
     private ArrayList<UserScore> getAllUserScores() {
         ArrayList<UserScore> userScores = new ArrayList<>();
         
@@ -95,7 +124,6 @@ public class Ranking extends JFrame implements ActionListener {
                 if (dataFile.exists()) {
                     User user = UserFile.cargarUsuario(username);
                     if (user != null) {
-                        int[] stats = UserFile.cargarEstadisticasUsuario(username);
                         int maxLevel = UserFile.getNivelMaximo(username);
                         userScores.add(new UserScore(username, user.getPuntos(), maxLevel));
                     }
@@ -119,8 +147,10 @@ public class Ranking extends JFrame implements ActionListener {
         
         @Override
         public int compareTo(UserScore other) {
+            // Primary sort by points
             int result = Integer.compare(this.points, other.points);
             if (result == 0) {
+                // Secondary sort by level if points are equal
                 result = Integer.compare(this.maxLevel, other.maxLevel);
             }
             

@@ -13,7 +13,6 @@ public abstract class GameMovement extends JPanel implements KeyListener {
     protected static final int COLS = 10;
     protected static final int CELL_SIZE = 60;
     
-    // Cell types
     protected static final int EMPTY = 0;
     protected static final int WALL = 1;
     protected static final int BOX = 2;
@@ -30,6 +29,9 @@ public abstract class GameMovement extends JPanel implements KeyListener {
     protected Image boxImage;
     protected Image playerImage;
     protected Image targetImage;
+    protected Image[] playerSprites = new Image[12]; 
+    protected int currentSpriteIndex = 0;
+    protected int lastDirection = 0; 
     
     protected JFrame frame;
     protected JLabel levelLabel;
@@ -43,7 +45,6 @@ public abstract class GameMovement extends JPanel implements KeyListener {
     protected boolean gameCompleted;
     protected String usuarioActual;
     
-    // Timer variables
     protected Timer gameTimer;
     protected long startTime;
     protected long elapsedTime;
@@ -54,7 +55,6 @@ public abstract class GameMovement extends JPanel implements KeyListener {
         this.moveCount = 0;
         this.elapsedTime = 0;
         
-        // Apply the user's custom controls if available
         if (usuario != null) {
             ControlManager.applyUserControls(usuario);
         }
@@ -83,10 +83,10 @@ public abstract class GameMovement extends JPanel implements KeyListener {
                 updateTimerLabel();
                 
                 if (usuarioActual != null) {
-                    UserFile.actualizarTiempoJugado(usuarioActual, 1); // Add 1 second
+                    UserFile.actualizarTiempoJugado(usuarioActual, 1); 
                 }
             }
-        }, 0, 1000); // Update every second
+        }, 0, 1000); 
     }
     
     protected void stopTimer() {
@@ -110,6 +110,24 @@ public abstract class GameMovement extends JPanel implements KeyListener {
         return String.format("%02d:%02d:%02d", hours, minutes, remainingSeconds);
     }
     
+    protected void updatePlayerSprite(int direction) {
+        currentSpriteIndex = (currentSpriteIndex + 1) % 3;
+        switch (direction) {
+            case 0: 
+                playerImage = playerSprites[0 + currentSpriteIndex];
+                break;
+            case 1: 
+                playerImage = playerSprites[3 + currentSpriteIndex];
+                break;
+            case 2: 
+                playerImage = playerSprites[6 + currentSpriteIndex];
+                break;
+            case 3: 
+                playerImage = playerSprites[9 + currentSpriteIndex];
+                break;
+        }
+    }
+    
     @Override
     public void keyPressed(KeyEvent e) {
         if (gameCompleted) {
@@ -118,7 +136,6 @@ public abstract class GameMovement extends JPanel implements KeyListener {
         
         char keyChar = Character.toUpperCase(e.getKeyChar());
         
-        // Check if it matches custom controls
         if (keyChar == ControlSettings.UP_KEY) {
             movePlayer(0, -1);
         } else if (keyChar == ControlSettings.DOWN_KEY) {
@@ -131,7 +148,6 @@ public abstract class GameMovement extends JPanel implements KeyListener {
             resetLevel();
         }
         
-        // Also support arrow keys for alternative control
         int keyCode = e.getKeyCode();
         if (keyCode == KeyEvent.VK_UP) {
             movePlayer(0, -1);
@@ -146,62 +162,67 @@ public abstract class GameMovement extends JPanel implements KeyListener {
     
     @Override
     public void keyTyped(KeyEvent e) {
-        // Not used
     }
     
     @Override
     public void keyReleased(KeyEvent e) {
-        // Not used
     }
     
     protected void movePlayer(int dx, int dy) {
         int newX = playerX + dx;
         int newY = playerY + dy;
         
-        // Check bounds
+        if (dx > 0) {
+            lastDirection = 1;
+        } else if (dx < 0) {
+            lastDirection = 0;
+        } else if (dy > 0) {
+            lastDirection = 3; 
+        } else if (dy < 0) {
+            lastDirection = 2; 
+        }
+        
         if (newX < 0 || newX >= COLS || newY < 0 || newY >= ROWS) {
             return;
         }
         
-        // Check destination cell
         if (board[newX][newY] == WALL) {
-            return; // Can't move through walls
+            return; 
         }
         
+        boolean moved = false;
+        
         if (board[newX][newY] == BOX || board[newX][newY] == BOX_ON_TARGET) {
-            // Try to push the box
             int newBoxX = newX + dx;
             int newBoxY = newY + dy;
             
-            // Check bounds for the box
             if (newBoxX < 0 || newBoxX >= COLS || newBoxY < 0 || newBoxY >= ROWS) {
                 return;
             }
             
-            // Check if box can be moved
             if (board[newBoxX][newBoxY] == EMPTY || board[newBoxX][newBoxY] == TARGET) {
-                // Move the box
                 if (board[newBoxX][newBoxY] == EMPTY) {
                     board[newBoxX][newBoxY] = BOX;
-                } else { // TARGET
+                } else { 
                     board[newBoxX][newBoxY] = BOX_ON_TARGET;
                 }
                 
-                // Update the player's cell
                 if (board[newX][newY] == BOX) {
                     board[newX][newY] = EMPTY;
-                } else { // BOX_ON_TARGET
+                } else { 
                     board[newX][newY] = TARGET;
                 }
+                moved = true;
             } else {
-                return; // Box can't be moved
+                return; 
             }
+        } else {
+            moved = true;
         }
         
-        // Move player
         if (board[playerX][playerY] == PLAYER) {
             board[playerX][playerY] = EMPTY;
-        } else { // PLAYER_ON_TARGET
+        } else { 
             board[playerX][playerY] = TARGET;
         }
         
@@ -214,8 +235,11 @@ public abstract class GameMovement extends JPanel implements KeyListener {
             board[playerX][playerY] = PLAYER_ON_TARGET;
         }
         
-        moveCount++;
-        movesLabel.setText("Movimientos: " + moveCount);
+        if (moved) {
+            updatePlayerSprite(lastDirection);
+            moveCount++;
+            movesLabel.setText("Movimientos: " + moveCount);
+        }
         
         repaint();
         

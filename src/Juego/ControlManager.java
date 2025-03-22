@@ -1,11 +1,11 @@
 package Juego;
 
 import java.io.*;
+import javax.swing.JOptionPane;
 
 public class ControlManager {
     private static final String CONTROLS_FILE_SUFFIX = "_controls.dat";
     
-    // Default controls
     private static final char DEFAULT_UP_KEY = 'W';
     private static final char DEFAULT_DOWN_KEY = 'S';
     private static final char DEFAULT_LEFT_KEY = 'A'; 
@@ -30,13 +30,13 @@ public class ControlManager {
         
         if (file.exists()) {
             try (DataInputStream in = new DataInputStream(new FileInputStream(file))) {
-                controls[0] = in.readChar(); // UP
-                controls[1] = in.readChar(); // DOWN
-                controls[2] = in.readChar(); // LEFT
-                controls[3] = in.readChar(); // RIGHT
-                controls[4] = in.readChar(); // RESET
+                controls[0] = in.readChar(); 
+                controls[1] = in.readChar(); 
+                controls[2] = in.readChar();
+                controls[3] = in.readChar(); 
+                controls[4] = in.readChar(); 
             } catch (IOException e) {
-                System.err.println("Error loading controls for user " + usuario + ": " + e.getMessage());
+                JOptionPane.showMessageDialog(null,"Error loading controls for user " + usuario + ": " +e.getMessage());
                 controls = getDefaultControls();
             }
         } else {

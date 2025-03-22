@@ -177,7 +177,6 @@ public class MiPerfil extends JFrame implements ActionListener {
                 Image img = Avatar.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
                 avatarLabel.setIcon(new ImageIcon(img));
             } catch (Exception ex) {
-                System.err.println("Error cargando avatar personalizado: " + ex.getMessage());
                 cargarAvatarPredeterminado();
             }
         } else {
@@ -187,11 +186,10 @@ public class MiPerfil extends JFrame implements ActionListener {
 
     private void cargarAvatarPredeterminado() {
         try {
-            ImageIcon Avatar = new ImageIcon("src/Images/avatardef.png");
+            ImageIcon Avatar = new ImageIcon("src/AvatarImages/avatardef.png");
             Image img = Avatar.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
             avatarLabel.setIcon(new ImageIcon(img));
         } catch (Exception ex) {
-            System.err.println("Error cargando imagen predeterminada: " + ex.getMessage());
         }
     }
 

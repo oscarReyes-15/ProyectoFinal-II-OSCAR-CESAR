@@ -1,5 +1,6 @@
 package Niveles;
 import Juego.Juego;
+import SubMenuOption.SeleccionarNiveles;
 import javax.swing.*;
 import java.awt.*;
 import User.*;
@@ -116,5 +117,9 @@ public class Nivel1 extends Juego {
             "Movimientos: " + moveCount + "\n" +
             "Tiempo: " + tiempoFormateado,
             "Felicitaciones", JOptionPane.INFORMATION_MESSAGE);
+         JOptionPane.showMessageDialog(frame, 
+        "¡Ya puedes avanzar al siguiente nivel!\n" +"","", JOptionPane.INFORMATION_MESSAGE);
+        new SeleccionarNiveles(usuarioActual);
+        frame.dispose();
     }
 }

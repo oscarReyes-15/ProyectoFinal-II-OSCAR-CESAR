@@ -17,7 +17,6 @@ public class Menu extends JFrame implements ActionListener {
     
     public Menu(String usuario) {
         this.usuarioActual = usuario;
-        
         this.messages = LanguageManager.getMessages();
         
         initComponents();

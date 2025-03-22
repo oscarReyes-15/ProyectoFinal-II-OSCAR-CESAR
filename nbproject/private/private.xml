@@ -3,38 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Main/Main.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Menu/Ranking.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Images/avatar4.png</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/InitGUI/Login.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/InitGUI/Registro.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/User/UserLogic.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Objects/Spawn.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Niveles/Nivel3.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Juego/Juego.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/InitGUI/MainMenu.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Juego/GameInput.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Niveles/Nivel4.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Objects/Sprites.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/SubMenuOption/SeleccionarNiveles.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Menu/Menu.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/InitGUI/Pantallainit.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Juego/GameMovement.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/User/User.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Niveles/Nivel1.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/SubMenuOption/NewAvatar.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Menu/MiPerfil.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/SubMenuOption/ControlSettings.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Juego/ControlSettings.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/User/UserFile.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/SubMenuOption/LanguageManager.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Objects/Muro.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Niveles/Nivel2.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/imagescan/fondogui.png</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Menu/Ajustes.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Objects/RedPoints.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Juego/ControlManager.java</file>
-            <file>file:/C:/Users/danilos/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Niveles/Nivel5.java</file>
+            <file>file:/C:/Users/soporte.tecnico/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Juego/GameInput.java</file>
+            <file>file:/C:/Users/soporte.tecnico/Documents/NetBeansProjects/ProyectoFinal-II-OSCAR-CESAR/src/Main/Main.java</file>
         </group>
     </open-files>
 </project-private>

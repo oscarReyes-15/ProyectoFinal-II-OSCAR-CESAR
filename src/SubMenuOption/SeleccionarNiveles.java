@@ -1,16 +1,12 @@
 package SubMenuOption;
-
 import Menu.Menu;
 import Niveles.*;
+import User.UserFile;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ResourceBundle;
 
-/**
- *
- * @author danilos
- */
 public class SeleccionarNiveles extends JFrame implements ActionListener {
     private JButton lvl1btn, lvl2btn, lvl3btn, lvl4btn, lvl5btn, backBtn;
     private String usuarioActual;
@@ -27,24 +23,27 @@ public class SeleccionarNiveles extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setLayout(null);
         
-        ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
+        ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondoniveles2.png");
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
         fondo.setBounds(0, 0, 800, 450);
-   
-        int buttonWidth = 80;
-        int buttonHeight = 80;
-        int spacing = 20;
-        int startX = 150;
-        int y = 150;
         
-        lvl1btn = createLevelButton(messages.getString("1"), startX, y, buttonWidth, buttonHeight);
-        lvl2btn = createLevelButton(messages.getString("2"), startX + buttonWidth + spacing, y, buttonWidth, buttonHeight);
-        lvl3btn = createLevelButton(messages.getString("3"), startX + (buttonWidth + spacing) * 2, y, buttonWidth, buttonHeight);
-        lvl4btn = createLevelButton(messages.getString("4"), startX + (buttonWidth + spacing) * 3, y, buttonWidth, buttonHeight);
-        lvl5btn = createLevelButton(messages.getString("5"), startX + (buttonWidth + spacing) * 4, y, buttonWidth, buttonHeight);
+        int buttonWidth = 150;
+        int buttonHeight = 80;
+        
+        lvl1btn = createLevelButton("1", 47, 22, buttonWidth, buttonHeight, true);
+        
+        boolean level1Completed = UserFile.hasCompletedLevel(usuarioActual, 1);
+        boolean level2Completed = UserFile.hasCompletedLevel(usuarioActual, 2);
+        boolean level3Completed = UserFile.hasCompletedLevel(usuarioActual, 3);
+        boolean level4Completed = UserFile.hasCompletedLevel(usuarioActual, 4);
+        
+        lvl2btn = createLevelButton("2", 165, 230, buttonWidth, buttonHeight, level1Completed);
+        lvl3btn = createLevelButton("3", 415, 270, buttonWidth, buttonHeight, level2Completed);
+        lvl4btn = createLevelButton("4", 533, 90, buttonWidth, buttonHeight, level3Completed);
+        lvl5btn = createLevelButton("5", 630, 250, buttonWidth, buttonHeight, level4Completed);
         
         backBtn = new JButton(messages.getString("button.back"));
-        backBtn.setBounds(350, 350, 100, 30);
+        backBtn.setBounds(20, 380, 100, 30);
         backBtn.addActionListener(this);
         add(backBtn);
         
@@ -53,13 +52,39 @@ public class SeleccionarNiveles extends JFrame implements ActionListener {
         this.setVisible(true);
     }
     
-    private JButton createLevelButton(String text, int x, int y, int width, int height) {
-        JButton button = new JButton(text);
+    private JButton createLevelButton(String level, int x, int y, int width, int height, boolean unlocked) {
+        JButton button = new JButton();
         button.setBounds(x, y, width, height);
-        button.setBackground(new Color(245, 222, 179));
-        button.setForeground(new Color(139, 69, 19)); 
-        button.setFont(new Font("Arial", Font.BOLD, 14));
+        ImageIcon iconOriginal = new ImageIcon("src/imagesbtn/" + level + ".png");
+        Image imgEscalada = iconOriginal.getImage().getScaledInstance(width - 20, height - 20, Image.SCALE_SMOOTH);
+        ImageIcon iconoEscalado = new ImageIcon(imgEscalada);
+        
+        button.setIcon(iconoEscalado);
+        
+        button.setBackground(unlocked ? new Color(6, 0, 53) : new Color(80, 80, 80));
+        
+        button.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(unlocked ? new Color(148, 116, 231) : Color.GRAY, 3),
+            BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+            
+        if (!unlocked) {
+            JPanel lockPanel = new JPanel(null);
+            lockPanel.setOpaque(false);
+            
+            JLabel lockLabel = new JLabel("\uD83D\uDD12"); 
+            lockLabel.setFont(new Font("Dialog", Font.BOLD, 24));
+            lockLabel.setForeground(Color.WHITE);
+            lockLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            lockLabel.setBounds(0, 0, width, height);
+            
+            lockPanel.add(lockLabel);
+            lockPanel.setBounds(0, 0, width, height);
+            button.setLayout(null);
+            button.add(lockPanel);
+        }
+        
         button.addActionListener(this);
+        button.setEnabled(unlocked); 
         add(button);
         return button;
     }
@@ -73,17 +98,46 @@ public class SeleccionarNiveles extends JFrame implements ActionListener {
             new Nivel1(usuarioActual); 
             this.dispose();
         } else if (e.getSource() == lvl2btn) {
-             new Nivel2(usuarioActual); 
-             this.dispose();
+            if (UserFile.hasCompletedLevel(usuarioActual, 1)) {
+                new Nivel2(usuarioActual); 
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Debes completar el Nivel 1 primero.", 
+                    "Nivel bloqueado", 
+                    JOptionPane.WARNING_MESSAGE);
+            }
         } else if (e.getSource() == lvl3btn) {
-             new Nivel3(usuarioActual); 
-             this.dispose();    
+            if (UserFile.hasCompletedLevel(usuarioActual, 2)) {
+                new Nivel3(usuarioActual); 
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Debes completar el Nivel 2 primero.", 
+                    "Nivel bloqueado", 
+                    JOptionPane.WARNING_MESSAGE);
+            }    
         } else if (e.getSource() == lvl4btn) {
-             new Nivel4(usuarioActual); 
-             this.dispose();
+            if (UserFile.hasCompletedLevel(usuarioActual, 3)) {
+                new Nivel4(usuarioActual); 
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Debes completar el Nivel 3 primero.", 
+                    "Nivel bloqueado", 
+                    JOptionPane.WARNING_MESSAGE);
+            }
         } else if (e.getSource() == lvl5btn) {
-            new Nivel5(usuarioActual); 
-             this.dispose();
+            // Check if level 4 is completed
+            if (UserFile.hasCompletedLevel(usuarioActual, 4)) {
+                new Nivel5(usuarioActual); 
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Debes completar el Nivel 4 primero.", 
+                    "Nivel bloqueado", 
+                    JOptionPane.WARNING_MESSAGE);
+            }
         }
     }
 }

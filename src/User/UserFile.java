@@ -169,7 +169,6 @@ public class UserFile {
                                         stats[1], stats[2], tiempoTotal);
     }
     
-    // Rest of the methods remain unchanged
     public static boolean verificarCredenciales(String usuario, String password) {
         File archivo = new File(usuario + USER_DATA_FILE);
         if (!archivo.exists()) {
@@ -260,6 +259,16 @@ public static String getTiempoFormateado(String usuario) {
     long remainingSeconds = seconds % 60;
     return String.format("%02d:%02d:%02d", hours, minutes, remainingSeconds);
 }
+// Add this method to your existing UserFile class
 
+public static boolean hasCompletedLevel(String username, int level) {
+    if (username == null) {
+        return false;
+    }
+    
+    int maxLevel = getNivelMaximo(username);
+    
+    return maxLevel >= level;
+}
 }
 
