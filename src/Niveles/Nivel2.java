@@ -6,11 +6,9 @@ import Juego.Juego;
 import SubMenuOption.SeleccionarNiveles;
 import javax.swing.*;
 import User.*;
-import java.util.ResourceBundle;
 
 public class Nivel2 extends Juego {
     
-    private ResourceBundle messages;
 
     public Nivel2() {
         this(null);
