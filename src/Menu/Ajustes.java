@@ -61,7 +61,6 @@ public class Ajustes extends JFrame implements ActionListener, ChangeListener {
         this.add(volumenLabel);
         
         volumenSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, (int) (Musica.getInstance().volume * 100));
-        System.out.println((int) (Musica.getInstance().volume * 100 ) );
         volumenSlider.setBounds(325, 200, 150, 50);
         volumenSlider.setMajorTickSpacing(25);
         volumenSlider.setMinorTickSpacing(5);
@@ -181,7 +180,6 @@ public class Ajustes extends JFrame implements ActionListener, ChangeListener {
             volumenLabel.setText(messages.getString("label.volume") + " " + valor + "%");
             Musica.getInstance().setVolume(valor / 100);
             Musica.volume = valor/100;
-            System.out.println("new value of vol: " + valor / 100);
         }
     }
 }
