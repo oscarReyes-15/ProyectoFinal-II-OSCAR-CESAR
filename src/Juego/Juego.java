@@ -1,5 +1,6 @@
 package Juego;
 
+import Audio.Musica;
 import Audio.Sonidos;
 import SubMenuOption.SeleccionarNiveles;
 import javax.swing.*;
@@ -251,6 +252,8 @@ protected void updatePlayerSprite(int direction) {
                 stopTimer();
                 if (usuarioActual != null) {
                     try {
+                        Musica.getInstance().audioStop();
+                        Musica.getInstance().play(0);
                         new SeleccionarNiveles(usuarioActual);
                         frame.dispose();
                     } catch (Exception ex) {

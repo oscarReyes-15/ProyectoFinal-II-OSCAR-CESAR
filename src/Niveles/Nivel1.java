@@ -4,7 +4,6 @@ import Audio.Sonidos;
 import Juego.Juego;
 import SubMenuOption.SeleccionarNiveles;
 import javax.swing.*;
-import java.awt.*;
 import User.*;
 
 public class Nivel1 extends Juego {

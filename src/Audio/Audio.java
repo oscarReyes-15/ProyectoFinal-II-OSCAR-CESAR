@@ -42,10 +42,14 @@ public class Audio implements Runnable {
     protected Audio () {} // Invasion de privacidad instanciar
     
     public void play (int n) {
-        audioStop();        
-        song = n;
-        audioThread = new Thread(this);
-        audioThread.start();
+        try{
+            audioStop();        
+            song = n;
+            audioThread = new Thread(this);
+            audioThread.start();
+        }catch (NullPointerException e) {
+            System.out.println("Seguro que asi es?");
+        }
     }
     
     public void audioStop () {
@@ -57,8 +61,6 @@ public class Audio implements Runnable {
     }
     
     public void setVolume (float vol) {
-        System.out.println((CAD != null) + "print");
-        System.out.println(volume + ": current volumen");
         if (CAD != null) {  
             CAD.setVolume(vol);
         }
@@ -74,7 +76,7 @@ public class Audio implements Runnable {
                         setVolume(volume);
                     }
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(Audio.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("Acaso eres capaz de superar este reto?");
                 }
             }
             
@@ -90,11 +92,11 @@ public class Audio implements Runnable {
             audioPlayer = new AdvancedPlayer(BIS, CAD);
 
             initVol();
-            audioPlayer.play();
+            if (audioPlayer != null) audioPlayer.play();
             uDone = false;
             audioStop();
         } catch (JavaLayerException | FileNotFoundException ex) {
-            Logger.getLogger(Audio.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("!");
         }
     }
     
@@ -132,7 +134,6 @@ public class Audio implements Runnable {
                 float max = gainControl.getMaximum();
                 float gain = min + (max - min) * volume;
                 gainControl.setValue(gain);
-                System.out.println("hello");
             } 
         }
 

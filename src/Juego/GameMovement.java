@@ -12,7 +12,7 @@ public abstract class GameMovement extends JPanel implements KeyListener {
     
     protected static final int ROWS = 10;
     protected static final int COLS = 10;
-    protected static final int CELL_SIZE = 60;
+    protected static int CELL_SIZE = 60;
     
     protected static final int EMPTY = 0;
     protected static final int WALL = 1;
@@ -70,7 +70,7 @@ public abstract class GameMovement extends JPanel implements KeyListener {
     protected abstract void checkWinCondition();
     protected abstract void resetLevel();
     
-    protected void startTimer() {
+    protected final void startTimer() {
         if (gameTimer != null) {
             gameTimer.cancel();
         }

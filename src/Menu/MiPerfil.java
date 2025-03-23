@@ -26,7 +26,7 @@ public class MiPerfil extends JFrame implements ActionListener {
         this.setTitle(messages.getString("title.profile"));
         this.setLayout(null);
         this.setSize(800, 450); 
-        this.setResizable(false);
+        this.setResizable(false);  
         this.setLocationRelativeTo(null);
 
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui1.png");

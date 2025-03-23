@@ -1,6 +1,9 @@
 package Niveles;
 
+import Audio.Musica;
+import Audio.Sonidos;
 import Juego.Juego;
+import SubMenuOption.SeleccionarNiveles;
 import javax.swing.*;
 import User.*;
 
@@ -30,54 +33,51 @@ public class Nivel3 extends Juego{
     
     @Override
     protected void initializeLevel() {
+        
         for (int x = 0; x < COLS; x++) {
             for (int y = 0; y < ROWS; y++) {
-                board[x][y] = EMPTY;
+                board[x][y] = WALL;
             }
         }
         
-        for (int x = 0; x < COLS; x++) {
-            board[x][0] = WALL;
-            board[x][ROWS - 1] = WALL;
-        }
+        board[4][1]  = EMPTY;
+        board[5][1]  = TARGET;
+        board[6][1]  = TARGET;
+        board[7][1]  = EMPTY;
         
-        for (int y = 0; y < ROWS; y++) {
-            board[0][y] = WALL;
-            board[COLS - 1][y] = WALL;
-        }
+        board[2][2]  = EMPTY;
+        board[3][2]  = EMPTY;
+        board[4][2]  = BOX;
+        board[5][2]  = TARGET;
+        board[6][2]  = EMPTY;
+        board[7][2]  = EMPTY;
         
-        board[2][2] = WALL;
-        board[2][3] = WALL;
-        board[2][4] = WALL;
-        board[2][5] = WALL;
-        board[2][6] = WALL;
-        board[3][2] = WALL;
-        board[4][4] = WALL;
-        board[5][4] = WALL;
-        board[6][2] = WALL;
-        board[6][3] = WALL;
-        board[6][4] = WALL;
-        board[6][6] = WALL;
-        board[6][7] = WALL;
-        board[7][7] = WALL;
+        board[2][3]  = EMPTY;
+        board[3][3]  = BOX;
+        board[4][3]  = EMPTY;
+        board[6][3]  = EMPTY;
         
-        board[4][7] = TARGET;
-        board[5][7] = TARGET;
-        board[7][3] = TARGET;
-        board[7][4] = TARGET;
+        board[3][4]  = EMPTY;
+        board[4][4]  = BOX;
+        board[5][4]  = EMPTY;
+        board[6][4]  = EMPTY;
+        board[7][4]  = EMPTY;
         
-        board[3][4] = BOX;
-        board[3][5] = BOX;
-        board[4][5] = BOX;
-        board[5][5] = BOX;
+        board[3][5]  = EMPTY;
+        board[4][5]  = EMPTY;
+        board[6][5]  = EMPTY;
+        board[7][5]  = EMPTY;
         
-        playerX = 4;
-        playerY = 3;
+        
+        playerX = 3;
+        playerY = 2;
         board[playerX][playerY] = PLAYER;
+        
         
         moveCount = 0;
         movesLabel.setText("Movimientos: " + moveCount);
         
+        Musica.getInstance().play(3);
         gameCompleted = false;
     }
     
@@ -91,10 +91,12 @@ public class Nivel3 extends Juego{
             }
         }
         
+        Musica.getInstance().audioStop();
         gameCompleted = true;
+        Sonidos.getInstance().play(2);
         
         if (usuarioActual != null) {
-            UserFile.setNivelCompletado(usuarioActual, 2);
+            UserFile.setNivelCompletado(usuarioActual, 3);
             
             int puntos = 1500 - (moveCount * 5); 
             if (puntos < 150) puntos = 150; 
@@ -103,5 +105,10 @@ public class Nivel3 extends Juego{
         
         JOptionPane.showMessageDialog(frame, "¡Nivel completado!\nMovimientos: " + moveCount, 
                                      "Felicitaciones", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(frame, 
+        "¡Ya puedes avanzar al siguiente nivel!\n" +"","", JOptionPane.INFORMATION_MESSAGE);
+        new SeleccionarNiveles(usuarioActual);
+        frame.dispose();
+        Musica.getInstance().play(0);
     }
 }
