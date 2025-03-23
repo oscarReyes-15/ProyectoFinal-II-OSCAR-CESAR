@@ -1,20 +1,23 @@
 package MenuGUI;
 
+import Sounds.Musica;
 import Sounds.Sonidos;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 public class Pantallainit extends JFrame implements ActionListener {
-    private JButton jugar;
-    private JLabel fondo;
+    private final JButton jugar;
+    private final JLabel fondo;
     protected Sonidos sonido;
+    protected Musica music;
     
     public Pantallainit(Sonidos sonido) {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("Menu Principal");
         this.setLayout(null);
-        this. sonido = sonido;
+        this. sonido = sonido = new Sonidos();
+
         
         int anchoVentana = 800;
         int altoVentana = 450;
@@ -31,10 +34,13 @@ public class Pantallainit extends JFrame implements ActionListener {
         this.setSize(anchoVentana, altoVentana);
         this.setLocationRelativeTo(null);
         
-
+        System.out.println(Musica.volume);
+        Musica.getInstance().play(0);
         
         this.add(jugar);
         this.add(fondo);
+        
+        Musica.getInstance().setVolume((float) 0.5);
         
         this.setVisible(true);
     }

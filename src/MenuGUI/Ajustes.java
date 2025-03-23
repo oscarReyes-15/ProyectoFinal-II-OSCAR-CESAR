@@ -1,5 +1,6 @@
 package MenuGUI;
 
+import Sounds.Musica;
 import Sounds.Sonidos;
 import java.awt.Image;
 import java.awt.event.*;
@@ -50,7 +51,8 @@ public class Ajustes extends JFrame implements ActionListener, ChangeListener {
         volumenLabel.setForeground(java.awt.Color.WHITE);
         this.add(volumenLabel);
         
-        volumenSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, (int)s.vol * 100);
+        volumenSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, (int) (Musica.volume * 100));
+        System.out.println(Musica.volume * 100);
         volumenSlider.setBounds(325, 200, 150, 50);
         volumenSlider.setMajorTickSpacing(25);
         volumenSlider.setMinorTickSpacing(5);
@@ -60,9 +62,9 @@ public class Ajustes extends JFrame implements ActionListener, ChangeListener {
         volumenSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                int value = volumenSlider.getValue(); 
-                
-                s.setVolume(s.vol = value/100);
+                float value = volumenSlider.getValue();
+                System.out.println(value + " : " + value/100);
+                Musica.getInstance().setVolume(value/100);
             }
         });
         this.add(volumenSlider);

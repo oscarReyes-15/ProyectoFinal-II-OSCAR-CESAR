@@ -1,6 +1,7 @@
 package MenuGUI;
 
 import Niveles.*;
+import Sounds.Musica;
 import Sounds.Sonidos;
 import javax.swing.*;
 import java.awt.*;
@@ -49,6 +50,9 @@ public class SeleccionarNiveles extends JFrame implements ActionListener {
         backBtn.setBounds(350, 350, 100, 30);
         backBtn.addActionListener(this);
         add(backBtn);
+        
+        Musica.getInstance().stop();
+        Musica.getInstance().play(1);
         
         this.add(fondo);
         

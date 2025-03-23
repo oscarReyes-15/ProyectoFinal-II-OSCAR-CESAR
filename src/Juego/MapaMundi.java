@@ -81,7 +81,7 @@ public final class MapaMundi {
             mapaMundi.add(btn);
         }
         JButton salir = new JButton ("salir");
-        salir.addActionListener(e -> {new MainMenu(); game.f.dispose();});
+        salir.addActionListener(e -> {});
         mapaMundi.add(salir);
     }
     
