@@ -1,5 +1,6 @@
 package Juego;
 
+import Audio.Sonidos;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -213,10 +214,12 @@ public abstract class GameMovement extends JPanel implements KeyListener {
                     board[newX][newY] = TARGET;
                 }
                 moved = true;
+                Sonidos.getInstance().play(1);
             } else {
                 return; 
             }
         } else {
+            Sonidos.getInstance().play(0);
             moved = true;
         }
         
@@ -240,6 +243,8 @@ public abstract class GameMovement extends JPanel implements KeyListener {
             moveCount++;
             movesLabel.setText("Movimientos: " + moveCount);
         }
+        
+        
         
         repaint();
         

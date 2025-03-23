@@ -1,4 +1,6 @@
 package SubMenuOption;
+import Audio.Musica;
+import Audio.Sonidos;
 import Menu.Menu;
 import Niveles.*;
 import User.UserFile;
@@ -20,6 +22,8 @@ public class SeleccionarNiveles extends JFrame implements ActionListener {
         this.setTitle(messages.getString("title.selectLevel"));
         this.setSize(800, 450);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
         
@@ -91,6 +95,7 @@ public class SeleccionarNiveles extends JFrame implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        Sonidos.getInstance().play(3);
         if (e.getSource() == backBtn) {
             this.dispose();
             new Menu(usuarioActual);

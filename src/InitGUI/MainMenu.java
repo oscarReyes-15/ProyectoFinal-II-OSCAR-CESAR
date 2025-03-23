@@ -1,5 +1,6 @@
 package InitGUI;
 
+import Audio.Sonidos;
 import InitGUI.Login;
 import InitGUI.Registro;
 import javax.swing.*;
@@ -44,6 +45,7 @@ public class MainMenu extends JFrame implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        Sonidos.getInstance().play(3);
         if (e.getSource() == loginbtn) {
             new Login();
             this.dispose();

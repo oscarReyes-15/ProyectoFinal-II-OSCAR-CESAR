@@ -1,5 +1,7 @@
 package Menu;
 
+import Audio.Musica;
+import Audio.Sonidos;
 import SubMenuOption.*;
 import java.awt.Image;
 import java.awt.event.*;
@@ -42,12 +44,13 @@ public class Ajustes extends JFrame implements ActionListener, ChangeListener {
         idiomaBtn.addActionListener(this);
         this.add(idiomaBtn);
         
-        volumenLabel = new JLabel(messages.getString("label.volume"));
+        volumenLabel = new JLabel(messages.getString("label.volume") + " " +(Musica.getInstance().volume * 100));
         volumenLabel.setBounds(325, 170, 150, 30);
         volumenLabel.setForeground(java.awt.Color.WHITE);
         this.add(volumenLabel);
         
-        volumenSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+        volumenSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, (int) (Musica.getInstance().volume * 100));
+        System.out.println((int) (Musica.getInstance().volume * 100 ) );
         volumenSlider.setBounds(325, 200, 150, 50);
         volumenSlider.setMajorTickSpacing(25);
         volumenSlider.setMinorTickSpacing(5);
@@ -100,6 +103,7 @@ public class Ajustes extends JFrame implements ActionListener, ChangeListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        Sonidos.getInstance().play(3);
         if (e.getSource() == idiomaBtn) {
             String[] opciones = {"Español", "English", "Italiano"};
             String seleccion = (String) JOptionPane.showInputDialog(
@@ -162,8 +166,11 @@ public class Ajustes extends JFrame implements ActionListener, ChangeListener {
     @Override
     public void stateChanged(ChangeEvent e) {
         if (e.getSource() == volumenSlider) {
-            int valor = volumenSlider.getValue();
+            float valor = volumenSlider.getValue();
             volumenLabel.setText(messages.getString("label.volume") + " " + valor + "%");
+            Musica.getInstance().setVolume(valor / 100);
+            Musica.volume = valor/100;
+            System.out.println("new value of vol: " + valor / 100);
         }
     }
 }

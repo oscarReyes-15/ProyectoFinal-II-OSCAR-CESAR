@@ -1,5 +1,6 @@
 package InitGUI;
 
+import Audio.Sonidos;
 import Menu.Menu;
 import javax.swing.*;
 import java.awt.*;
@@ -59,6 +60,7 @@ public class Login extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == iniciarSesionBtn) {
+            Sonidos.getInstance().play(3);
             String usuarioInput = usuario.getText().trim().toLowerCase(); 
             String passwordInput = new String(password.getPassword()).trim();
             

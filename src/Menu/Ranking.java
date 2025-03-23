@@ -1,5 +1,6 @@
 package Menu;
 
+import Audio.Sonidos;
 import User.*;
 import javax.swing.*;
 import java.awt.*;
@@ -22,6 +23,7 @@ public class Ranking extends JFrame implements ActionListener {
         this.setTitle("Ranking de Jugadores");
         this.setSize(800, 450);
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
         this.setLayout(null);
         
         rankingPanel = new JPanel();
@@ -160,6 +162,7 @@ public class Ranking extends JFrame implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        Sonidos.getInstance().play(3);
         if (e.getSource() == salirbtn) {
             new Menu(usuarioActual);
             this.dispose();

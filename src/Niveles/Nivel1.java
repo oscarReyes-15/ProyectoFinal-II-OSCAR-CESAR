@@ -1,4 +1,6 @@
 package Niveles;
+import Audio.Musica;
+import Audio.Sonidos;
 import Juego.Juego;
 import SubMenuOption.SeleccionarNiveles;
 import javax.swing.*;
@@ -75,6 +77,8 @@ public class Nivel1 extends Juego {
         movesLabel.setText("Movimientos: " + moveCount);
         
         gameCompleted = false;
+        Musica.getInstance().audioStop();
+        Musica.getInstance().play(1);
     }
     
     @Override
@@ -96,7 +100,9 @@ public class Nivel1 extends Juego {
             return;
         }
         
+        Musica.getInstance().audioStop();
         gameCompleted = true;
+        Sonidos.getInstance().play(2);
         
         stopTimer();
         
@@ -121,5 +127,6 @@ public class Nivel1 extends Juego {
         "¡Ya puedes avanzar al siguiente nivel!\n" +"","", JOptionPane.INFORMATION_MESSAGE);
         new SeleccionarNiveles(usuarioActual);
         frame.dispose();
+        Musica.getInstance().play(0);
     }
 }

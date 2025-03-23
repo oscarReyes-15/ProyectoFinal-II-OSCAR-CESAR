@@ -1,5 +1,6 @@
 package SubMenuOption;
 
+import Audio.Sonidos;
 import Menu.MiPerfil;
 import javax.swing.*;
 import java.awt.*;
@@ -29,6 +30,7 @@ public class NewAvatar extends JFrame implements ActionListener {
         this.setSize(800, 450);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
         this.setLayout(null);
         
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui1.png");
@@ -96,6 +98,7 @@ public class NewAvatar extends JFrame implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        Sonidos.getInstance().play(3);
         if (e.getSource() == regresarBtn) {
             try {
                 new MiPerfil(usuarioActual);

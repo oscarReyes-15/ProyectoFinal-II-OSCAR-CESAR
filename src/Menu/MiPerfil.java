@@ -1,5 +1,6 @@
 package Menu;
 
+import Audio.Sonidos;
 import InitGUI.*;
 import SubMenuOption.*;
 import javax.swing.*;
@@ -25,6 +26,7 @@ public class MiPerfil extends JFrame implements ActionListener {
         this.setTitle(messages.getString("title.profile"));
         this.setLayout(null);
         this.setSize(800, 450); 
+        this.setResizable(false);
         this.setLocationRelativeTo(null);
 
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui1.png");
@@ -195,6 +197,7 @@ public class MiPerfil extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        Sonidos.getInstance().play(3);
         if (e.getSource() == cambiarAvatarBtn) {
             new NewAvatar(usuarioActual);
             this.dispose();

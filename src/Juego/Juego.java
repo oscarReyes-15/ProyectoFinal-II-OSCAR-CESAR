@@ -1,5 +1,6 @@
 package Juego;
 
+import Audio.Sonidos;
 import SubMenuOption.SeleccionarNiveles;
 import javax.swing.*;
 import java.awt.*;
@@ -235,6 +236,7 @@ protected void updatePlayerSprite(int direction) {
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        Sonidos.getInstance().play(3);
         if (e.getSource() == resetBtn) {
             resetLevel();
             this.requestFocus();

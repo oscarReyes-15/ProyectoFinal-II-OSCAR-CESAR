@@ -1,5 +1,7 @@
 package InitGUI;
 
+import Audio.Musica;
+import Audio.Sonidos;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -32,10 +34,12 @@ public class Pantallainit extends JFrame implements ActionListener {
         this.add(fondo);
         
         this.setVisible(true);
+        Musica.getInstance().play(0);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        Sonidos.getInstance().play(3);
         if (e.getSource() == jugar) {
             new MainMenu(); 
             this.dispose();

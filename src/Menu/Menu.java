@@ -1,5 +1,6 @@
 package Menu;
 
+import Audio.Sonidos;
 import InitGUI.*;
 import SubMenuOption.*;
 import java.awt.Image;
@@ -80,6 +81,7 @@ public class Menu extends JFrame implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        Sonidos.getInstance().play(3);
         if (e.getSource() == jugar) {
             new SeleccionarNiveles(usuarioActual);
             this.dispose();

@@ -1,5 +1,6 @@
 package SubMenuOption;
 
+import Audio.Sonidos;
 import Menu.Ajustes;
 import java.awt.*;
 import java.awt.event.*;
@@ -39,6 +40,7 @@ public class ControlSettings extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle(messages.getString("title.controls"));
         this.setLayout(null);
+        this.setResizable(false);
         this.setSize(800, 450);
         this.setLocationRelativeTo(null);
         
@@ -298,6 +300,7 @@ public class ControlSettings extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        Sonidos.getInstance().play(3);
         if (e.getSource() == guardarBtn) {
             if (saveUserControls()) {
                 Ajustes ajustes = new Ajustes(usuarioActual);

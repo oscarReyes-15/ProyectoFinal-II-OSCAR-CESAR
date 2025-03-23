@@ -1,4 +1,5 @@
 package InitGUI;
+import Audio.Sonidos;
 import Menu.Menu;
 import javax.swing.*;
 import java.awt.*;
@@ -67,6 +68,7 @@ public class Registro extends JFrame implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        Sonidos.getInstance().play(3);
         if (e.getSource() == registrarBtn) {
             try {
                 String nombreApellidoInput = nombreApellido.getText().trim();
