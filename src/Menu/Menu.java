@@ -4,6 +4,7 @@ import Audio.Sonidos;
 import InitGUI.*;
 import SubMenuOption.*;
 import java.awt.Image;
+import java.awt.MediaTracker;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.Locale;
@@ -44,6 +45,16 @@ public class Menu extends JFrame implements ActionListener {
         this.setLayout(null);
         this.setSize(800, 450);
         this.setLocationRelativeTo(null);
+                try {
+      ImageIcon taza = new ImageIcon(getClass().getResource("/imagescan/logo.jpg"));
+    if (taza.getImageLoadStatus() == MediaTracker.COMPLETE) {
+        this.setIconImage(taza.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH));
+    } else {
+        System.err.println("Unable to load the image");
+    }
+} catch (Exception e) {
+    e.printStackTrace();
+}
         
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));

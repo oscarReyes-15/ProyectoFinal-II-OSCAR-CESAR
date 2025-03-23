@@ -20,6 +20,16 @@ public class Login extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setLayout(null);
         
+                try {
+      ImageIcon taza = new ImageIcon(getClass().getResource("/imagescan/logo.jpg"));
+    if (taza.getImageLoadStatus() == MediaTracker.COMPLETE) {
+        this.setIconImage(taza.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH));
+    } else {
+        System.err.println("Unable to load the image");
+    }
+} catch (Exception e) {
+    e.printStackTrace();
+}
         ImageIcon imagenFondo = new ImageIcon("src/imagescan/fondogui.png");
         fondo = new JLabel(new ImageIcon(imagenFondo.getImage().getScaledInstance(800, 450, Image.SCALE_SMOOTH)));
         fondo.setBounds(0, 0, 800, 450);

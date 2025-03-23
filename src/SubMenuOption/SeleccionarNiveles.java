@@ -19,6 +19,16 @@ public class SeleccionarNiveles extends JFrame implements ActionListener {
         this.usuarioActual = usuario;
         this.messages = LanguageManager.getMessages();
         
+                try {
+      ImageIcon taza = new ImageIcon(getClass().getResource("/imagescan/logo.jpg"));
+    if (taza.getImageLoadStatus() == MediaTracker.COMPLETE) {
+        this.setIconImage(taza.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH));
+    } else {
+        System.err.println("Unable to load the image");
+    }
+} catch (Exception e) {
+    e.printStackTrace();
+}
         this.setTitle(messages.getString("title.selectLevel"));
         this.setSize(800, 450);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

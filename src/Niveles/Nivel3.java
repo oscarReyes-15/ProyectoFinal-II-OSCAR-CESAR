@@ -21,7 +21,7 @@ public class Nivel3 extends Juego{
         super(usuario, 3);
         
         loadImages();
-        setupFrame("Sokoban - Nivel 3");
+        setupFrame("Sokoban - " + messages.getString("level.3"));
         
         if (usuarioActual != null) {
             UserFile.incrementarPartidasJugadas(usuarioActual);
@@ -75,7 +75,7 @@ public class Nivel3 extends Juego{
         
         
         moveCount = 0;
-        movesLabel.setText("Movimientos: " + moveCount);
+        movesLabel.setText(messages.getString("game.movements") + ": " + moveCount);
         
         Musica.getInstance().play(3);
         gameCompleted = false;
@@ -103,10 +103,17 @@ public class Nivel3 extends Juego{
             UserFile.actualizarPuntos(usuarioActual, puntos);
         }
         
-        JOptionPane.showMessageDialog(frame, "¡Nivel completado!\nMovimientos: " + moveCount, 
-                                     "Felicitaciones", JOptionPane.INFORMATION_MESSAGE);
+        String tiempoFormateado = formatTime(elapsedTime);
         JOptionPane.showMessageDialog(frame, 
-        "¡Ya puedes avanzar al siguiente nivel!\n" +"","", JOptionPane.INFORMATION_MESSAGE);
+         messages.getString("dialog.levelCompleted") + "\n" +
+            messages.getString("game.movements") + ": " + moveCount + "\n" +
+            messages.getString("game.timer") + ": " + tiempoFormateado,
+            messages.getString("dialog.congratulations"), JOptionPane.INFORMATION_MESSAGE);
+        
+        JOptionPane.showMessageDialog(frame, 
+            messages.getString("dialog.nextLevelAvailable") + "\n",
+            "", JOptionPane.INFORMATION_MESSAGE);   
+
         new SeleccionarNiveles(usuarioActual);
         frame.dispose();
         Musica.getInstance().play(0);

@@ -1,12 +1,14 @@
 package Niveles;
-import Audio.Musica;
-import Audio.Sonidos;
-import Juego.Juego;
-import SubMenuOption.SeleccionarNiveles;
+
+import Audio.*;
+import Juego.*;
+import SubMenuOption.*;
 import javax.swing.*;
 import User.*;
+import java.util.ResourceBundle;
 
 public class Nivel1 extends Juego {
+    private ResourceBundle messages;
     
     public Nivel1() {
         this(null);
@@ -15,8 +17,10 @@ public class Nivel1 extends Juego {
     public Nivel1(String usuario) {
         super(usuario, 1);
         
+        messages = LanguageManager.getMessages();
+        
         loadImages();
-        setupFrame("Sokoban - Nivel 1");
+        setupFrame("Sokoban - " + messages.getString("level.1"));
         
         if (usuarioActual != null) {
             UserFile.incrementarPartidasJugadas(usuarioActual);
@@ -73,7 +77,7 @@ public class Nivel1 extends Juego {
         board[playerX][playerY] = PLAYER;
         
         moveCount = 0;
-        movesLabel.setText("Movimientos: " + moveCount);
+        movesLabel.setText(messages.getString("game.movements") + ": " + moveCount);
         
         gameCompleted = false;
         Musica.getInstance().audioStop();
@@ -109,21 +113,23 @@ public class Nivel1 extends Juego {
             UserFile.setNivelCompletado(usuarioActual, 1);
             
             int puntosPorMovimientos = 1000 - (moveCount * 5);
-            if (puntosPorMovimientos < 100) puntosPorMovimientos = 100; // Minimum points
+            if (puntosPorMovimientos < 100) puntosPorMovimientos = 100;
             
             UserFile.actualizarPuntos(usuarioActual, puntosPorMovimientos);
-            
         }
         
         String tiempoFormateado = formatTime(elapsedTime);
         
         JOptionPane.showMessageDialog(frame, 
-            "¡Nivel completado!\n" +
-            "Movimientos: " + moveCount + "\n" +
-            "Tiempo: " + tiempoFormateado,
-            "Felicitaciones", JOptionPane.INFORMATION_MESSAGE);
-         JOptionPane.showMessageDialog(frame, 
-        "¡Ya puedes avanzar al siguiente nivel!\n" +"","", JOptionPane.INFORMATION_MESSAGE);
+         messages.getString("dialog.levelCompleted") + "\n" +
+            messages.getString("game.movements") + ": " + moveCount + "\n" +
+            messages.getString("game.timer") + ": " + tiempoFormateado,
+            messages.getString("dialog.congratulations"), JOptionPane.INFORMATION_MESSAGE);
+        
+        JOptionPane.showMessageDialog(frame, 
+            messages.getString("dialog.nextLevelAvailable") + "\n",
+            "", JOptionPane.INFORMATION_MESSAGE);   
+            
         new SeleccionarNiveles(usuarioActual);
         frame.dispose();
         Musica.getInstance().play(0);

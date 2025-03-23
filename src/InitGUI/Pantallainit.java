@@ -12,6 +12,16 @@ public class Pantallainit extends JFrame implements ActionListener {
 
     public Pantallainit() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        try {
+    ImageIcon taza = new ImageIcon(getClass().getResource("/imagescan/logo.jpg"));
+    if (taza.getImageLoadStatus() == MediaTracker.COMPLETE) {
+        this.setIconImage(taza.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH));
+    } else {
+        System.err.println("Unable to load the image");
+    }
+} catch (Exception e) {
+    e.printStackTrace();
+}
         this.setTitle("Pantalla de Inicio");
         this.setLayout(null);
        

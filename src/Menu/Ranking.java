@@ -1,6 +1,7 @@
 package Menu;
 
 import Audio.Sonidos;
+import SubMenuOption.LanguageManager;
 import User.*;
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +20,16 @@ public class Ranking extends JFrame implements ActionListener {
     public Ranking(String usuario) {
         this.usuarioActual = usuario;
         
+                try {
+      ImageIcon taza = new ImageIcon(getClass().getResource("/imagescan/logo.jpg"));
+    if (taza.getImageLoadStatus() == MediaTracker.COMPLETE) {
+        this.setIconImage(taza.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH));
+    } else {
+        System.err.println("Unable to load the image");
+    }
+} catch (Exception e) {
+    e.printStackTrace();
+}
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("Ranking de Jugadores");
         this.setSize(800, 450);
@@ -33,7 +44,7 @@ public class Ranking extends JFrame implements ActionListener {
         rankingPanel.setBorder(BorderFactory.createLineBorder(new Color(100, 180, 255), 2));
         this.add(rankingPanel);
         
-        titleLabel = new JLabel("RANKING DE JUGADORES");
+        titleLabel = new JLabel(LanguageManager.getMessages().getString("title.ranking"));
         titleLabel.setBounds(100, 10, 300, 30);
         titleLabel.setForeground(new Color(255, 255, 200));
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -57,7 +68,7 @@ public class Ranking extends JFrame implements ActionListener {
         
         displayRanking();
         
-        salirbtn = new JButton("Volver");
+        salirbtn = new JButton(LanguageManager.getMessages().getString("button.back"));
         salirbtn.setBounds(325, 340, 150, 40);      
         salirbtn.addActionListener(this);
         this.add(salirbtn);
@@ -73,27 +84,27 @@ public class Ranking extends JFrame implements ActionListener {
     private void displayRanking() {
         ArrayList<UserScore> userScores = getAllUserScores();
         
-        // Ensure consistent sorting by points (primary) and level (secondary)
         Collections.sort(userScores, Collections.reverseOrder());
         
         StringBuilder sb = new StringBuilder();
         
-        if (userScores.isEmpty()) {
-            sb.append("No hay jugadores registrados.");
-        } else {
-            // Improved spacing for better alignment
-            sb.append(String.format("%-4s %-20s %-10s %-10s %-15s\n", 
-                      "Pos", "Usuario", "Puntos", "Nivel", "Tiempo Total"));
-            sb.append("----------------------------------------------------------\n");
-            
+           if (userScores.isEmpty()) {
+              sb.append(LanguageManager.getMessages().getString("ranking.noPlayers"));
+       } else {
+              sb.append(String.format("%-4s %-20s %-10s %-10s %-15s\n", 
+              LanguageManager.getMessages().getString("ranking.position"),
+              LanguageManager.getMessages().getString("ranking.user"),
+              LanguageManager.getMessages().getString("ranking.points"),
+              LanguageManager.getMessages().getString("ranking.level"),
+              LanguageManager.getMessages().getString("ranking.totalTime")));
+
             int position = 1;
             for (UserScore score : userScores) {
                 String userName = score.username;
                 String highlight = "";
                 
-                // Destacar usuario actual
                 if (userName.equals(usuarioActual)) {
-                    highlight = " ➤"; // Usar un indicador más visible
+                    highlight = " ➤"; 
                 }
                 
                 String formattedLine = String.format("%-4d %-20s %-10d %-10d %-15s%s\n", 

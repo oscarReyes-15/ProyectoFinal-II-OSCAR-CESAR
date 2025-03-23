@@ -3,49 +3,65 @@ package Juego;
 import Audio.Musica;
 import Audio.Sonidos;
 import SubMenuOption.SeleccionarNiveles;
+import SubMenuOption.LanguageManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.*;
+import java.util.ResourceBundle;
 
 public abstract class Juego extends GameMovement implements ActionListener {
     
+    protected ResourceBundle messages;
+    
     public Juego(String usuario, int nivel) {
         super(usuario, nivel);
+        this.messages = LanguageManager.getMessages();
     }
     
     protected void setupFrame(String title) {
-        frame = new JFrame(title);
+         frame = new JFrame(title);
+    try {
+        ImageIcon taza = new ImageIcon(getClass().getResource("/imagescan/logo.jpg"));
+        if (taza.getImageLoadStatus() == MediaTracker.COMPLETE) {
+            frame.setIconImage(taza.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH));
+        } else {
+            System.err.println("Unable to load the image");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
-        frame.setSize(800, 700);
+        frame.setSize(800, 720);
         
         this.setBounds(50, 50, COLS * CELL_SIZE, ROWS * CELL_SIZE);
         frame.add(this);
         
-        levelLabel = new JLabel("Nivel " + currentLevel);
+        levelLabel = new JLabel(messages.getString("game.level") + " " + currentLevel);
         levelLabel.setFont(new Font("Arial", Font.BOLD, 18));
         levelLabel.setBounds(50, 10, 100, 30);
         frame.add(levelLabel);
         
-        movesLabel = new JLabel("Movimientos: 0");
+        movesLabel = new JLabel(messages.getString("game.movements") + ": 0");
         movesLabel.setFont(new Font("Arial", Font.BOLD, 16));
         movesLabel.setBounds(200, 10, 150, 30);
         frame.add(movesLabel);
         
-        timerLabel = new JLabel("Tiempo: 00:00:00");
+        timerLabel = new JLabel(messages.getString("game.timer") + ": 00:00:00");
         timerLabel.setFont(new Font("Arial", Font.BOLD, 16));
         timerLabel.setBounds(200, 650, 200, 30);
         frame.add(timerLabel);
         
-        resetBtn = new JButton("Reiniciar");
+        resetBtn = new JButton(messages.getString("game.restart"));
         resetBtn.setBounds(400, 10, 100, 30);
         resetBtn.addActionListener(this);
         frame.add(resetBtn);
         
-        menuBtn = new JButton("Salir");
+        menuBtn = new JButton(messages.getString("game.exit"));
         menuBtn.setBounds(520, 10, 100, 30);
         menuBtn.addActionListener(this);
         frame.add(menuBtn);
@@ -63,59 +79,60 @@ public abstract class Juego extends GameMovement implements ActionListener {
         this.requestFocus();
     }
     
-protected void loadImages() {
-    try {
-        backgroundImage = ImageIO.read(new File("src/GameImages/fondogame.png"));
-        wallImage = ImageIO.read(new File("src/GameImages/muro1.png"));
-        boxImage = ImageIO.read(new File("src/GameImages/caja.png"));
-        
-        BufferedImage spriteSheet = ImageIO.read(new File("src/GameImages/sprites1.png"));
-        
-        int cols = 3;
-        int rows = 4;
-        
-        int spriteWidth = spriteSheet.getWidth() / cols; 
-        int spriteHeight = spriteSheet.getHeight() / rows;
-        
-        playerSprites = new BufferedImage[12];
-        
-        int index = 0;
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                playerSprites[index] = spriteSheet.getSubimage(
-                    col * spriteWidth, row * spriteHeight, spriteWidth, spriteHeight
-                );
-                index++;
+    protected void loadImages() {
+        try {
+            backgroundImage = ImageIO.read(new File("src/GameImages/fondogame.png"));
+            wallImage = ImageIO.read(new File("src/GameImages/muro1.png"));
+            boxImage = ImageIO.read(new File("src/GameImages/caja.png"));
+            
+            BufferedImage spriteSheet = ImageIO.read(new File("src/GameImages/sprites1.png"));
+            
+            int cols = 3;
+            int rows = 4;
+            
+            int spriteWidth = spriteSheet.getWidth() / cols; 
+            int spriteHeight = spriteSheet.getHeight() / rows;
+            
+            playerSprites = new BufferedImage[12];
+            
+            int index = 0;
+            for (int row = 0; row < rows; row++) {
+                for (int col = 0; col < cols; col++) {
+                    playerSprites[index] = spriteSheet.getSubimage(
+                        col * spriteWidth, row * spriteHeight, spriteWidth, spriteHeight
+                    );
+                    index++;
+                }
             }
+            
+            playerImage = playerSprites[0];
+        } catch (IOException e) {
+            e.printStackTrace();
+            this.setBackground(new Color(233, 149, 65));
         }
-        
-        // Set initial player image
-        playerImage = playerSprites[0];
-    } catch (IOException e) {
-        e.printStackTrace();
-        this.setBackground(new Color(233, 149, 65));
     }
-}    
-protected void updatePlayerSprite(int direction) {
-    switch (direction) {
-        case 0: 
-            currentSpriteIndex = (currentSpriteIndex + 1) % 3;
-            playerImage = playerSprites[0 + currentSpriteIndex]; 
-            break;
-        case 1: 
-            currentSpriteIndex = (currentSpriteIndex + 1) % 3;
-            playerImage = playerSprites[3 + currentSpriteIndex];
-            break;
-        case 2: 
-            currentSpriteIndex = (currentSpriteIndex + 1) % 3;
-            playerImage = playerSprites[6 + currentSpriteIndex];
-            break;
-        case 3:
-            currentSpriteIndex = (currentSpriteIndex + 1) % 3;
-            playerImage = playerSprites[9 + currentSpriteIndex];
-            break;
+    
+    protected void updatePlayerSprite(int direction) {
+        switch (direction) {
+            case 0: 
+                currentSpriteIndex = (currentSpriteIndex + 1) % 3;
+                playerImage = playerSprites[0 + currentSpriteIndex]; 
+                break;
+            case 1: 
+                currentSpriteIndex = (currentSpriteIndex + 1) % 3;
+                playerImage = playerSprites[3 + currentSpriteIndex];
+                break;
+            case 2: 
+                currentSpriteIndex = (currentSpriteIndex + 1) % 3;
+                playerImage = playerSprites[6 + currentSpriteIndex];
+                break;
+            case 3:
+                currentSpriteIndex = (currentSpriteIndex + 1) % 3;
+                playerImage = playerSprites[9 + currentSpriteIndex];
+                break;
+        }
     }
-} 
+    
     protected void resetLevel() {
         stopTimer();
         elapsedTime = 0;
@@ -123,7 +140,7 @@ protected void updatePlayerSprite(int direction) {
         
         initializeLevel();
         moveCount = 0;
-        movesLabel.setText("Movimientos: " + moveCount);
+        movesLabel.setText(messages.getString("game.movements") + ": " + moveCount);
         gameCompleted = false;
         currentSpriteIndex = 0;
         playerImage = playerSprites[0];
@@ -225,7 +242,7 @@ protected void updatePlayerSprite(int direction) {
             
             g.setColor(Color.WHITE);
             g.setFont(new Font("Arial", Font.BOLD, 30));
-            String message = "¡Nivel Completado!";
+            String message = messages.getString("dialog.levelCompleted");
             FontMetrics fm = g.getFontMetrics();
             int messageWidth = fm.stringWidth(message);
             int messageX = (COLS * CELL_SIZE - messageWidth) / 2;
@@ -234,6 +251,7 @@ protected void updatePlayerSprite(int direction) {
             stopTimer();
         }
     }
+    
     
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -244,8 +262,8 @@ protected void updatePlayerSprite(int direction) {
         } else if (e.getSource() == menuBtn) {
             int option = JOptionPane.showConfirmDialog(
                 frame,
-                "Desea salir del nivel?",
-                "Salir del Juego",
+                 messages.getString("dialog.confirmExit"),
+                messages.getString("dialog.exitGame"),
                 JOptionPane.YES_NO_OPTION);
                 
             if (option == JOptionPane.YES_OPTION) {

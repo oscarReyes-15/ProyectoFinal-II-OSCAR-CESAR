@@ -89,10 +89,49 @@ public class LanguageManager {
         spanishMessages.put("dialog.profileError", "Error al regresar al perfil");
         spanishMessages.put("dialog.success", "Éxito");
         spanishMessages.put("dialog.error", "Error");
+        
+        //Juego 
+        spanishMessages.put("game.level", "Nivel");
+        spanishMessages.put("game.restart", "Reiniciar");
+        spanishMessages.put("game.exit", "Salir");
+        spanishMessages.put("game.timer", "Tiempo");
+        spanishMessages.put("game.movements", "Movimientos");
+        spanishMessages.put("dialog.finish", "Felicidades, has completado todo el juego!");
+
+        
+        
+        // Level completion messages
+        spanishMessages.put("dialog.levelCompleted", "¡Nivel completado!");
+        spanishMessages.put("dialog.congratulations", "Felicitaciones");
+        spanishMessages.put("dialog.nextLevelAvailable", "¡Ya puedes avanzar al siguiente nivel!");
+        spanishMessages.put("dialog.confirmExit", "Desea salir del nivel?");
+        spanishMessages.put("dialog.exitGame", "Salir del Juego");
+        
+        //Ranking
+        spanishMessages.put("title.ranking", "RANKING DE JUGADORES");
+        spanishMessages.put("ranking.noPlayers", "No hay jugadores registrados.");
+        spanishMessages.put("ranking.position", "Pos"); 
+        spanishMessages.put("ranking.user", "Usuario");
+        spanishMessages.put("ranking.points", "Puntos");
+        spanishMessages.put("ranking.level", "Nivel");
+        spanishMessages.put("ranking.totalTime", "Tiempo Total");
+        
+        //Logica User
+        spanishMessages.put("dialog.noActivePlayer", "No hay un jugador activo.");
+        spanishMessages.put("dialog.enterCurrentPassword", "Ingrese su contraseña actual:");
+        spanishMessages.put("dialog.incorrectPassword", "Contraseña incorrecta.");
+        spanishMessages.put("dialog.tryAgain", "¿Desea intentar nuevamente?");
+        spanishMessages.put("dialog.enterNewPassword", "Ingrese su nueva contraseña:");
+        spanishMessages.put("dialog.passwordChanged", "Contraseña cambiada exitosamente.");
+        spanishMessages.put("dialog.passwordChangeError", "Error al cambiar la contraseña.");
+        spanishMessages.put("dialog.accountDeleted", "Cuenta eliminada con éxito.");
+        spanishMessages.put("dialog.accountDeleteError", "Error al eliminar la cuenta.");
+
     }
     
     private static void initializeEnglishMessages() {
- englishMessages.put("title.main", "Main Menu");
+        
+        englishMessages.put("title.main", "Main Menu");
         englishMessages.put("button.play", "1. Play");
         englishMessages.put("button.profile", "2. My Profile");
         englishMessages.put("button.ranking", "3. Ranking");
@@ -127,6 +166,7 @@ public class LanguageManager {
         englishMessages.put("controls.moveLeft", "Move Left");
         englishMessages.put("controls.moveRight", "Move Right");
         englishMessages.put("controls.reset", "Restart");
+        englishMessages.put("profile.reset", "Restart : R");
         
         // Levels
         englishMessages.put("title.selectLevel", "Select Level");
@@ -161,6 +201,42 @@ public class LanguageManager {
         englishMessages.put("dialog.profileError", "Error returning to profile");
         englishMessages.put("dialog.success", "Success");
         englishMessages.put("dialog.error", "Error");
+        
+        //Game 
+        englishMessages.put("game.level", "Level");
+        englishMessages.put("game.restart", "Restart");
+        englishMessages.put("game.exit", "Exit");
+        englishMessages.put("game.timer", "Time");
+        englishMessages.put("game.movements", "Movements");
+        englishMessages.put("dialog.finish", "Congratulations, you have completed the entire game!");
+
+        
+        // Level completion messages
+        englishMessages.put("dialog.levelCompleted", "Level completed!");
+        englishMessages.put("dialog.congratulations", "Congratulations");
+        englishMessages.put("dialog.nextLevelAvailable", "You can now proceed to the next level!");
+        englishMessages.put("dialog.confirmExit", "Do you want to exit the level?");
+        englishMessages.put("dialog.exitGame", "Exit Game");
+        
+        //Ranking 
+        englishMessages.put("title.ranking", "PLAYER RANKING");
+        englishMessages.put("ranking.noPlayers", "No registered players.");
+        englishMessages.put("ranking.position", "Pos");
+        englishMessages.put("ranking.user", "User");
+        englishMessages.put("ranking.points", "Points");
+        englishMessages.put("ranking.level", "Level");
+        englishMessages.put("ranking.totalTime", "Total Time");
+        
+        //Logic User
+        englishMessages.put("dialog.noActivePlayer", "No active player.");
+        englishMessages.put("dialog.enterCurrentPassword", "Enter your current password:");
+        englishMessages.put("dialog.incorrectPassword", "Incorrect password.");
+        englishMessages.put("dialog.tryAgain", "Do you want to try again?");
+        englishMessages.put("dialog.enterNewPassword", "Enter your new password:");
+        englishMessages.put("dialog.passwordChanged", "Password changed successfully.");
+        englishMessages.put("dialog.passwordChangeError", "Error changing password.");
+        englishMessages.put("dialog.accountDeleted", "Account deleted successfully.");
+        englishMessages.put("dialog.accountDeleteError", "Error deleting account.");
     }
     
     private static void initializeItalianMessages() {
@@ -199,6 +275,7 @@ public class LanguageManager {
         italianMessages.put("controls.moveLeft", "Muovi a Sinistra");
         italianMessages.put("controls.moveRight", "Muovi a Destra");
         italianMessages.put("controls.reset", "Ricomincia");
+        italianMessages.put("profile.reset", "Ricomincia : R");
         
         // Levels
         italianMessages.put("title.selectLevel", "Seleziona Livello");
@@ -233,7 +310,43 @@ public class LanguageManager {
         italianMessages.put("dialog.profileError", "Errore durante il ritorno al profilo");
         italianMessages.put("dialog.success", "Successo");
         italianMessages.put("dialog.error", "Errore");
+        
+        //Game 
+        italianMessages.put("game.level", "Livello");
+        italianMessages.put("game.restart", "Ricomincia");
+        italianMessages.put("game.exit", "Uscire");
+        italianMessages.put("game.timer", "Tempo");
+        italianMessages.put("game.movements", "Movimenti");
+        italianMessages.put("dialog.finish", "Complimenti, hai completato l'intero gioco!");
 
+        
+        // Level completion messages
+        italianMessages.put("dialog.levelCompleted", "Livello completato!");
+        italianMessages.put("dialog.congratulations", "Congratulazioni");
+        italianMessages.put("dialog.nextLevelAvailable", "Ora puoi procedere al livello successivo!");
+        italianMessages.put("dialog.confirmExit", "Vuoi uscire dal livello?");
+        italianMessages.put("dialog.exitGame", "Uscire dal Gioco");
+        
+        //Ranking
+        italianMessages.put("title.ranking", "CLASSIFICA DEI GIOCATORI");
+        italianMessages.put("ranking.noPlayers", "Nessun giocatore registrato.");
+        italianMessages.put("ranking.position", "Pos");
+        italianMessages.put("ranking.user", "Utente");
+        italianMessages.put("ranking.points", "Punti");
+        italianMessages.put("ranking.level", "Livello");
+        italianMessages.put("ranking.totalTime", "Tempo Totale");
+        
+        //Logica
+        italianMessages.put("dialog.noActivePlayer", "Nessun giocatore attivo.");
+        italianMessages.put("dialog.enterCurrentPassword", "Inserisci la tua password attuale:");
+        italianMessages.put("dialog.incorrectPassword", "Password errata.");
+        italianMessages.put("dialog.tryAgain", "Vuoi riprovare?");
+        italianMessages.put("dialog.enterNewPassword", "Inserisci la tua nuova password:");
+        italianMessages.put("dialog.passwordChanged", "Password cambiata con successo.");
+        italianMessages.put("dialog.passwordChangeError", "Errore durante il cambio della password.");
+        italianMessages.put("dialog.accountDeleted", "Account eliminato con successo.");
+        italianMessages.put("dialog.accountDeleteError", "Errore durante l'eliminazione dell'account.");
+        
     }
     
     private static ResourceBundle createCustomBundle(final Map<String, String> messagesMap) {

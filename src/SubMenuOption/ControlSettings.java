@@ -37,6 +37,16 @@ public class ControlSettings extends JFrame implements ActionListener {
     }
     
     private void initComponents() {
+                try {
+      ImageIcon taza = new ImageIcon(getClass().getResource("/imagescan/logo.jpg"));
+    if (taza.getImageLoadStatus() == MediaTracker.COMPLETE) {
+        this.setIconImage(taza.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH));
+    } else {
+        System.err.println("Unable to load the image");
+    }
+} catch (Exception e) {
+    e.printStackTrace();
+}
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle(messages.getString("title.controls"));
         this.setLayout(null);

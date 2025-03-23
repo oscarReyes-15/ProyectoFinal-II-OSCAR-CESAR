@@ -15,7 +15,17 @@ public class MainMenu extends JFrame implements ActionListener {
     
     public MainMenu() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setTitle("Prueba");
+        try {
+      ImageIcon taza = new ImageIcon(getClass().getResource("/imagescan/logo.jpg"));
+    if (taza.getImageLoadStatus() == MediaTracker.COMPLETE) {
+        this.setIconImage(taza.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH));
+    } else {
+        System.err.println("Unable to load the image");
+    }
+} catch (Exception e) {
+    e.printStackTrace();
+}
+        this.setTitle("MENU");
         this.setSize(800, 450);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
