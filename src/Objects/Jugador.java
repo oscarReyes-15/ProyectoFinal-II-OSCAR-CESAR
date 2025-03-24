@@ -5,16 +5,20 @@
 package Objects;
 
 import java.awt.Image;
+import java.io.Serializable;
 
 /**
  *
  * @author LENOVO
  */
-public class Jugador {
-    public Image playerImage;//
-    public Image[] playerSprites = new Image[12]; //
-    public int currentSpriteIndex = 0;//
-    public int lastDirection = 0; //
+public class Jugador implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
+    public transient Image playerImage;
+    public transient Image[] playerSprites = new Image[12];
+    
+    public int currentSpriteIndex = 0;
+    public int lastDirection = 0;
     public int X, Y;
     
     
@@ -36,11 +40,11 @@ public class Jugador {
         }
     }
     
-    public void move (int x, int y) {
+    public void move(int x, int y) {
         X = x; Y = y;
     }
     
-    public void updateDirection (int dx, int dy) {
+    public void updateDirection(int dx, int dy) {
         if (dx > 0) {
             lastDirection = 1;
         } else if (dx < 0) {
@@ -52,12 +56,11 @@ public class Jugador {
         }
     }
     
-    public void loadImage (int n) {
+    public void loadImage(int n) {
         playerImage = playerSprites[n];
     }
         
-    public int updateSpriteImage () {
+    public int updateSpriteImage() {
         return currentSpriteIndex = (currentSpriteIndex + 1) % 3;
     }
-    
 }

@@ -48,7 +48,7 @@ public class Audio implements Runnable {
             audioThread = new Thread(this);
             audioThread.start();
         }catch (NullPointerException e) {
-            System.out.println("Seguro que asi es?");
+            System.out.println("");
         }
     }
     
@@ -76,7 +76,7 @@ public class Audio implements Runnable {
                         setVolume(volume);
                     }
                 } catch (InterruptedException ex) {
-                    System.out.println("Acaso eres capaz de superar este reto?");
+                    System.out.println("");
                 }
             }
             
@@ -96,7 +96,7 @@ public class Audio implements Runnable {
             uDone = false;
             audioStop();
         } catch (JavaLayerException | FileNotFoundException ex) {
-            System.out.println("!");
+            System.out.println("");
         }
     }
     

@@ -228,43 +228,45 @@ public class MiPerfil extends JFrame implements ActionListener {
         }
     }
     
-    private void mostrarUltimasPartidas() {
-        Object[][] partidas = GameHistory.obtenerHistorial(usuarioActual);
-        
-        if (partidas.length == 0) {
-            JOptionPane.showMessageDialog(this, 
-                (messages.getString("No hay partidas registradas")), 
-                 (messages.getString("dialog.lastgames")), 
-                JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-        
-        StringBuilder mensaje = new StringBuilder("dialog.lastgames\n");
-        mensaje.append(messages.getString(("level\ttime\tresults\n")));
-        
-        for (Object[] partida : partidas) {
-            int nivel = (Integer) partida[0];
-            long tiempo = (Long) partida[1];
-            boolean completado = (Boolean) partida[2];
-            
-            String tiempoFormateado = GameHistory.formatearTiempo(tiempo);
-            String resultado = completado ? (messages.getString("dialog.completed")): (messages.getString("dialog.notCompleted"));
-            
-            mensaje.append(nivel)
-                   .append("\t")
-                   .append(tiempoFormateado)
-                   .append("\t")
-                   .append(resultado)
-                   .append("\n");
-        }
-        
-        JTextArea textArea = new JTextArea(mensaje.toString());
-        textArea.setEditable(false); 
-        JScrollPane scrollPane = new JScrollPane(textArea); 
-        
-        JOptionPane.showMessageDialog(null, scrollPane, (messages.getString("dialog.lastgames")), JOptionPane.INFORMATION_MESSAGE);
+private void mostrarUltimasPartidas() {
+    Object[][] partidas = GameHistory.obtenerHistorial(usuarioActual);
+    
+    if (partidas.length == 0) {
+        JOptionPane.showMessageDialog(this, 
+            messages.getString("No hay partidas registradas"), 
+            messages.getString("dialog.lastgames"), 
+            JOptionPane.INFORMATION_MESSAGE);
+        return;
     }
-
+    
+    StringBuilder mensaje = new StringBuilder();
+    // Add headers
+    mensaje.append(String.format("%-10s %-15s %-15s%n", 
+        messages.getString("dialog.level"),
+        messages.getString("dialog.time"),
+        messages.getString("dialog.results")));
+    
+    for (Object[] partida : partidas) {
+        int nivel = (Integer) partida[0];
+        long tiempo = (Long) partida[1];
+        boolean completado = (Boolean) partida[2];
+        
+        String tiempoFormateado = GameHistory.formatearTiempo(tiempo);
+        String resultado = completado ? messages.getString("dialog.completed") : messages.getString("dialog.notCompleted");
+        
+        mensaje.append(String.format("%-10d %-15s %-15s%n", nivel, tiempoFormateado, resultado));
+    }
+    
+    JTextArea textArea = new JTextArea(mensaje.toString());
+    textArea.setEditable(false); 
+    JScrollPane scrollPane = new JScrollPane(textArea); 
+    
+    JOptionPane.showMessageDialog(
+        this, 
+        scrollPane, 
+        messages.getString("dialog.lastgames"), 
+        JOptionPane.INFORMATION_MESSAGE);
+}
     @Override
     public void actionPerformed(ActionEvent e) {
         Sonidos.getInstance().play(3);

@@ -115,6 +115,7 @@ public class Nivel1 extends Juego {
             int puntosPorMovimientos = 1000 - (moveCount * 5);
             if (puntosPorMovimientos < 100) puntosPorMovimientos = 100;
             
+            GameHistory.registrarPartida(usuarioActual, 1, elapsedTime / 1000, true);
             UserFile.actualizarPuntos(usuarioActual, puntosPorMovimientos);
         }
         

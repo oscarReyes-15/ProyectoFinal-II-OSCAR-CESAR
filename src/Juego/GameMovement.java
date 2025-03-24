@@ -2,41 +2,50 @@ package Juego;
 
 import Audio.Sonidos;
 import Objects.*;
+import SubMenuOption.LanguageManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Timer;
 import java.util.TimerTask;
 import User.*;
+import java.io.Serializable;
+import java.util.ResourceBundle;
 
-public abstract class GameMovement extends JPanel implements KeyListener, ObjectConstants, MapConstants{
-       
+
+public abstract class GameMovement extends JPanel implements KeyListener, ObjectConstants, MapConstants, Serializable {
+    private static final long serialVersionUID = 2L;
+     
+    private ResourceBundle messages;
+    
     protected int[][] board = new int[COLS][ROWS];
     
-    protected Image backgroundImage;
-    protected Image wallImage;
-    protected Image boxImage;
-    protected Image targetImage;
+    protected transient Image backgroundImage;
+    protected transient Image wallImage;
+    protected transient Image boxImage;
+    protected transient Image targetImage;
     
-    protected JFrame frame;
-    protected JLabel levelLabel;
-    protected JLabel movesLabel;
-    protected JLabel timerLabel;
-    protected JButton resetBtn;
-    protected JButton menuBtn;
+    protected transient JFrame frame;
+    protected transient JLabel levelLabel;
+    protected transient JLabel movesLabel;
+    protected transient JLabel timerLabel;
+    protected transient JButton resetBtn;
+    protected transient JButton menuBtn;
     
     protected int currentLevel;
     protected int moveCount;
     protected boolean gameCompleted;
     protected String usuarioActual;
     
-    protected Timer gameTimer;
+    protected transient Timer gameTimer;
     protected long startTime;
     protected long elapsedTime;
     
     protected Jugador player;
     
     public GameMovement(String usuario, int nivel) {
+        
+        messages = LanguageManager.getMessages();
         this.usuarioActual = usuario;
         this.currentLevel = nivel;
         this.moveCount = 0;
@@ -86,9 +95,11 @@ public abstract class GameMovement extends JPanel implements KeyListener, Object
     }
     
     protected void updateTimerLabel() {
-        SwingUtilities.invokeLater(() -> {
-            timerLabel.setText("Tiempo: " + formatTime(elapsedTime));
-        });
+        if (timerLabel != null) {
+            SwingUtilities.invokeLater(() -> {
+                timerLabel.setText(messages.getString("game.timer")+":" + formatTime(elapsedTime));
+            });
+        }
     }
     
     protected String formatTime(long timeMillis) {
@@ -132,12 +143,10 @@ public abstract class GameMovement extends JPanel implements KeyListener, Object
     }
     
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
+    public void keyTyped(KeyEvent e) {}
     
     @Override
-    public void keyReleased(KeyEvent e) {
-    }
+    public void keyReleased(KeyEvent e) {}
     
     protected void movePlayer(int dx, int dy) {
         int newX = player.X + dx;
@@ -202,13 +211,27 @@ public abstract class GameMovement extends JPanel implements KeyListener, Object
         if (moved) {
             player.updatePlayerSprite(player.lastDirection);
             moveCount++;
-            movesLabel.setText("Movimientos: " + moveCount);
+            if (movesLabel != null) {
+                movesLabel.setText(messages.getString("game.movements")+":" + moveCount);
+            }
         }
         
-        
-        
         repaint();
-        
         checkWinCondition();
+    }
+    
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+        out.defaultWriteObject();
+    }
+    
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        this.player = new Jugador();
+        if (usuarioActual != null) {
+            ControlManager.applyUserControls(usuarioActual);
+        }
+        setFocusable(true);
+        addKeyListener(this);
+        startTimer();
     }
 }
