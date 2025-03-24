@@ -70,6 +70,7 @@ public class LanguageManager {
         spanishMessages.put("profile.user", "Usuario");
         spanishMessages.put("profile.name", "Nombre");
         spanishMessages.put("profile.points", "Puntos");
+        spanishMessages.put("profile.lastLogin", "Ultima Sesion");
         spanishMessages.put("profile.creationDate", "Fecha de creación");
         spanishMessages.put("profile.maxLevel", "Nivel máximo");
         spanishMessages.put("profile.gamesPlayed", "Partidas jugadas");
@@ -80,6 +81,14 @@ public class LanguageManager {
         spanishMessages.put("button.deleteAccount", "Eliminar Cuenta");
         spanishMessages.put("dialog.confirmDeleteAccount", "¿Está seguro que desea eliminar su cuenta?");
         spanishMessages.put("dialog.accountDeleted", "Cuenta eliminada correctamente");
+        spanishMessages.put("button.lastGames", "Ver últimas partidas");
+        spanishMessages.put("dialog.lastgames", "Últimas Partidas");
+    spanishMessages.put("dialog.completed", "Completado");
+    spanishMessages.put("dialog.notCompleted", "No Completado");
+    spanishMessages.put("level", "Nivel");
+    spanishMessages.put("time", "Tiempo");
+    spanishMessages.put("results", "Resultado");
+    spanishMessages.put("No hay partidas registradas", "No hay partidas registradas");
         
         //Seleccion Avatar
         spanishMessages.put("title.selectAvatar", "Seleccionar Avatar");
@@ -116,16 +125,19 @@ public class LanguageManager {
         spanishMessages.put("ranking.level", "Nivel");
         spanishMessages.put("ranking.totalTime", "Tiempo Total");
         
-        //Logica User
-        spanishMessages.put("dialog.noActivePlayer", "No hay un jugador activo.");
-        spanishMessages.put("dialog.enterCurrentPassword", "Ingrese su contraseña actual:");
-        spanishMessages.put("dialog.incorrectPassword", "Contraseña incorrecta.");
-        spanishMessages.put("dialog.tryAgain", "¿Desea intentar nuevamente?");
-        spanishMessages.put("dialog.enterNewPassword", "Ingrese su nueva contraseña:");
-        spanishMessages.put("dialog.passwordChanged", "Contraseña cambiada exitosamente.");
-        spanishMessages.put("dialog.passwordChangeError", "Error al cambiar la contraseña.");
-        spanishMessages.put("dialog.accountDeleted", "Cuenta eliminada con éxito.");
-        spanishMessages.put("dialog.accountDeleteError", "Error al eliminar la cuenta.");
+       // Para UserLogic
+spanishMessages.put("error.noActivePlayer", "No hay un jugador activo.");
+spanishMessages.put("error.title", "Error");
+spanishMessages.put("password.current", "Ingrese su contraseña actual:");
+spanishMessages.put("password.incorrect", "Contraseña incorrecta.");
+spanishMessages.put("password.tryAgain", "¿Desea intentar nuevamente?");
+spanishMessages.put("password.new", "Ingrese su nueva contraseña:");
+spanishMessages.put("password.changeSuccess", "Contraseña cambiada exitosamente.");
+spanishMessages.put("password.changeError", "Error al cambiar la contraseña.");
+spanishMessages.put("account.deleteConfirm", "¿Seguro que deseas borrar tu cuenta?");
+spanishMessages.put("account.deleteSuccess", "Cuenta eliminada con éxito.");
+spanishMessages.put("account.deleteError", "Error al eliminar la cuenta.");
+spanishMessages.put("dialog.confirmation", "Confirmación");
 
     }
     
@@ -183,6 +195,7 @@ public class LanguageManager {
         englishMessages.put("profile.name", "Name");
         englishMessages.put("profile.points", "Points");
         englishMessages.put("profile.creationDate", "Creation date");
+        englishMessages.put("profile.lastLogin", "Last Login");
         englishMessages.put("profile.maxLevel", "Maximum level");
         englishMessages.put("profile.gamesPlayed", "Games played");
         englishMessages.put("profile.timePlayed", "Time played");
@@ -192,6 +205,18 @@ public class LanguageManager {
         englishMessages.put("button.deleteAccount", "Delete Account");
         englishMessages.put("dialog.confirmDeleteAccount", "Are you sure you want to delete your account?");
         englishMessages.put("dialog.accountDeleted", "Account successfully deleted");
+        englishMessages.put("button.lastGames", "View last games");
+    
+        englishMessages.put("dialog.lastgames", "Last Games");
+    englishMessages.put("dialog.completed", "Completed");
+    englishMessages.put("dialog.notCompleted", "Not Completed");
+    englishMessages.put("level", "Level");
+    englishMessages.put("time", "Time");
+    englishMessages.put("results", "Result");
+    englishMessages.put("No hay partidas registradas", "No games recorded");
+        
+        
+
         
         // Avatar selection 
         englishMessages.put("title.selectAvatar", "Select Avatar");
@@ -227,16 +252,19 @@ public class LanguageManager {
         englishMessages.put("ranking.level", "Level");
         englishMessages.put("ranking.totalTime", "Total Time");
         
-        //Logic User
-        englishMessages.put("dialog.noActivePlayer", "No active player.");
-        englishMessages.put("dialog.enterCurrentPassword", "Enter your current password:");
-        englishMessages.put("dialog.incorrectPassword", "Incorrect password.");
-        englishMessages.put("dialog.tryAgain", "Do you want to try again?");
-        englishMessages.put("dialog.enterNewPassword", "Enter your new password:");
-        englishMessages.put("dialog.passwordChanged", "Password changed successfully.");
-        englishMessages.put("dialog.passwordChangeError", "Error changing password.");
-        englishMessages.put("dialog.accountDeleted", "Account deleted successfully.");
-        englishMessages.put("dialog.accountDeleteError", "Error deleting account.");
+      // Para UserLogic
+englishMessages.put("error.noActivePlayer", "There is no active player.");
+englishMessages.put("error.title", "Error");
+englishMessages.put("password.current", "Enter your current password:");
+englishMessages.put("password.incorrect", "Incorrect password.");
+englishMessages.put("password.tryAgain", "Would you like to try again?");
+englishMessages.put("password.new", "Enter your new password:");
+englishMessages.put("password.changeSuccess", "Password changed successfully.");
+englishMessages.put("password.changeError", "Error changing password.");
+englishMessages.put("account.deleteConfirm", "Are you sure you want to delete your account?");
+englishMessages.put("account.deleteSuccess", "Account deleted successfully.");
+englishMessages.put("account.deleteError", "Error deleting account.");
+englishMessages.put("dialog.confirmation", "Confirmation");
     }
     
     private static void initializeItalianMessages() {
@@ -291,7 +319,7 @@ public class LanguageManager {
         italianMessages.put("profile.user", "Utente");
         italianMessages.put("profile.name", "Nome");
         italianMessages.put("profile.points", "Punti");
-        italianMessages.put("profile.creationDate", "Data di creazione");
+            italianMessages.put("profile.creationDate", "Data di creazione");
         italianMessages.put("profile.maxLevel", "Livello massimo");
         italianMessages.put("profile.gamesPlayed", "Partite giocate");
         italianMessages.put("profile.timePlayed", "Tempo di gioco");
@@ -301,6 +329,15 @@ public class LanguageManager {
         italianMessages.put("button.deleteAccount", "Elimina Account");
         italianMessages.put("dialog.confirmDeleteAccount", "Sei sicuro di voler eliminare il tuo account?");
         italianMessages.put("dialog.accountDeleted", "Account eliminato con successo");
+            italianMessages.put("button.lastGames", "Visualizza ultime partite");
+  italianMessages.put("dialog.lastgames", "Ultime Partite");
+    italianMessages.put("dialog.completed", "Completato");
+    italianMessages.put("dialog.notCompleted", "Non Completato");
+    italianMessages.put("level", "Livello");
+    italianMessages.put("time", "Tempo");
+    italianMessages.put("results", "Risultato");
+    italianMessages.put("No hay partidas registradas", "Nessuna partita registrata");
+       italianMessages.put("profile.lastLogin", "Ultimo Acceso");
         
         // Avatar selection 
         italianMessages.put("title.selectAvatar", "Seleziona Avatar");
@@ -336,17 +373,19 @@ public class LanguageManager {
         italianMessages.put("ranking.level", "Livello");
         italianMessages.put("ranking.totalTime", "Tempo Totale");
         
-        //Logica
-        italianMessages.put("dialog.noActivePlayer", "Nessun giocatore attivo.");
-        italianMessages.put("dialog.enterCurrentPassword", "Inserisci la tua password attuale:");
-        italianMessages.put("dialog.incorrectPassword", "Password errata.");
-        italianMessages.put("dialog.tryAgain", "Vuoi riprovare?");
-        italianMessages.put("dialog.enterNewPassword", "Inserisci la tua nuova password:");
-        italianMessages.put("dialog.passwordChanged", "Password cambiata con successo.");
-        italianMessages.put("dialog.passwordChangeError", "Errore durante il cambio della password.");
-        italianMessages.put("dialog.accountDeleted", "Account eliminato con successo.");
-        italianMessages.put("dialog.accountDeleteError", "Errore durante l'eliminazione dell'account.");
-        
+       // Para UserLogic
+italianMessages.put("error.noActivePlayer", "Non c'è nessun giocatore attivo.");
+italianMessages.put("error.title", "Errore");
+italianMessages.put("password.current", "Inserisci la tua password attuale:");
+italianMessages.put("password.incorrect", "Password errata.");
+italianMessages.put("password.tryAgain", "Vuoi riprovare?");
+italianMessages.put("password.new", "Inserisci la tua nuova password:");
+italianMessages.put("password.changeSuccess", "Password cambiata con successo.");
+italianMessages.put("password.changeError", "Errore durante il cambio della password.");
+italianMessages.put("account.deleteConfirm", "Sei sicuro di voler eliminare il tuo account?");
+italianMessages.put("account.deleteSuccess", "Account eliminato con successo.");
+italianMessages.put("account.deleteError", "Errore durante l'eliminazione dell'account.");
+italianMessages.put("dialog.confirmation", "Conferma");
     }
     
     

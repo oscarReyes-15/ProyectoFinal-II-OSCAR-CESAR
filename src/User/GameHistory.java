@@ -89,15 +89,14 @@ public class GameHistory {
             Object[][] partidas = new Object[numPartidas][3];
             try (DataInputStream entrada = new DataInputStream(new FileInputStream(historialFile))) {
                 for (int i = 0; i < numPartidas; i++) {
-                    partidas[i][0] = entrada.readInt();  // nivel
-                    partidas[i][1] = entrada.readLong();  // tiempo
-                    partidas[i][2] = entrada.readBoolean();  // completado
+                    partidas[i][0] = entrada.readInt(); 
+                    partidas[i][1] = entrada.readLong();  
+                    partidas[i][2] = entrada.readBoolean();
                 }
             }
             
             return partidas;
         } catch (IOException e) {
-            System.err.println("Error al obtener historial: " + e.getMessage());
             return new Object[0][3];
         }
     }

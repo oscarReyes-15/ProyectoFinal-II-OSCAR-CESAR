@@ -1,21 +1,23 @@
 
 package User;
-
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class User {
     private String usuario;
     private String password;
     private String nombre;
     private int puntos;
-    private LocalDate fechaCreacion;
+    private LocalDateTime fechaCreacion; // Cambiado de LocalDate a LocalDateTime
+    private LocalDateTime ultimoLogin;   // Nuevo campo para el último login
     private long tiempoJugado; 
     
     public User(String usuario, String password) {
         this.usuario = usuario;
         this.password = password;
         this.puntos = 0;
-        this.fechaCreacion = LocalDate.now();
+        this.fechaCreacion = LocalDateTime.now();
+        this.ultimoLogin = LocalDateTime.now();
         this.nombre = "";
         this.tiempoJugado = 0;
     }
@@ -40,12 +42,20 @@ public class User {
         this.puntos += puntos;
     }
     
-    public LocalDate getFechaCreacion() {
+    public LocalDateTime getFechaCreacion() {
         return fechaCreacion;
     }
     
-    public void setFechaCreacion(LocalDate fechaCreacion) {
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+    
+    public LocalDateTime getUltimoLogin() {
+        return ultimoLogin;
+    }
+    
+    public void setUltimoLogin(LocalDateTime ultimoLogin) {
+        this.ultimoLogin = ultimoLogin;
     }
     
     public String getNombre() {

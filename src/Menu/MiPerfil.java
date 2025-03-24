@@ -8,19 +8,23 @@ import java.awt.*;
 import java.awt.event.*;
 import User.*;
 import java.io.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class MiPerfil extends JFrame implements ActionListener {
     private JButton regresarBtn, cambiarContraBtn, eliminarCuentaBtn, cambiarAvatarBtn, ultimasPartidasBtn;
     private String usuarioActual;
-    private JLabel usuarioLabel, nombreLabel, puntosLabel, fechaLabel, avatarLabel, tiempoJugadoLabel, partidasJugadasLabel, nivelMaximoLabel, fondo;
+    private JLabel usuarioLabel, nombreLabel, puntosLabel, fechaLabel, avatarLabel, tiempoJugadoLabel, 
+                  partidasJugadasLabel, nivelMaximoLabel, ultimoLoginLabel, fondo, espacioLabel;
     private User userData;
     private JPanel avatarPanel, infoPanel;
     private ResourceBundle messages;
+    private DateTimeFormatter formatter;
 
     public MiPerfil(String usuario) {
         this.usuarioActual = usuario;
         this.messages = LanguageManager.getMessages();
+        this.formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         
         try {
             ImageIcon taza = new ImageIcon(getClass().getResource("/imagescan/logo.jpg"));
@@ -48,7 +52,7 @@ public class MiPerfil extends JFrame implements ActionListener {
 
         infoPanel = new JPanel();
         infoPanel.setLayout(null);
-        infoPanel.setBounds(30, 30, 470, 250); 
+        infoPanel.setBounds(30, 30, 470, 285); // Aumentado la altura para incluir nueva información
         infoPanel.setBackground(new Color(0, 20, 60, 200)); 
         infoPanel.setBorder(BorderFactory.createLineBorder(new Color(100, 180, 255), 2)); 
         this.add(infoPanel);
@@ -68,71 +72,70 @@ public class MiPerfil extends JFrame implements ActionListener {
         cambiarAvatarBtn.addActionListener(this);
         this.add(cambiarAvatarBtn);
 
-        // Nuevo botón para ver últimas partidas
         ultimasPartidasBtn = new JButton(messages.getString("button.lastGames"));
-        if (!messages.containsKey("button.lastGames")) {
-            ultimasPartidasBtn.setText("Ver últimas partidas");
-        }
         ultimasPartidasBtn.setBounds(550, 250, 150, 30);
         ultimasPartidasBtn.addActionListener(this);
         this.add(ultimasPartidasBtn);
 
-        // Botones ahora ubicados bajo el panel de información
         cambiarContraBtn = new JButton(messages.getString("button.changePassword"));
-        cambiarContraBtn.setBounds(50, 290, 200, 30);
+        cambiarContraBtn.setBounds(50, 325, 200, 30);
         cambiarContraBtn.addActionListener(this);
         this.add(cambiarContraBtn);
 
         eliminarCuentaBtn = new JButton(messages.getString("button.deleteAccount"));
-        eliminarCuentaBtn.setBounds(50, 330, 200, 30);
+        eliminarCuentaBtn.setBounds(50, 365, 200, 30);
         eliminarCuentaBtn.addActionListener(this);
         this.add(eliminarCuentaBtn);
 
         regresarBtn = new JButton(messages.getString("button.back"));
-        regresarBtn.setBounds(50, 370, 200, 30);
+        regresarBtn.setBounds(270, 325, 200, 30); 
         regresarBtn.addActionListener(this);
         this.add(regresarBtn);
 
-        // Etiquetas dentro del panel de información
         usuarioLabel = new JLabel();
         usuarioLabel.setBounds(20, 20, 250, 30);
         usuarioLabel.setForeground(Color.white);
         usuarioLabel.setFont(new Font("Arial", Font.BOLD, 16));
         infoPanel.add(usuarioLabel);
         
-        // Nueva etiqueta para mostrar el nombre del usuario
         nombreLabel = new JLabel();
-        nombreLabel.setBounds(20, 60, 250, 30);
+        nombreLabel.setBounds(20, 50, 250, 30);
         nombreLabel.setForeground(Color.white);
         nombreLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         infoPanel.add(nombreLabel);
 
         puntosLabel = new JLabel();
-        puntosLabel.setBounds(20, 100, 250, 30);
+        puntosLabel.setBounds(20, 80, 250, 30);
         puntosLabel.setForeground(Color.white);
         puntosLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         infoPanel.add(puntosLabel);
 
         fechaLabel = new JLabel();
-        fechaLabel.setBounds(20, 140, 250, 30);
+        fechaLabel.setBounds(20, 110, 440, 30);
         fechaLabel.setForeground(Color.white);
         fechaLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         infoPanel.add(fechaLabel);
+        
+        ultimoLoginLabel = new JLabel();
+        ultimoLoginLabel.setBounds(20, 140, 440, 30);
+        ultimoLoginLabel.setForeground(Color.white);
+        ultimoLoginLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        infoPanel.add(ultimoLoginLabel);
 
         nivelMaximoLabel = new JLabel();
-        nivelMaximoLabel.setBounds(20, 180, 250, 30);
+        nivelMaximoLabel.setBounds(20, 170, 250, 30);
         nivelMaximoLabel.setForeground(Color.white);
         nivelMaximoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         infoPanel.add(nivelMaximoLabel);
 
         partidasJugadasLabel = new JLabel();
-        partidasJugadasLabel.setBounds(20, 220, 250, 30);
+        partidasJugadasLabel.setBounds(20, 200, 250, 30);
         partidasJugadasLabel.setForeground(Color.white);
         partidasJugadasLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         infoPanel.add(partidasJugadasLabel);
 
         tiempoJugadoLabel = new JLabel();
-        tiempoJugadoLabel.setBounds(270, 220, 250, 30); // Positioned to the right of partidasJugadasLabel
+        tiempoJugadoLabel.setBounds(20, 230, 250, 30); 
         tiempoJugadoLabel.setForeground(Color.white);
         tiempoJugadoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         infoPanel.add(tiempoJugadoLabel);
@@ -143,6 +146,10 @@ public class MiPerfil extends JFrame implements ActionListener {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         infoPanel.add(titleLabel);
+
+        espacioLabel = new JLabel();
+        espacioLabel.setBounds(510, 30, 20, 285); 
+        this.add(espacioLabel);
 
         actualizarDatos();
 
@@ -166,7 +173,12 @@ public class MiPerfil extends JFrame implements ActionListener {
                 }
                 
                 puntosLabel.setText(messages.getString("profile.points") + ": " + userData.getPuntos());
-                fechaLabel.setText(messages.getString("profile.creationDate") + ": " + userData.getFechaCreacion().toString());
+                
+                String fechaCreacionStr = userData.getFechaCreacion().format(formatter);
+                fechaLabel.setText(messages.getString("profile.creationDate") + ": " + fechaCreacionStr);
+                
+                String ultimoLoginStr = userData.getUltimoLogin().format(formatter);
+                ultimoLoginLabel.setText(messages.getString("profile.lastLogin") + ": " + ultimoLoginStr);
                 
                 int nivelMaximo = UserFile.getNivelMaximo(usuarioActual);
                 int partidasJugadas = UserFile.getPartidasJugadas(usuarioActual);
@@ -183,6 +195,7 @@ public class MiPerfil extends JFrame implements ActionListener {
                 nombreLabel.setText(messages.getString("profile.name") + ": " + messages.getString("profile.notAvailable"));
                 puntosLabel.setText(messages.getString("profile.points") + ": " + messages.getString("profile.notAvailable"));
                 fechaLabel.setText(messages.getString("profile.creationDate") + ": " + messages.getString("profile.notAvailable"));
+                ultimoLoginLabel.setText(messages.getString("profile.lastLogin") + ": " + messages.getString("profile.notAvailable"));
                 nivelMaximoLabel.setText(messages.getString("profile.maxLevel") + ": " + messages.getString("profile.notAvailable"));
                 partidasJugadasLabel.setText(messages.getString("profile.gamesPlayed") + ": " + messages.getString("profile.notAvailable"));
                 tiempoJugadoLabel.setText(messages.getString("profile.timePlayed") + ": " + messages.getString("profile.notAvailable"));
@@ -216,19 +229,18 @@ public class MiPerfil extends JFrame implements ActionListener {
     }
     
     private void mostrarUltimasPartidas() {
-        // Use the GameHistory class to retrieve game history instead of local method
         Object[][] partidas = GameHistory.obtenerHistorial(usuarioActual);
         
         if (partidas.length == 0) {
             JOptionPane.showMessageDialog(this, 
-                "No hay partidas registradas", 
-                "Últimas partidas", 
+                (messages.getString("No hay partidas registradas")), 
+                 (messages.getString("dialog.lastgames")), 
                 JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         
-        StringBuilder mensaje = new StringBuilder("Últimas partidas\n");
-        mensaje.append("Nivel\tDuración\tResultado\n");
+        StringBuilder mensaje = new StringBuilder("dialog.lastgames\n");
+        mensaje.append(messages.getString(("level\ttime\tresults\n")));
         
         for (Object[] partida : partidas) {
             int nivel = (Integer) partida[0];
@@ -236,7 +248,7 @@ public class MiPerfil extends JFrame implements ActionListener {
             boolean completado = (Boolean) partida[2];
             
             String tiempoFormateado = GameHistory.formatearTiempo(tiempo);
-            String resultado = completado ? "Completado" : "No completado";
+            String resultado = completado ? (messages.getString("dialog.completed")): (messages.getString("dialog.notCompleted"));
             
             mensaje.append(nivel)
                    .append("\t")
@@ -247,10 +259,10 @@ public class MiPerfil extends JFrame implements ActionListener {
         }
         
         JTextArea textArea = new JTextArea(mensaje.toString());
-        textArea.setEditable(false); // Hacer que el texto no sea editable
+        textArea.setEditable(false); 
         JScrollPane scrollPane = new JScrollPane(textArea); 
         
-        JOptionPane.showMessageDialog(null, scrollPane, "Últimas partidas", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, scrollPane, (messages.getString("dialog.lastgames")), JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override

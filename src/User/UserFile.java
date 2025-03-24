@@ -2,6 +2,7 @@ package User;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import SubMenuOption.LanguageManager;
 import SubMenuOption.LanguageFileManager;
@@ -9,6 +10,7 @@ import SubMenuOption.LanguageFileManager;
 public class UserFile {
     
     private static final String USER_DATA_FILE = "/datos.bin";
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
     
     public static boolean guardarDatosUsuario(String usuario, String password) {
         return guardarDatosUsuario(usuario, password, "", null);
@@ -28,9 +30,10 @@ public class UserFile {
             controls = new char[] {'W', 'S', 'A', 'D', 'R'}; 
         }
         
-        // Save default language in separate file
         String language = LanguageManager.getCurrentLocale().getLanguage();
         LanguageFileManager.saveLanguagePreference(usuario, language);
+        
+        LocalDateTime now = LocalDateTime.now();
         
         File archivo = new File(usuario + USER_DATA_FILE);
         try (DataOutputStream salida = new DataOutputStream(new FileOutputStream(archivo))) {
@@ -38,11 +41,12 @@ public class UserFile {
             salida.writeUTF(password);
             salida.writeUTF(nombre);
             
-            salida.writeInt(0); 
-            salida.writeUTF(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)); // fechaCreacion
-            salida.writeInt(0); 
-            salida.writeInt(0); 
-            salida.writeLong(0); 
+            salida.writeInt(0); // puntos
+            salida.writeUTF(now.format(DATE_TIME_FORMATTER)); // fechaCreacion con hora
+            salida.writeUTF(now.format(DATE_TIME_FORMATTER)); // ultimoLogin con hora
+            salida.writeInt(0); // nivelMaximo
+            salida.writeInt(0); // partidasJugadas
+            salida.writeLong(0); // tiempoTotal
             
             for (char key : controls) {
                 salida.writeChar(key);
@@ -54,9 +58,9 @@ public class UserFile {
         }
     }
     
-    public static boolean actualizarDatosUsuario(String usuario, int puntos, LocalDate fechaCreacion, 
-                                               int nivelMaximo, int partidasJugadas, long tiempoTotal,
-                                               char[] controls) {
+    public static boolean actualizarDatosUsuario(String usuario, int puntos, LocalDateTime fechaCreacion, 
+                                               LocalDateTime ultimoLogin, int nivelMaximo, int partidasJugadas, 
+                                               long tiempoTotal, char[] controls) {
         User user = cargarUsuario(usuario);
         if (user == null) {
             return false;
@@ -69,7 +73,8 @@ public class UserFile {
             salida.writeUTF(user.getNombre());
             
             salida.writeInt(puntos);
-            salida.writeUTF(fechaCreacion.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            salida.writeUTF(fechaCreacion.format(DATE_TIME_FORMATTER));
+            salida.writeUTF(ultimoLogin.format(DATE_TIME_FORMATTER));
             salida.writeInt(nivelMaximo);
             salida.writeInt(partidasJugadas);
             salida.writeLong(tiempoTotal);
@@ -80,13 +85,13 @@ public class UserFile {
             
             return true;
         } catch (IOException ex) {
-            System.err.println("Error al actualizar datos de usuario: " + ex.getMessage());
             return false;
         }
     }
     
     public static boolean actualizarDatosUsuario(String usuario, String password, String nombre, int puntos, 
-                                               LocalDate fechaCreacion, int nivelMaximo, int partidasJugadas, 
+                                               LocalDateTime fechaCreacion, LocalDateTime ultimoLogin,
+                                               int nivelMaximo, int partidasJugadas, 
                                                long tiempoTotal, char[] controls) {
         File archivo = new File(usuario + USER_DATA_FILE);
         try (DataOutputStream salida = new DataOutputStream(new FileOutputStream(archivo))) {
@@ -95,7 +100,8 @@ public class UserFile {
             salida.writeUTF(nombre);
             
             salida.writeInt(puntos);
-            salida.writeUTF(fechaCreacion.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            salida.writeUTF(fechaCreacion.format(DATE_TIME_FORMATTER));
+            salida.writeUTF(ultimoLogin.format(DATE_TIME_FORMATTER));
             salida.writeInt(nivelMaximo);
             salida.writeInt(partidasJugadas);
             salida.writeLong(tiempoTotal);
@@ -106,9 +112,23 @@ public class UserFile {
             
             return true;
         } catch (IOException ex) {
-            System.err.println("Error al actualizar datos de usuario: " + ex.getMessage());
             return false;
         }
+    }
+    
+    public static boolean actualizarUltimoLogin(String usuario) {
+        User user = cargarUsuario(usuario);
+        char[] controls = getControlsForUser(usuario);
+        
+        if (user != null) {
+            int[] stats = getEstadisticasUsuario(usuario);
+            LocalDateTime ultimoLogin = LocalDateTime.now();
+            
+            return actualizarDatosUsuario(usuario, user.getPuntos(), user.getFechaCreacion(), 
+                              ultimoLogin, stats[1], stats[2], getTiempoTotal(usuario),
+                              controls);
+        }
+        return false;
     }
     
     public static boolean actualizarTiempoJugado(String usuario, long segundosAdicionales) {
@@ -120,7 +140,7 @@ public class UserFile {
             long tiempoActual = getTiempoTotal(usuario);
             
             return actualizarDatosUsuario(usuario, user.getPuntos(), user.getFechaCreacion(), 
-                              stats[1], stats[2], tiempoActual + segundosAdicionales,
+                              user.getUltimoLogin(), stats[1], stats[2], tiempoActual + segundosAdicionales,
                               controls);
         }
         return false;
@@ -134,7 +154,7 @@ public class UserFile {
         if (user != null && nivel > stats[1]) {
             stats[1] = nivel;
             return actualizarDatosUsuario(usuario, stats[0], user.getFechaCreacion(), 
-                           stats[1], stats[2], getTiempoTotal(usuario),
+                           user.getUltimoLogin(), stats[1], stats[2], getTiempoTotal(usuario),
                            controls);
         }
         return true;
@@ -148,7 +168,7 @@ public class UserFile {
         if (user != null) {
             stats[2]++;
             return actualizarDatosUsuario(usuario, stats[0], user.getFechaCreacion(), 
-                           stats[1], stats[2], getTiempoTotal(usuario),
+                           user.getUltimoLogin(), stats[1], stats[2], getTiempoTotal(usuario),
                            controls);
         }
         return false;
@@ -163,7 +183,7 @@ public class UserFile {
             user.addPuntos(puntosNuevos);
             
             return actualizarDatosUsuario(usuario, user.getPuntos(), user.getFechaCreacion(), 
-                           stats[1], stats[2], getTiempoTotal(usuario),
+                           user.getUltimoLogin(), stats[1], stats[2], getTiempoTotal(usuario),
                            controls);
         }
         return false;
@@ -176,10 +196,9 @@ public class UserFile {
         if (user != null) {
             int[] stats = getEstadisticasUsuario(usuario);
             
-            // Guardamos los datos con la nueva contraseña
             return actualizarDatosUsuario(usuario, nuevaPassword, user.getNombre(), user.getPuntos(), 
-                       user.getFechaCreacion(), stats[1], stats[2], getTiempoTotal(usuario),
-                       controls);
+                       user.getFechaCreacion(), user.getUltimoLogin(), stats[1], stats[2], 
+                       getTiempoTotal(usuario), controls);
         }
         return false;
     }    
@@ -193,38 +212,60 @@ public class UserFile {
         try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
             String nombreArchivo = entrada.readUTF();
             String passwordArchivo = entrada.readUTF();
-            return usuario.equals(nombreArchivo) && password.equals(passwordArchivo);
+            boolean credencialesCorrectas = usuario.equals(nombreArchivo) && password.equals(passwordArchivo);
+            
+            // Si las credenciales son correctas, actualizar el último login
+            if (credencialesCorrectas) {
+                actualizarUltimoLogin(usuario);
+            }
+            
+            return credencialesCorrectas;
         } catch (IOException e) {
-            System.err.println("Error al verificar credenciales: " + e.getMessage());
             return false;
         }
     }
     
-    public static User cargarUsuario(String usuario) {
-        File archivo = new File(usuario + USER_DATA_FILE);
-        
-        if (!archivo.exists()) {
-            return null;
-        }
-        
-        try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
-            entrada.readUTF();
-            String password = entrada.readUTF();
-            String nombre = entrada.readUTF();
-            
-            int puntos = entrada.readInt();
-            LocalDate fechaCreacion = LocalDate.parse(entrada.readUTF(), DateTimeFormatter.ISO_LOCAL_DATE);
-            
-            User user = new User(usuario, password);
-            user.setNombre(nombre);
-            user.addPuntos(puntos);
-            user.setFechaCreacion(fechaCreacion);
-            
-            return user;
-        } catch (IOException e) {
-            return null;
-        }
+public static User cargarUsuario(String usuario) {
+    File archivo = new File(usuario + USER_DATA_FILE);
+    
+    if (!archivo.exists()) {
+        return null;
     }
+    
+    try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
+        entrada.readUTF(); // usuario
+        String password = entrada.readUTF();
+        String nombre = entrada.readUTF();
+        
+        int puntos = entrada.readInt();
+        String fechaStr = entrada.readUTF();  // lee la fechaCreacion
+        
+        // Asegurar que la fecha tenga la parte de la hora
+        if (fechaStr.length() == 10) {  // Si solo tiene la fecha
+            fechaStr += "T00:00:00";  // Añadir la hora
+        }
+        
+        LocalDateTime fechaCreacion = LocalDateTime.parse(fechaStr, DATE_TIME_FORMATTER);
+        
+        String ultimoLoginStr = entrada.readUTF();  // lee el ultimoLogin
+        // Asegurar que la fecha tenga la parte de la hora
+        if (ultimoLoginStr.length() == 10) {  // Si solo tiene la fecha
+            ultimoLoginStr += "T00:00:00";  // Añadir la hora
+        }
+        
+        LocalDateTime ultimoLogin = LocalDateTime.parse(ultimoLoginStr, DATE_TIME_FORMATTER);
+        
+        User user = new User(usuario, password);
+        user.setNombre(nombre);
+        user.addPuntos(puntos);
+        user.setFechaCreacion(fechaCreacion);
+        user.setUltimoLogin(ultimoLogin);
+        
+        return user;
+    } catch (IOException e) {
+        return null;
+    }
+}
     
     public static int[] getEstadisticasUsuario(String usuario) {
         File archivo = new File(usuario + USER_DATA_FILE);
@@ -235,18 +276,40 @@ public class UserFile {
         }
         
         try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
-            entrada.readUTF(); 
-            entrada.readUTF(); 
-            entrada.readUTF(); 
+            entrada.readUTF(); // usuario
+            entrada.readUTF(); // password
+            entrada.readUTF(); // nombre
             
-            stats[0] = entrada.readInt(); 
-            entrada.readUTF();
-            stats[1] = entrada.readInt();
-            stats[2] = entrada.readInt(); 
+            stats[0] = entrada.readInt(); // puntos
+            entrada.readUTF(); // fechaCreacion
+            entrada.readUTF(); // ultimoLogin
+            stats[1] = entrada.readInt(); // nivelMaximo
+            stats[2] = entrada.readInt(); // partidasJugadas
             
             return stats;
         } catch (IOException e) {
             return new int[]{0, 0, 0};
+        }
+    }
+    
+    public static LocalDateTime getUltimoLogin(String usuario) {
+        File archivo = new File(usuario + USER_DATA_FILE);
+        
+        if (!archivo.exists()) {
+            return null;
+        }
+        
+        try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
+            entrada.readUTF(); // usuario
+            entrada.readUTF(); // password
+            entrada.readUTF(); // nombre
+            entrada.readInt(); // puntos
+            entrada.readUTF(); // fechaCreacion
+            String ultimoLoginStr = entrada.readUTF();
+            
+            return LocalDateTime.parse(ultimoLoginStr, DATE_TIME_FORMATTER);
+        } catch (IOException e) {
+            return null;
         }
     }
     
@@ -258,15 +321,16 @@ public class UserFile {
         }
         
         try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
-            entrada.readUTF(); 
-            entrada.readUTF(); 
-            entrada.readUTF(); 
-            entrada.readInt(); 
-            entrada.readUTF(); 
-            entrada.readInt(); 
-            entrada.readInt(); 
+            entrada.readUTF(); // usuario
+            entrada.readUTF(); // password
+            entrada.readUTF(); // nombre
+            entrada.readInt(); // puntos
+            entrada.readUTF(); // fechaCreacion
+            entrada.readUTF(); // ultimoLogin
+            entrada.readInt(); // nivelMaximo
+            entrada.readInt(); // partidasJugadas
             
-            return entrada.readLong(); 
+            return entrada.readLong(); // tiempoTotal
         } catch (IOException e) {
             return 0;
         }
@@ -286,6 +350,7 @@ public class UserFile {
             entrada.readUTF(); // nombre
             entrada.readInt(); // puntos
             entrada.readUTF(); // fechaCreacion
+            entrada.readUTF(); // ultimoLogin
             entrada.readInt(); // nivelMaximo
             entrada.readInt(); // partidasJugadas
             entrada.readLong(); // tiempoTotal
@@ -296,8 +361,7 @@ public class UserFile {
             
             return controls;
         } catch (IOException e) {
-            System.err.println("Error al cargar controles de usuario: " + e.getMessage());
-            return controls; // Return default controls
+            return controls;
         }
     }
     
@@ -308,7 +372,7 @@ public class UserFile {
             int[] stats = getEstadisticasUsuario(usuario);
             
             return actualizarDatosUsuario(usuario, user.getPuntos(), user.getFechaCreacion(), 
-                           stats[1], stats[2], getTiempoTotal(usuario),
+                           user.getUltimoLogin(), stats[1], stats[2], getTiempoTotal(usuario),
                            controls);
         }
         return false;

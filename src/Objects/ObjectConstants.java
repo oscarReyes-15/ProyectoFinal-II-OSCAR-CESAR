@@ -9,7 +9,7 @@ package Objects;
  * @author LENOVO
  */
 public interface ObjectConstants {
-    int EMPTY = 0;
+       int EMPTY = 0;
     int WALL = 1;
     int BOX = 2;
     int TARGET = 3;
