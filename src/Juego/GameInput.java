@@ -1,24 +1,13 @@
 
 package Juego;
 
+import Objects.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import User.UserFile;
 
-public abstract class GameInput extends JPanel {
-    
-    protected static final int CELL_SIZE = 60;
-    protected static final int ROWS = 10;
-    protected static final int COLS = 10;
-    
-    protected static final int EMPTY = 0;
-    protected static final int WALL = 1;
-    protected static final int BOX = 2;
-    protected static final int TARGET = 3;
-    protected static final int PLAYER = 4;
-    protected static final int BOX_ON_TARGET = 5;
-    protected static final int PLAYER_ON_TARGET = 6;
+public abstract class GameInput extends JPanel implements ObjectConstants, MapConstants{
     
     protected int[][] board = new int[COLS][ROWS];
     protected int playerX, playerY;
@@ -92,7 +81,7 @@ public abstract class GameInput extends JPanel {
     
     protected abstract void initializeLevel();
     protected abstract void checkWinCondition();
-    protected abstract void movePlayer(int dx, int dy);
+    protected abstract void movePlayer(int dx, int dy); // mover
     protected abstract void resetLevel();
     
     protected void startTimer() {

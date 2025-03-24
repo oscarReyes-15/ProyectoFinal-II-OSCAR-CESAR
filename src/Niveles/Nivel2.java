@@ -56,9 +56,9 @@ public class Nivel2 extends Juego {
         board[1][8] = TARGET;
         board[2][8] = EMPTY;
         
-        playerX = 2;
-        playerY = 1;
-        board[playerX][playerY] = PLAYER;
+        player.X = 2;
+        player.Y = 1;
+        board[player.X][player.Y] = PLAYER;
         
         
         moveCount = 0;

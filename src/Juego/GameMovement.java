@@ -1,6 +1,7 @@
 package Juego;
 
 import Audio.Sonidos;
+import Objects.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -8,31 +9,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 import User.*;
 
-public abstract class GameMovement extends JPanel implements KeyListener {
-    
-    protected static final int ROWS = 10;
-    protected static final int COLS = 10;
-    protected static int CELL_SIZE = 60;
-    
-    protected static final int EMPTY = 0;
-    protected static final int WALL = 1;
-    protected static final int BOX = 2;
-    protected static final int TARGET = 3;
-    protected static final int PLAYER = 4;
-    protected static final int BOX_ON_TARGET = 5;
-    protected static final int PLAYER_ON_TARGET = 6;
-    
+public abstract class GameMovement extends JPanel implements KeyListener, ObjectConstants, MapConstants{
+       
     protected int[][] board = new int[COLS][ROWS];
-    protected int playerX, playerY;
     
     protected Image backgroundImage;
     protected Image wallImage;
     protected Image boxImage;
-    protected Image playerImage;
     protected Image targetImage;
-    protected Image[] playerSprites = new Image[12]; 
-    protected int currentSpriteIndex = 0;
-    protected int lastDirection = 0; 
     
     protected JFrame frame;
     protected JLabel levelLabel;
@@ -50,11 +34,15 @@ public abstract class GameMovement extends JPanel implements KeyListener {
     protected long startTime;
     protected long elapsedTime;
     
+    protected Jugador player;
+    
     public GameMovement(String usuario, int nivel) {
         this.usuarioActual = usuario;
         this.currentLevel = nivel;
         this.moveCount = 0;
         this.elapsedTime = 0;
+        
+        player = new Jugador();
         
         if (usuario != null) {
             ControlManager.applyUserControls(usuario);
@@ -111,24 +99,6 @@ public abstract class GameMovement extends JPanel implements KeyListener {
         return String.format("%02d:%02d:%02d", hours, minutes, remainingSeconds);
     }
     
-    protected void updatePlayerSprite(int direction) {
-        currentSpriteIndex = (currentSpriteIndex + 1) % 3;
-        switch (direction) {
-            case 0: 
-                playerImage = playerSprites[0 + currentSpriteIndex];
-                break;
-            case 1: 
-                playerImage = playerSprites[3 + currentSpriteIndex];
-                break;
-            case 2: 
-                playerImage = playerSprites[6 + currentSpriteIndex];
-                break;
-            case 3: 
-                playerImage = playerSprites[9 + currentSpriteIndex];
-                break;
-        }
-    }
-    
     @Override
     public void keyPressed(KeyEvent e) {
         if (gameCompleted) {
@@ -170,18 +140,10 @@ public abstract class GameMovement extends JPanel implements KeyListener {
     }
     
     protected void movePlayer(int dx, int dy) {
-        int newX = playerX + dx;
-        int newY = playerY + dy;
+        int newX = player.X + dx;
+        int newY = player.Y + dy;
         
-        if (dx > 0) {
-            lastDirection = 1;
-        } else if (dx < 0) {
-            lastDirection = 0;
-        } else if (dy > 0) {
-            lastDirection = 3; 
-        } else if (dy < 0) {
-            lastDirection = 2; 
-        }
+        player.updateDirection(dx, dy);
         
         if (newX < 0 || newX >= COLS || newY < 0 || newY >= ROWS) {
             return;
@@ -223,23 +185,22 @@ public abstract class GameMovement extends JPanel implements KeyListener {
             moved = true;
         }
         
-        if (board[playerX][playerY] == PLAYER) {
-            board[playerX][playerY] = EMPTY;
+        if (board[player.X][player.Y] == PLAYER) {
+            board[player.X][player.Y] = EMPTY;
         } else { 
-            board[playerX][playerY] = TARGET;
+            board[player.X][player.Y] = TARGET;
         }
         
-        playerX = newX;
-        playerY = newY;
+        player.move(newX,newY);
         
-        if (board[playerX][playerY] == EMPTY) {
-            board[playerX][playerY] = PLAYER;
-        } else if (board[playerX][playerY] == TARGET) {
-            board[playerX][playerY] = PLAYER_ON_TARGET;
+        if (board[player.X][player.Y] == EMPTY) {
+            board[player.X][player.Y] = PLAYER;
+        } else if (board[player.X][player.Y] == TARGET) {
+            board[player.X][player.Y] = PLAYER_ON_TARGET;
         }
         
         if (moved) {
-            updatePlayerSprite(lastDirection);
+            player.updatePlayerSprite(player.lastDirection);
             moveCount++;
             movesLabel.setText("Movimientos: " + moveCount);
         }

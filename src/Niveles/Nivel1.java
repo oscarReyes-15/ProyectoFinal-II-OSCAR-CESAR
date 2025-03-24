@@ -72,9 +72,9 @@ public class Nivel1 extends Juego {
         board[4][4] = BOX;
         board[5][4] = BOX;
         
-        playerX = 5;
-        playerY = 5;
-        board[playerX][playerY] = PLAYER;
+        player.X = 5;
+        player.Y = 5;
+        board[player.X][player.Y] = PLAYER;
         
         moveCount = 0;
         movesLabel.setText(messages.getString("game.movements") + ": " + moveCount);

@@ -69,9 +69,9 @@ public class Nivel3 extends Juego{
         board[7][5]  = EMPTY;
         
         
-        playerX = 3;
-        playerY = 2;
-        board[playerX][playerY] = PLAYER;
+        player.X = 3;
+        player.Y = 2;
+        board[player.X][player.Y] = PLAYER;
         
         
         moveCount = 0;

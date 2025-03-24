@@ -93,19 +93,19 @@ public abstract class Juego extends GameMovement implements ActionListener {
             int spriteWidth = spriteSheet.getWidth() / cols; 
             int spriteHeight = spriteSheet.getHeight() / rows;
             
-            playerSprites = new BufferedImage[12];
+            player.playerSprites = new BufferedImage[12];
             
             int index = 0;
             for (int row = 0; row < rows; row++) {
                 for (int col = 0; col < cols; col++) {
-                    playerSprites[index] = spriteSheet.getSubimage(
+                    player.playerSprites[index] = spriteSheet.getSubimage(
                         col * spriteWidth, row * spriteHeight, spriteWidth, spriteHeight
                     );
                     index++;
                 }
             }
             
-            playerImage = playerSprites[0];
+            player.loadImage(0);
         } catch (IOException e) {
             e.printStackTrace();
             this.setBackground(new Color(233, 149, 65));
@@ -115,20 +115,16 @@ public abstract class Juego extends GameMovement implements ActionListener {
     protected void updatePlayerSprite(int direction) {
         switch (direction) {
             case 0: 
-                currentSpriteIndex = (currentSpriteIndex + 1) % 3;
-                playerImage = playerSprites[0 + currentSpriteIndex]; 
+                player.loadImage(0 + player.updateSpriteImage()); 
                 break;
             case 1: 
-                currentSpriteIndex = (currentSpriteIndex + 1) % 3;
-                playerImage = playerSprites[3 + currentSpriteIndex];
+                player.loadImage(3 + player.updateSpriteImage());
                 break;
             case 2: 
-                currentSpriteIndex = (currentSpriteIndex + 1) % 3;
-                playerImage = playerSprites[6 + currentSpriteIndex];
+                player.loadImage(6 + player.updateSpriteImage());
                 break;
             case 3:
-                currentSpriteIndex = (currentSpriteIndex + 1) % 3;
-                playerImage = playerSprites[9 + currentSpriteIndex];
+                player.loadImage(9 + player.updateSpriteImage());
                 break;
         }
     }
@@ -142,8 +138,8 @@ public abstract class Juego extends GameMovement implements ActionListener {
         moveCount = 0;
         movesLabel.setText(messages.getString("game.movements") + ": " + moveCount);
         gameCompleted = false;
-        currentSpriteIndex = 0;
-        playerImage = playerSprites[0];
+        player.currentSpriteIndex = 0;
+        player.playerImage = player.playerSprites[0];
         repaint();
     }
     
@@ -195,8 +191,8 @@ public abstract class Juego extends GameMovement implements ActionListener {
                         }
                         break;
                     case PLAYER:
-                        if (playerImage != null) {
-                            g.drawImage(playerImage, cellX, cellY, CELL_SIZE, CELL_SIZE, this);
+                        if (player.playerImage != null) {
+                            g.drawImage(player.playerImage, cellX, cellY, CELL_SIZE, CELL_SIZE, this);
                         } else {
                             g.setColor(new Color(0, 0, 200));
                             g.fillOval(cellX + 10, cellY + 10, CELL_SIZE - 20, CELL_SIZE - 20);
@@ -225,8 +221,8 @@ public abstract class Juego extends GameMovement implements ActionListener {
                             g.fillOval(cellX + 15, cellY + 15, CELL_SIZE - 30, CELL_SIZE - 30);
                         }
                         
-                        if (playerImage != null) {
-                            g.drawImage(playerImage, cellX, cellY, CELL_SIZE, CELL_SIZE, this);
+                        if (player.playerImage != null) {
+                            g.drawImage(player.playerImage, cellX, cellY, CELL_SIZE, CELL_SIZE, this);
                         } else {
                             g.setColor(new Color(0, 0, 200));
                             g.fillOval(cellX + 10, cellY + 10, CELL_SIZE - 20, CELL_SIZE - 20);
