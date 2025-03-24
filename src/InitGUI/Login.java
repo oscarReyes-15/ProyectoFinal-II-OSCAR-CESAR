@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import User.*;
+import SubMenuOption.LanguageManager;
 
 public class Login extends JFrame implements ActionListener {
     private JTextField usuario;
@@ -81,6 +82,7 @@ public class Login extends JFrame implements ActionListener {
             
             if (UserFile.verificarCredenciales(usuarioInput, passwordInput)) {
                 JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
+                LanguageManager.loadLanguageForUser(usuarioInput);
                 new Menu(usuarioInput);
                 this.dispose();
             } else {

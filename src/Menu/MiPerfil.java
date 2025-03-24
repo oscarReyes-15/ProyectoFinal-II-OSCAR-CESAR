@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.ResourceBundle;
 
 public class MiPerfil extends JFrame implements ActionListener {
-    private JButton regresarBtn, cambiarContraBtn, eliminarCuentaBtn, cambiarAvatarBtn;
+    private JButton regresarBtn, cambiarContraBtn, eliminarCuentaBtn, cambiarAvatarBtn, ultimasPartidasBtn;
     private String usuarioActual;
     private JLabel usuarioLabel, nombreLabel, puntosLabel, fechaLabel, avatarLabel, tiempoJugadoLabel, partidasJugadasLabel, nivelMaximoLabel, fondo;
     private User userData;
@@ -22,16 +22,17 @@ public class MiPerfil extends JFrame implements ActionListener {
         this.usuarioActual = usuario;
         this.messages = LanguageManager.getMessages();
         
-                try {
-      ImageIcon taza = new ImageIcon(getClass().getResource("/imagescan/logo.jpg"));
-    if (taza.getImageLoadStatus() == MediaTracker.COMPLETE) {
-        this.setIconImage(taza.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH));
-    } else {
-        System.err.println("Unable to load the image");
-    }
-} catch (Exception e) {
-    e.printStackTrace();
-}
+        try {
+            ImageIcon taza = new ImageIcon(getClass().getResource("/imagescan/logo.jpg"));
+            if (taza.getImageLoadStatus() == MediaTracker.COMPLETE) {
+                this.setIconImage(taza.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH));
+            } else {
+                System.err.println("Unable to load the image");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle(messages.getString("title.profile"));
         this.setLayout(null);
@@ -66,6 +67,15 @@ public class MiPerfil extends JFrame implements ActionListener {
         cambiarAvatarBtn.setBounds(550, 210, 150, 30);
         cambiarAvatarBtn.addActionListener(this);
         this.add(cambiarAvatarBtn);
+
+        // Nuevo botón para ver últimas partidas
+        ultimasPartidasBtn = new JButton(messages.getString("button.lastGames"));
+        if (!messages.containsKey("button.lastGames")) {
+            ultimasPartidasBtn.setText("Ver últimas partidas");
+        }
+        ultimasPartidasBtn.setBounds(550, 250, 150, 30);
+        ultimasPartidasBtn.addActionListener(this);
+        this.add(ultimasPartidasBtn);
 
         // Botones ahora ubicados bajo el panel de información
         cambiarContraBtn = new JButton(messages.getString("button.changePassword"));
@@ -204,6 +214,44 @@ public class MiPerfil extends JFrame implements ActionListener {
         } catch (Exception ex) {
         }
     }
+    
+    private void mostrarUltimasPartidas() {
+        // Use the GameHistory class to retrieve game history instead of local method
+        Object[][] partidas = GameHistory.obtenerHistorial(usuarioActual);
+        
+        if (partidas.length == 0) {
+            JOptionPane.showMessageDialog(this, 
+                "No hay partidas registradas", 
+                "Últimas partidas", 
+                JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        StringBuilder mensaje = new StringBuilder("Últimas partidas\n");
+        mensaje.append("Nivel\tDuración\tResultado\n");
+        
+        for (Object[] partida : partidas) {
+            int nivel = (Integer) partida[0];
+            long tiempo = (Long) partida[1];
+            boolean completado = (Boolean) partida[2];
+            
+            String tiempoFormateado = GameHistory.formatearTiempo(tiempo);
+            String resultado = completado ? "Completado" : "No completado";
+            
+            mensaje.append(nivel)
+                   .append("\t")
+                   .append(tiempoFormateado)
+                   .append("\t")
+                   .append(resultado)
+                   .append("\n");
+        }
+        
+        JTextArea textArea = new JTextArea(mensaje.toString());
+        textArea.setEditable(false); // Hacer que el texto no sea editable
+        JScrollPane scrollPane = new JScrollPane(textArea); 
+        
+        JOptionPane.showMessageDialog(null, scrollPane, "Últimas partidas", JOptionPane.INFORMATION_MESSAGE);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -224,6 +272,8 @@ public class MiPerfil extends JFrame implements ActionListener {
         } else if (e.getSource() == regresarBtn) {
             new Menu(usuarioActual);
             this.dispose();
+        } else if (e.getSource() == ultimasPartidasBtn) {
+            mostrarUltimasPartidas();
         }
     }
 }

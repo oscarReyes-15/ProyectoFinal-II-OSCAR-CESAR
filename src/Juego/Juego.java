@@ -4,6 +4,7 @@ import Audio.Musica;
 import Audio.Sonidos;
 import SubMenuOption.SeleccionarNiveles;
 import SubMenuOption.LanguageManager;
+import User.GameHistory;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -266,6 +267,7 @@ public abstract class Juego extends GameMovement implements ActionListener {
                 stopTimer();
                 if (usuarioActual != null) {
                     try {
+                        GameHistory.registrarPartida(usuarioActual, currentLevel, elapsedTime / 1000, false);
                         Musica.getInstance().audioStop();
                         Musica.getInstance().play(0);
                         new SeleccionarNiveles(usuarioActual);

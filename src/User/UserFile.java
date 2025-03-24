@@ -4,21 +4,21 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import SubMenuOption.LanguageManager;
+import SubMenuOption.LanguageFileManager;
 
 public class UserFile {
     
     private static final String USER_DATA_FILE = "/datos.bin";
     
     public static boolean guardarDatosUsuario(String usuario, String password) {
-        return guardarDatosUsuario(usuario, password, "", null, null);
+        return guardarDatosUsuario(usuario, password, "", null);
     }
     
     public static boolean guardarDatosUsuario(String usuario, String password, String nombre) {
-        return guardarDatosUsuario(usuario, password, nombre, null, null);
+        return guardarDatosUsuario(usuario, password, nombre, null);
     }
     
-    public static boolean guardarDatosUsuario(String usuario, String password, String nombre, 
-                                             String language, char[] controls) {
+    public static boolean guardarDatosUsuario(String usuario, String password, String nombre, char[] controls) {
         File directorio = new File(usuario);
         if (!directorio.exists()) {
             directorio.mkdir();
@@ -28,9 +28,9 @@ public class UserFile {
             controls = new char[] {'W', 'S', 'A', 'D', 'R'}; 
         }
         
-        if (language == null) {
-            language = LanguageManager.getCurrentLocale().getLanguage();
-        }
+        // Save default language in separate file
+        String language = LanguageManager.getCurrentLocale().getLanguage();
+        LanguageFileManager.saveLanguagePreference(usuario, language);
         
         File archivo = new File(usuario + USER_DATA_FILE);
         try (DataOutputStream salida = new DataOutputStream(new FileOutputStream(archivo))) {
@@ -44,8 +44,6 @@ public class UserFile {
             salida.writeInt(0); 
             salida.writeLong(0); 
             
-            salida.writeUTF(language);
-            
             for (char key : controls) {
                 salida.writeChar(key);
             }
@@ -58,12 +56,12 @@ public class UserFile {
     
     public static boolean actualizarDatosUsuario(String usuario, int puntos, LocalDate fechaCreacion, 
                                                int nivelMaximo, int partidasJugadas, long tiempoTotal,
-                                               String language, char[] controls) {
+                                               char[] controls) {
         User user = cargarUsuario(usuario);
         if (user == null) {
             return false;
         }
-        
+
         File archivo = new File(usuario + USER_DATA_FILE);
         try (DataOutputStream salida = new DataOutputStream(new FileOutputStream(archivo))) {
             salida.writeUTF(usuario);
@@ -75,7 +73,32 @@ public class UserFile {
             salida.writeInt(nivelMaximo);
             salida.writeInt(partidasJugadas);
             salida.writeLong(tiempoTotal);
-            salida.writeUTF(language);
+            
+            for (char key : controls) {
+                salida.writeChar(key);
+            }
+            
+            return true;
+        } catch (IOException ex) {
+            System.err.println("Error al actualizar datos de usuario: " + ex.getMessage());
+            return false;
+        }
+    }
+    
+    public static boolean actualizarDatosUsuario(String usuario, String password, String nombre, int puntos, 
+                                               LocalDate fechaCreacion, int nivelMaximo, int partidasJugadas, 
+                                               long tiempoTotal, char[] controls) {
+        File archivo = new File(usuario + USER_DATA_FILE);
+        try (DataOutputStream salida = new DataOutputStream(new FileOutputStream(archivo))) {
+            salida.writeUTF(usuario);
+            salida.writeUTF(password);
+            salida.writeUTF(nombre);
+            
+            salida.writeInt(puntos);
+            salida.writeUTF(fechaCreacion.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            salida.writeInt(nivelMaximo);
+            salida.writeInt(partidasJugadas);
+            salida.writeLong(tiempoTotal);
             
             for (char key : controls) {
                 salida.writeChar(key);
@@ -90,7 +113,6 @@ public class UserFile {
     
     public static boolean actualizarTiempoJugado(String usuario, long segundosAdicionales) {
         User user = cargarUsuario(usuario);
-        String language = getLanguageForUser(usuario);
         char[] controls = getControlsForUser(usuario);
         
         if (user != null) {
@@ -99,7 +121,7 @@ public class UserFile {
             
             return actualizarDatosUsuario(usuario, user.getPuntos(), user.getFechaCreacion(), 
                               stats[1], stats[2], tiempoActual + segundosAdicionales,
-                              language, controls);
+                              controls);
         }
         return false;
     }
@@ -107,14 +129,13 @@ public class UserFile {
     public static boolean setNivelCompletado(String usuario, int nivel) {
         int[] stats = getEstadisticasUsuario(usuario);
         User user = cargarUsuario(usuario);
-        String language = getLanguageForUser(usuario);
         char[] controls = getControlsForUser(usuario);
         
         if (user != null && nivel > stats[1]) {
             stats[1] = nivel;
             return actualizarDatosUsuario(usuario, stats[0], user.getFechaCreacion(), 
                            stats[1], stats[2], getTiempoTotal(usuario),
-                           language, controls);
+                           controls);
         }
         return true;
     }
@@ -122,21 +143,19 @@ public class UserFile {
     public static boolean incrementarPartidasJugadas(String usuario) {
         int[] stats = getEstadisticasUsuario(usuario);
         User user = cargarUsuario(usuario);
-        String language = getLanguageForUser(usuario);
         char[] controls = getControlsForUser(usuario);
         
         if (user != null) {
             stats[2]++;
             return actualizarDatosUsuario(usuario, stats[0], user.getFechaCreacion(), 
                            stats[1], stats[2], getTiempoTotal(usuario),
-                           language, controls);
+                           controls);
         }
         return false;
     }
     
     public static boolean actualizarPuntos(String usuario, int puntosNuevos) {
         User user = cargarUsuario(usuario);
-        String language = getLanguageForUser(usuario);
         char[] controls = getControlsForUser(usuario);
         
         if (user != null) {
@@ -145,25 +164,25 @@ public class UserFile {
             
             return actualizarDatosUsuario(usuario, user.getPuntos(), user.getFechaCreacion(), 
                            stats[1], stats[2], getTiempoTotal(usuario),
-                           language, controls);
+                           controls);
         }
         return false;
     }
     
     public static boolean cambiarContraseña(String usuario, String nuevaPassword) {
         User user = cargarUsuario(usuario);
-        String language = getLanguageForUser(usuario);
         char[] controls = getControlsForUser(usuario);
         
         if (user != null) {
             int[] stats = getEstadisticasUsuario(usuario);
             
-            return actualizarDatosUsuario(usuario, user.getPuntos(), user.getFechaCreacion(), 
-                           stats[1], stats[2], getTiempoTotal(usuario),
-                           language, controls);
+            // Guardamos los datos con la nueva contraseña
+            return actualizarDatosUsuario(usuario, nuevaPassword, user.getNombre(), user.getPuntos(), 
+                       user.getFechaCreacion(), stats[1], stats[2], getTiempoTotal(usuario),
+                       controls);
         }
         return false;
-    }
+    }    
     
     public static boolean verificarCredenciales(String usuario, String password) {
         File archivo = new File(usuario + USER_DATA_FILE);
@@ -253,29 +272,6 @@ public class UserFile {
         }
     }
     
-    public static String getLanguageForUser(String usuario) {
-        File archivo = new File(usuario + USER_DATA_FILE);
-        
-        if (!archivo.exists()) {
-            return "es"; 
-        }
-        
-        try (DataInputStream entrada = new DataInputStream(new FileInputStream(archivo))) {
-            entrada.readUTF(); 
-            entrada.readUTF(); 
-            entrada.readUTF(); 
-            entrada.readInt(); 
-            entrada.readUTF();
-            entrada.readInt(); 
-            entrada.readInt();
-            entrada.readLong(); 
-            
-            return entrada.readUTF(); 
-        } catch (IOException e) {
-            return "es";
-        }
-    }
-    
     public static char[] getControlsForUser(String usuario) {
         File archivo = new File(usuario + USER_DATA_FILE);
         char[] controls = new char[] {'W', 'S', 'A', 'D', 'R'}; 
@@ -293,7 +289,6 @@ public class UserFile {
             entrada.readInt(); // nivelMaximo
             entrada.readInt(); // partidasJugadas
             entrada.readLong(); // tiempoTotal
-            entrada.readUTF(); // language
             
             for (int i = 0; i < 5; i++) {
                 controls[i] = entrada.readChar();
@@ -306,30 +301,15 @@ public class UserFile {
         }
     }
     
-    public static boolean setLanguageForUser(String usuario, String language) {
-        User user = cargarUsuario(usuario);
-        char[] controls = getControlsForUser(usuario);
-        
-        if (user != null) {
-            int[] stats = getEstadisticasUsuario(usuario);
-            
-            return actualizarDatosUsuario(usuario, user.getPuntos(), user.getFechaCreacion(), 
-                           stats[1], stats[2], getTiempoTotal(usuario),
-                           language, controls);
-        }
-        return false;
-    }
-    
     public static boolean setControlsForUser(String usuario, char[] controls) {
         User user = cargarUsuario(usuario);
-        String language = getLanguageForUser(usuario);
         
         if (user != null) {
             int[] stats = getEstadisticasUsuario(usuario);
             
             return actualizarDatosUsuario(usuario, user.getPuntos(), user.getFechaCreacion(), 
                            stats[1], stats[2], getTiempoTotal(usuario),
-                           language, controls);
+                           controls);
         }
         return false;
     }

@@ -116,9 +116,12 @@ public class Nivel1 extends Juego {
             if (puntosPorMovimientos < 100) puntosPorMovimientos = 100;
             
             UserFile.actualizarPuntos(usuarioActual, puntosPorMovimientos);
+            GameHistory.registrarPartida(usuarioActual, 1, elapsedTime / 1000, true);
+
         }
         
         String tiempoFormateado = formatTime(elapsedTime);
+        
         
         JOptionPane.showMessageDialog(frame, 
          messages.getString("dialog.levelCompleted") + "\n" +

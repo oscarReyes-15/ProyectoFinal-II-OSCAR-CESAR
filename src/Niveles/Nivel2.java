@@ -85,6 +85,7 @@ public class Nivel2 extends Juego {
         
         if (usuarioActual != null) {
             UserFile.setNivelCompletado(usuarioActual, 2);
+            GameHistory.registrarPartida(usuarioActual, 2, elapsedTime / 1000, true);
             
             int puntos = 1500 - (moveCount * 5); 
             if (puntos < 150) puntos = 150; 

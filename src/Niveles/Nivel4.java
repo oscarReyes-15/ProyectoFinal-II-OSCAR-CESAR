@@ -96,6 +96,8 @@ public class Nivel4 extends Juego{
             int puntos = 1500 - (moveCount * 5); 
             if (puntos < 150) puntos = 150; 
             UserFile.actualizarPuntos(usuarioActual, puntos);
+            GameHistory.registrarPartida(usuarioActual, 4, elapsedTime / 1000, true);
+
         }
         
          String tiempoFormateado = formatTime(elapsedTime);

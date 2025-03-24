@@ -349,6 +349,7 @@ public class LanguageManager {
         
     }
     
+    
     private static ResourceBundle createCustomBundle(final Map<String, String> messagesMap) {
         return new ResourceBundle() {
             @Override
@@ -393,11 +394,13 @@ public class LanguageManager {
             messages = createCustomBundle(italianMessages);
         }
         
-        UserFile.setLanguageForUser(usuario, langCode);
+        // Use the new LanguageFileManager instead of UserFile
+        LanguageFileManager.saveLanguagePreference(usuario, langCode);
     }
     
     public static void loadLanguageForUser(String usuario) {
-        String language = UserFile.getLanguageForUser(usuario);
+        // Use the new LanguageFileManager instead of UserFile
+        String language = LanguageFileManager.getLanguagePreference(usuario);
         
         if (language.equals("en")) {
             currentLocale = new Locale("en", "US");

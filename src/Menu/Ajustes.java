@@ -163,7 +163,6 @@ public class Ajustes extends JFrame implements ActionListener, ChangeListener {
                 this.setVisible(false);
                 this.dispose();
             } catch (Exception ex) {
-                System.err.println("Error opening control settings: " + ex.getMessage());
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this,
                         "Error opening control settings: " + ex.getMessage(),
